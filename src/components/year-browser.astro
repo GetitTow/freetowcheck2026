@@ -1,0 +1,262 @@
+---
+/**
+ * YearBrowser — Model Year Directory & Catalog Scope Matrix (2010–2026)
+ *
+ * Provides a discoverable, accessible browser across all 17 model years in scope.
+ * Displays coverage status: Verified Records Available vs. Archival Digitization In Queue.
+ */
+import { CATALOG_YEARS_SCOPE } from '../lib/catalog-years.ts';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  title = "2010–2026 Model Year Coverage Matrix",
+  subtitle = "Explore verified towing records across our 17-year catalog scope. Every published rating is traced directly to official manufacturer documentation.",
+} = Astro.props;
+
+const publishedYears = CATALOG_YEARS_SCOPE.filter((item) => item.hasPublishedRecords);
+const totalPublishedYearsCount = publishedYears.length;
+const totalPublishedConfigsCount = publishedYears.reduce((sum, item) => sum + item.configsCount, 0);
+const totalPlannedYearsCount = CATALOG_YEARS_SCOPE.length - totalPublishedYearsCount;
+---
+
+<section class="year-browser" aria-labelledby="year-browser-heading">
+  <div class="container">
+    <div class="year-browser__header">
+      <div class="year-browser__intro">
+        <p class="section__eyebrow">Catalog Scope & Verification Status</p>
+        <h2 class="section__title" id="year-browser-heading">{title}</h2>
+        <p class="section__desc">{subtitle}</p>
+      </div>
+
+      <div class="year-browser__stats">
+        <div class="year-stat-pill year-stat-pill--verified">
+          <span class="year-stat-pill__dot"></span>
+          <span>{totalPublishedYearsCount} Model Years with Data ({totalPublishedConfigsCount} Configurations)</span>
+        </div>
+        <div class="year-stat-pill year-stat-pill--planned">
+          <span class="year-stat-pill__dot"></span>
+          <span>{totalPlannedYearsCount} Model Years in Research Queue</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Year Grid (2026 down to 2010) -->
+    <div class="year-grid" role="list" aria-label="Model years 2010 through 2026">
+      {CATALOG_YEARS_SCOPE.map((item) => (
+        <div
+          class:list={['year-card', {
+            'year-card--verified': item.hasPublishedRecords,
+            'year-card--planned': !item.hasPublishedRecords,
+          }]}
+          role="listitem"
+        >
+          <div class="year-card__top">
+            <span class="year-card__num">{item.year}</span>
+            <span class:list={['year-card__badge', item.hasPublishedRecords ? 'badge-verified' : 'badge-planned']}>
+              {item.hasPublishedRecords ? 'Data available' : 'Research in progress'}
+            </span>
+          </div>
+
+          <p class="year-card__status">
+            {item.hasPublishedRecords
+              ? `${item.modelsCount === 1 ? '1 model' : `${item.modelsCount} models`} · ${item.configsCount === 1 ? '1 configuration' : `${item.configsCount} configurations`}`
+              : 'Technical review in progress'}
+          </p>
+
+          <p class="year-card__vehicles">
+            {item.featuredVehicles.slice(0, 3).join(', ')}
+            {item.featuredVehicles.length > 3 ? '...' : ''}
+          </p>
+
+          <div class="year-card__footer">
+            {item.hasPublishedRecords ? (
+              <a href={`/vehicles/?year=${item.year}`} class="year-card__link">
+                Browse {item.year} Specs
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            ) : (
+              <span class="year-card__pending-text" title={item.notes}>
+                Research in progress
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .year-browser {
+    padding-block: var(--spacing-16);
+    background-color: var(--color-pure-white);
+    border-top: 1px solid var(--color-cloud-gray);
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+
+  .year-browser__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .year-browser__intro {
+    max-width: 680px;
+  }
+
+  .year-browser__stats {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .year-stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+  }
+
+  .year-stat-pill--verified {
+    background: #f0faf4;
+    color: #1a7a4a;
+    border: 1px solid #a8d5b8;
+  }
+
+  .year-stat-pill--verified .year-stat-pill__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #1a7a4a;
+  }
+
+  .year-stat-pill--planned {
+    background: #fefbf0;
+    color: #7a5c0a;
+    border: 1px solid #e5d08a;
+  }
+
+  .year-stat-pill--planned .year-stat-pill__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #7a5c0a;
+  }
+
+  .year-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+
+  .year-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.125rem;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-cloud-gray);
+    background: var(--color-pure-white);
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .year-card--verified {
+    border-color: #c9e2d3;
+    background: linear-gradient(180deg, #ffffff 0%, #fafffc 100%);
+  }
+
+  .year-card--verified:hover {
+    border-color: var(--color-electric-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(62, 106, 225, 0.08);
+  }
+
+  .year-card--planned {
+    background: #fafafa;
+    border-color: #ececec;
+    opacity: 0.85;
+  }
+
+  .year-card__top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .year-card__num {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+  }
+
+  .year-card__badge {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .badge-verified {
+    background: #e6f7ec;
+    color: #1a7a4a;
+  }
+
+  .badge-planned {
+    background: #f4f4f4;
+    color: #6c7075;
+  }
+
+  .year-card__status {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-graphite);
+    margin-bottom: 0.25rem;
+  }
+
+  .year-card__vehicles {
+    font-size: 0.6875rem;
+    color: var(--color-pewter);
+    line-height: 1.4;
+    margin-bottom: 0.875rem;
+    flex: 1;
+  }
+
+  .year-card__footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 0.625rem;
+  }
+
+  .year-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-electric-blue);
+    text-decoration: none;
+  }
+
+  .year-card__link:hover {
+    text-decoration: underline;
+  }
+
+  .year-card__pending-text {
+    font-size: 0.6875rem;
+    color: var(--color-silver-fog);
+  }
+</style>

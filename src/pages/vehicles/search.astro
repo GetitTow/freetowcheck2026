@@ -1,0 +1,24 @@
+---
+/**
+ * GET /vehicles/search/ — handles form submission from VehicleSearch
+ * Redirects to the appropriate vehicle page based on year/make/model.
+ */
+import type { APIRoute } from 'astro';
+
+// This page is server-rendered and handles GET redirect
+const url = Astro.url;
+const year = url.searchParams.get('year');
+const make = url.searchParams.get('make');
+const model = url.searchParams.get('model');
+
+if (year && make && model) {
+  return Astro.redirect(`/vehicles/${make}/${model}/${year}/`, 302);
+} else if (year && make) {
+  return Astro.redirect(`/vehicles/${make}/?year=${year}`, 302);
+} else if (make) {
+  return Astro.redirect(`/vehicles/${make}/`, 302);
+}
+
+// If no valid params, redirect to browse
+return Astro.redirect('/vehicles/', 302);
+---

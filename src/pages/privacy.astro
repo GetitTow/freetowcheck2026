@@ -1,0 +1,72 @@
+---
+/**
+ * /privacy/ — Privacy Policy
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+---
+
+<Layout
+  title="Privacy Policy — TowingSpecs"
+  description="Privacy policy and data governance practices for TowingSpecs."
+  canonicalUrl="/privacy/"
+  breadcrumbs={[{ name: 'Privacy Policy', url: '/privacy/' }]}
+>
+  <SiteHeader currentPath="/privacy/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem; max-width: 780px;">
+      <Breadcrumbs crumbs={[{ name: 'Privacy Policy' }]} />
+
+      <h1 style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 600; margin-bottom: 1.5rem;">
+        Privacy Policy
+      </h1>
+
+      <div style="font-size: var(--text-md); line-height: 1.7; color: var(--color-carbon-dark); display: flex; flex-direction: column; gap: 1.5rem;">
+        <p><strong>Effective Date:</strong> January 1, 2025</p>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">1. Introduction</h2>
+          <p>
+            TowingSpecs ("we", "our", or "us") operates towingspecs.com as an independent automotive technical reference. We believe in minimal data collection and privacy by design. We do not require account registration or collect vehicle identification numbers (VINs) to search or view towing specifications.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">2. Information We Collect</h2>
+          <p>
+            • <strong>Usage Analytics:</strong> Anonymized server logs, browser types, and visited paths to monitor infrastructure performance and uptime.
+          </p>
+          <p>
+            • <strong>Voluntary Inquiries:</strong> When you submit a data correction or contact request, we store the name, email, and message you provide solely to investigate and reply to your inquiry.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">3. No Sale of Personal Information</h2>
+          <p>
+            We do not sell, rent, monetize, or trade any personal user information with vehicle manufacturers, dealerships, or advertising networks.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">4. Cookies and Local Storage</h2>
+          <p>
+            We use minimal functional browser storage exclusively for persisting lookup preferences (such as selected units: lbs vs kg) across sessions. No third-party tracking cookies are deployed.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">5. Contact Us</h2>
+          <p>
+            For privacy inquiries or data requests, please contact us via our <a href="/contact/" style="color: var(--color-electric-blue); text-decoration: underline;">Contact Page</a>.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>

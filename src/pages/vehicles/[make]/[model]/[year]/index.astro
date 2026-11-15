@@ -1,0 +1,545 @@
+---
+/**
+ * /vehicles/[make]/[model]/[year]/ — Year-specific vehicle page
+ * Shows all trims and towing specs for a given model year.
+ */
+import Layout from '../../../../../layouts/Layout.astro';
+import SiteHeader from '../../../../../components/site-header.astro';
+import SiteFooter from '../../../../../components/site-footer.astro';
+import Breadcrumbs from '../../../../../components/breadcrumbs.astro';
+import SafetyDisclaimer from '../../../../../components/safety-disclaimer.astro';
+import VerificationStatus from '../../../../../components/verification-status.astro';
+import SpecificationSource from '../../../../../components/specification-source.astro';
+import type { VerificationStatus as VS } from '../../../../../components/verification-status.astro';
+import {
+  getMakeBySlug,
+  getModelBySlug,
+  getModelYears,
+  getModelYearByYear,
+  getTrimsByModelYear,
+  getConfigurationsByTrim,
+  getTowingSpecByConfiguration,
+  getSourcesForSpec,
+} from '../../../../../lib/db.ts';
+
+const { make: makeSlug, model: modelSlug, year: yearParam } = Astro.params;
+const year = yearParam ? parseInt(yearParam, 10) : null;
+
+if (!makeSlug || !modelSlug || !year) return Astro.redirect('/vehicles/', 302);
+
+const { data: make } = await getMakeBySlug(makeSlug);
+if (!make) return new Response(null, { status: 404 });
+
+const { data: model } = await getModelBySlug(make.id, modelSlug);
+if (!model) return new Response(null, { status: 404 });
+
+const { data: allModelYears } = await getModelYears(model.id);
+const verifiedYears = (allModelYears ?? []).map((my) => my.year).sort((a, b) => b - a);
+
+const { data: modelYear } = await getModelYearByYear(model.id, year);
+const isPublished = Boolean(modelYear);
+
+const { data: trims } = modelYear ? await getTrimsByModelYear(modelYear.id) : { data: [] };
+const safeTrims = trims ?? [];
+
+// Eagerly load all configs and specs for this year
+type ConfigWithSpec = {
+  config: Awaited<ReturnType<typeof getConfigurationsByTrim>>['data'] extends (infer T)[] | null ? T : never;
+  spec: Awaited<ReturnType<typeof getTowingSpecByConfiguration>>['data'];
+  sources: Awaited<ReturnType<typeof getSourcesForSpec>>['data'];
+};
+
+type TrimData = {
+  trim: (typeof safeTrims)[number];
+  configs: ConfigWithSpec[];
+};
+
+const trimData: TrimData[] = [];
+
+for (const trim of safeTrims) {
+  const { data: configs } = await getConfigurationsByTrim(trim.id);
+  const safeConfigs = configs ?? [];
+  const configsWithSpecs: ConfigWithSpec[] = [];
+  for (const config of safeConfigs) {
+    const { data: spec } = await getTowingSpecByConfiguration(config.id);
+    const { data: sources } = spec ? await getSourcesForSpec(spec.id) : { data: [] };
+    configsWithSpecs.push({ config, spec, sources: sources ?? [] });
+  }
+  trimData.push({ trim, configs: configsWithSpecs });
+}
+
+// Find overall max towing for display
+const allCapacities = trimData
+  .flatMap((t) => t.configs.map((c) => c.spec?.max_towing_capacity_lbs))
+  .filter((v): v is number => v !== null && v !== undefined);
+const maxTowing = allCapacities.length > 0 ? Math.max(...allCapacities) : null;
+const minTowing = allCapacities.length > 0 ? Math.min(...allCapacities) : null;
+
+function formatLbs(v: number | null): string {
+  if (v === null) return 'N/A';
+  return v.toLocaleString('en-US');
+}
+
+const pageTitle = isPublished
+  ? `${year} ${make.name} ${model.name} Towing Capacity`
+  : `${year} ${make.name} ${model.name} — Towing Specifications Pending`;
+const pageDesc = isPublished
+  ? (maxTowing !== null && maxTowing > 0
+      ? `${year} ${make.name} ${model.name} towing capacity: up to ${formatLbs(maxTowing)} lbs. Configuration-specific specifications from manufacturer documentation.`
+      : `${year} ${make.name} ${model.name} towing specifications from official manufacturer documentation.`)
+  : `Towing capacity specifications for the ${year} ${make.name} ${model.name} are pending archival verification.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemPage',
+  name: pageTitle,
+  description: pageDesc,
+  url: `${import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com'}/vehicles/${make.slug}/${model.slug}/${year}/`,
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDesc}
+  canonicalUrl={`/vehicles/${make.slug}/${model.slug}/${year}/`}
+  jsonLd={jsonLd}
+  noindex={!isPublished}
+  breadcrumbs={[
+    { name: 'Vehicles', url: '/vehicles/' },
+    { name: make.name, url: `/vehicles/${make.slug}/` },
+    { name: model.name, url: `/vehicles/${make.slug}/${model.slug}/` },
+    { name: String(year), url: `/vehicles/${make.slug}/${model.slug}/${year}/` },
+  ]}
+>
+  <SiteHeader currentPath="/vehicles/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs crumbs={[
+        { name: 'Vehicles', href: '/vehicles/' },
+        { name: make.name, href: `/vehicles/${make.slug}/` },
+        { name: model.name, href: `/vehicles/${make.slug}/${model.slug}/` },
+        { name: String(year) },
+      ]} />
+
+      <!-- Model Year Switcher -->
+      {verifiedYears.length > 1 && (
+        <div class="year-switcher" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+          <span style="font-size: var(--text-xs); color: var(--color-pewter); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500;">
+            Available Model Years:
+          </span>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem;">
+            {verifiedYears.map((vy) => (
+              <a
+                href={`/vehicles/${make.slug}/${model.slug}/${vy}/`}
+                class={`year-pill ${vy === year ? 'year-pill--active' : ''}`}
+                style={vy === year ? 'background: var(--color-sky-blue); color: var(--color-charcoal); font-weight: 600;' : ''}
+              >
+                {vy}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Page Header -->
+      <div class="spec-header">
+        <div class="spec-header__meta">
+          <h1 class="spec-header__title">{year} {make.name} {model.name}</h1>
+          <p class="spec-header__sub">Towing Capacity &amp; Specifications</p>
+        </div>
+
+        {maxTowing !== null && (
+          <div class="spec-header__capacity">
+            <span class="capacity-display__label">Max Towing Capacity</span>
+            <div class="spec-header__capacity-row">
+              <span class="capacity-display__value">
+                {formatLbs(maxTowing)}
+              </span>
+              <span class="capacity-display__unit">lbs</span>
+            </div>
+            {minTowing !== null && minTowing !== maxTowing && (
+              <span class="spec-header__range">
+                Range: {formatLbs(minTowing)} – {formatLbs(maxTowing)} lbs depending on configuration
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <!-- Important warning when capacities vary -->
+      {minTowing !== null && maxTowing !== null && minTowing !== maxTowing && (
+        <div class="alert alert--warning" role="note" style="margin-bottom:1.5rem;">
+          <svg class="alert__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 2l8 15H2L10 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M10 8v4M10 14.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>
+            Towing capacity for this vehicle ranges from {formatLbs(minTowing)} to {formatLbs(maxTowing)} lbs
+            depending on trim level, engine, drivetrain, and equipment. The maximum rating applies only to
+            specific configurations listed below. Do not assume the highest rating applies to your vehicle.
+          </p>
+        </div>
+      )}
+
+      <!-- Explicit warning for non-towing rated vehicles (e.g. Venza) -->
+      {maxTowing === 0 && (
+        <div class="alert alert--warning" role="note" style="margin-bottom:1.5rem;">
+          <svg class="alert__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 2l8 15H2L10 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M10 8v4M10 14.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>
+            <strong>Trailer Towing Not Recommended:</strong> Official manufacturer documentation explicitly states that this vehicle is not engineered or rated for trailer towing (0 lbs capacity). Towing a trailer with this vehicle may cause severe transmission or drivetrain damage and void warranty coverage.
+          </p>
+        </div>
+      )}
+
+      <!-- Trim/Config Specs -->
+      {trimData.length > 0 ? (
+        <div class="trims-list">
+          {trimData.map((td) => (
+            <section class="trim-section" aria-labelledby={`trim-${td.trim.id}`}>
+              <h2 class="trim-section__header" id={`trim-${td.trim.id}`}>
+                {td.trim.name} Trim
+              </h2>
+
+              {td.configs.length === 0 ? (
+                <p class="trim-section__empty">No configuration data available for this trim.</p>
+              ) : (
+                td.configs.map((cw, ci) => (
+                  <div class="config-block">
+                    {td.configs.length > 1 && (
+                      <h3 class="config-block__label">
+                        Configuration {ci + 1}
+                        {cw.config.drivetrain && ` — ${cw.config.drivetrain}`}
+                        {cw.config.engine_description && ` · ${cw.config.engine_description}`}
+                        {cw.config.cab_style && ` · ${cw.config.cab_style}`}
+                      </h3>
+                    )}
+
+                    <!-- Config details -->
+                    {(cw.config.engine_description || cw.config.drivetrain || cw.config.transmission || cw.config.cab_style || cw.config.axle_ratio) && (
+                      <div class="config-block__meta">
+                        {cw.config.engine_description && <span>{cw.config.engine_description}</span>}
+                        {cw.config.drivetrain && <span>{cw.config.drivetrain}</span>}
+                        {cw.config.transmission && <span>{cw.config.transmission}</span>}
+                        {cw.config.cab_style && <span>{cw.config.cab_style}</span>}
+                        {cw.config.bed_length && <span>{cw.config.bed_length} bed</span>}
+                        {cw.config.axle_ratio && <span>{cw.config.axle_ratio} axle</span>}
+                        {cw.config.has_tow_package && <span class="badge badge--verified">Tow Package</span>}
+                      </div>
+                    )}
+
+                    <!-- Spec Table -->
+                    {cw.spec ? (
+                      <div class="spec-table-wrap">
+                        <table class="spec-table" aria-label={`Towing specifications for ${td.trim.name}`}>
+                          <tbody>
+                            <tr>
+                              <td class="spec-label">Maximum Towing Capacity</td>
+                              <td class="spec-value spec-value--primary">
+                                {cw.spec.max_towing_capacity_lbs !== null
+                                  ? (cw.spec.max_towing_capacity_lbs === 0
+                                      ? 'Not recommended for trailer towing'
+                                      : `${formatLbs(cw.spec.max_towing_capacity_lbs)} lbs`)
+                                  : <span class="spec-unavailable">Not available in verified source</span>
+                                }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="spec-label">Maximum Tongue Weight</td>
+                              <td class="spec-value">
+                                {cw.spec.max_tongue_weight_lbs !== null
+                                  ? (cw.spec.max_tongue_weight_lbs === 0
+                                      ? 'Not applicable (towing not recommended)'
+                                      : `${formatLbs(cw.spec.max_tongue_weight_lbs)} lbs`)
+                                  : <span class="spec-unavailable">Not available in verified source</span>
+                                }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="spec-label">Payload Capacity</td>
+                              <td class="spec-value">
+                                {cw.spec.max_payload_lbs !== null
+                                  ? `${formatLbs(cw.spec.max_payload_lbs)} lbs`
+                                  : <span class="spec-unavailable">Not available in verified source</span>
+                                }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="spec-label">GCWR</td>
+                              <td class="spec-value">
+                                {cw.spec.gcwr_lbs !== null
+                                  ? `${formatLbs(cw.spec.gcwr_lbs)} lbs`
+                                  : <span class="spec-unavailable">Not available in verified source</span>
+                                }
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="spec-label">GVWR</td>
+                              <td class="spec-value">
+                                {cw.spec.gvwr_lbs !== null
+                                  ? `${formatLbs(cw.spec.gvwr_lbs)} lbs`
+                                  : <span class="spec-unavailable">Not available in verified source</span>
+                                }
+                              </td>
+                            </tr>
+                            {cw.spec.fifth_wheel_capacity_lbs !== null && (
+                              <tr>
+                                <td class="spec-label">Fifth-Wheel Towing</td>
+                                <td class="spec-value">{formatLbs(cw.spec.fifth_wheel_capacity_lbs)} lbs</td>
+                              </tr>
+                            )}
+                            {cw.spec.gooseneck_capacity_lbs !== null && (
+                              <tr>
+                                <td class="spec-label">Gooseneck Towing</td>
+                                <td class="spec-value">{formatLbs(cw.spec.gooseneck_capacity_lbs)} lbs</td>
+                              </tr>
+                            )}
+                            {cw.spec.hitch_class && (
+                              <tr>
+                                <td class="spec-label">Hitch Class</td>
+                                <td class="spec-value">{cw.spec.hitch_class}</td>
+                              </tr>
+                            )}
+                            {cw.spec.equipment_notes && (
+                              <tr>
+                                <td class="spec-label">Equipment Required</td>
+                                <td class="spec-value">{cw.spec.equipment_notes}</td>
+                              </tr>
+                            )}
+                            {cw.spec.applies_when && (
+                              <tr>
+                                <td class="spec-label">Applies When</td>
+                                <td class="spec-value">{cw.spec.applies_when}</td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+
+                        <!-- Sources -->
+                        {cw.sources.length > 0 && (
+                          <div class="spec-sources">
+                            <p class="spec-sources__label">Source documentation</p>
+                            {cw.sources.map((src) => (
+                              <SpecificationSource
+                                documentTitle={src.document_title}
+                                sourceUrl={src.source_url}
+                                publisher={src.publisher}
+                                pageNumber={src.page_number}
+                                verificationDate={src.verification_date}
+                              />
+                            ))}
+                          </div>
+                        )}
+
+                        <!-- Verification Status & Actions -->
+                        <div style="padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; border-top: 1px solid var(--color-cloud-gray);">
+                          {cw.sources.length > 0 ? (
+                            <VerificationStatus
+                              status={cw.sources[0].verification_status as VS}
+                              verifiedDate={cw.sources[0].verification_date}
+                            />
+                          ) : <div></div>}
+
+                          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <a
+                              href={`/trailer-matcher/?make=${make.slug}&model=${model.slug}&year=${year}&config=${cw.config.id}`}
+                              class="btn btn--sm btn--primary"
+                            >
+                              Check My Trailer
+                            </a>
+                            <a
+                              href={`/compare/?v1=${cw.config.id}`}
+                              class="btn btn--sm btn--secondary"
+                            >
+                              Compare
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div class="alert alert--info" style="margin: 0.75rem 0;">
+                        <svg class="alert__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                          <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                          <path d="M10 9v6M10 6.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <p>Towing specification data is pending verification for this configuration.</p>
+                      </div>
+                    )}
+
+                    {cw.config.configuration_notes && (
+                      <p class="config-block__notes">{cw.config.configuration_notes}</p>
+                    )}
+                  </div>
+                ))
+              )}
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state" style="padding: 2.5rem; text-align: center; max-width: 650px; margin: 2rem auto; background: var(--color-charcoal); border: 1px solid var(--color-slate-gray); border-radius: var(--radius-md);">
+          <span class="badge badge--pending" style="margin-bottom: 0.75rem; display: inline-block;">Verification In Progress</span>
+          <h2 style="font-size: 1.35rem; color: var(--color-white); margin-bottom: 0.5rem;">
+            No verified configurations published for {year} {make.name} {model.name}
+          </h2>
+          <p style="color: var(--color-pewter); line-height: 1.6; font-size: var(--text-sm); margin-bottom: 1.5rem;">
+            TowingSpecs strictly publishes ratings backed by verified manufacturer documentation (certified owner's manuals, official fleet towing guides, and SAE J2807 compliance tables).
+          </p>
+          {verifiedYears.length > 0 && (
+            <div style="background: var(--color-graphite); padding: 1.25rem; border-radius: var(--radius-sm); text-align: left;">
+              <span style="font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; color: var(--color-cloud-gray); display: block; margin-bottom: 0.5rem;">
+                Verified model years available for {make.name} {model.name}:
+              </span>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                {verifiedYears.map((vy) => (
+                  <a href={`/vehicles/${make.slug}/${model.slug}/${vy}/`} class="btn btn--secondary btn--sm">
+                    {vy} {make.name} {model.name} &rarr;
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <SafetyDisclaimer />
+
+      <!-- Related Navigation -->
+      <nav class="related-nav" aria-label="Related tools" style="display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;">
+        <a href={`/vehicles/${make.slug}/${model.slug}/`} class="btn btn--secondary">
+          All {make.name} {model.name} Years
+        </a>
+        <a href={`/trailer-matcher/?make=${make.slug}&model=${model.slug}&year=${year}`} class="btn btn--primary">
+          Check in Trailer Matcher
+        </a>
+        <a href="/compare/" class="btn btn--secondary">
+          Compare Vehicles
+        </a>
+      </nav>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .spec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .spec-header__title { font-size: clamp(1.75rem, 3vw, 2.25rem); }
+  .spec-header__sub { color: var(--color-pewter); margin-top: 0.25rem; }
+
+  .spec-header__capacity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    text-align: right;
+  }
+
+  .spec-header__capacity-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+  }
+
+  .spec-header__range {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    max-width: 28ch;
+    text-align: right;
+  }
+
+  .trims-list { display: flex; flex-direction: column; gap: 2.5rem; }
+
+  .trim-section__header {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--color-cloud-gray);
+    margin-bottom: 1.25rem;
+  }
+
+  .trim-section__empty {
+    color: var(--color-pewter);
+    font-size: var(--text-sm);
+    padding: 1rem 0;
+  }
+
+  .config-block {
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .config-block__label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-pewter);
+    padding: 0.75rem 1rem;
+    background: var(--color-light-ash);
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+
+  .config-block__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+
+  .config-block__meta span {
+    font-size: var(--text-xs);
+    background: var(--color-light-ash);
+    color: var(--color-graphite);
+    padding: 0.2rem 0.625rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-cloud-gray);
+  }
+
+  .spec-table-wrap { overflow: hidden; }
+
+  .spec-sources {
+    padding: 0.875rem 1rem;
+    border-top: 1px solid var(--color-cloud-gray);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .spec-sources__label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.25rem;
+    max-width: none;
+  }
+
+  .config-block__notes {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--color-cloud-gray);
+    background: var(--color-light-ash);
+  }
+
+  .related-nav {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+</style>

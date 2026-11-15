@@ -1,0 +1,244 @@
+---
+/**
+ * /vehicles/[make]/ — Make overview page
+ * Lists all models for a given make with published towing data.
+ */
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/site-header.astro';
+import SiteFooter from '../../../components/site-footer.astro';
+import Breadcrumbs from '../../../components/breadcrumbs.astro';
+import { getMakeBySlug, getModelsByMake, getModelYears } from '../../../lib/db.ts';
+
+const { make: makeSlug } = Astro.params;
+
+if (!makeSlug) return Astro.redirect('/vehicles/', 302);
+
+const { data: make } = await getMakeBySlug(makeSlug);
+
+if (!make) {
+  return new Response(null, { status: 404 });
+}
+
+const url = Astro.url;
+const yearParam = url.searchParams.get('year');
+const selectedYear = yearParam ? parseInt(yearParam, 10) : null;
+
+const { data: models } = await getModelsByMake(make.id);
+const allModels = models ?? [];
+
+// If a year is specified, filter to models that genuinely have published data for that year
+let safeModels: Array<(typeof allModels)[0] & { targetUrl: string }> = [];
+
+if (selectedYear) {
+  for (const model of allModels) {
+    const { data: years } = await getModelYears(model.id);
+    if (years && years.some((my) => my.year === selectedYear && my.is_published)) {
+      safeModels.push({
+        ...model,
+        targetUrl: `/vehicles/${make.slug}/${model.slug}/${selectedYear}/`,
+      });
+    }
+  }
+} else {
+  safeModels = allModels.map((m) => ({
+    ...m,
+    targetUrl: `/vehicles/${make.slug}/${m.slug}/`,
+  }));
+}
+
+const pageTitle = selectedYear
+  ? `${selectedYear} ${make.name} Towing Specifications`
+  : `${make.name} Towing Specifications`;
+
+const pageDescription = selectedYear
+  ? `Browse verified ${selectedYear} ${make.name} towing capacity specifications by model and configuration. Trucks and SUVs.`
+  : `Browse manufacturer-verified towing capacity specifications for all ${make.name} models by year. Trucks, SUVs, and vans.`;
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={selectedYear ? `/vehicles/${make.slug}/?year=${selectedYear}` : `/vehicles/${make.slug}/`}
+  breadcrumbs={selectedYear ? [
+    { name: 'Vehicles', url: '/vehicles/' },
+    { name: make.name, url: `/vehicles/${make.slug}/` },
+    { name: `${selectedYear} Specs`, url: `/vehicles/${make.slug}/?year=${selectedYear}` },
+  ] : [
+    { name: 'Vehicles', url: '/vehicles/' },
+    { name: make.name, url: `/vehicles/${make.slug}/` },
+  ]}
+>
+  <SiteHeader currentPath="/vehicles/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs crumbs={selectedYear ? [
+        { name: 'Vehicles', href: '/vehicles/' },
+        { name: make.name, href: `/vehicles/${make.slug}/` },
+        { name: `${selectedYear} Specs` },
+      ] : [
+        { name: 'Vehicles', href: '/vehicles/' },
+        { name: make.name },
+      ]} />
+
+      <div class="page-header">
+        {selectedYear ? (
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+              <h1 class="page-header__title" style="margin-bottom: 0;">{selectedYear} {make.name} Towing Specifications</h1>
+              {safeModels.length > 0 ? (
+                <span class="badge badge--verified">Data available</span>
+              ) : (
+                <span class="badge badge--planned">No {selectedYear} models published</span>
+              )}
+            </div>
+            <p class="page-header__desc">
+              {safeModels.length > 0 ? (
+                `Verified towing ratings for ${safeModels.length} ${safeModels.length === 1 ? 'model' : 'models'} in model year ${selectedYear}. Sourced from official ${selectedYear} ${make.name} documentation.`
+              ) : (
+                `No verified ${selectedYear} vehicle records are currently published for ${make.name}.`
+              )}
+            </p>
+            <div style="margin-top: 0.75rem;">
+              <a href={`/vehicles/${make.slug}/`} class="btn btn--secondary btn--sm">← View All {make.name} Model Years</a>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <h1 class="page-header__title">{make.name} Towing Specifications</h1>
+            <p class="page-header__desc">
+              Select a model to view year-specific and configuration-specific towing capacity data.
+              All specifications are sourced from official {make.name} documentation.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {safeModels.length > 0 ? (
+        <div class="models-list" role="list">
+          {safeModels.map((model) => (
+            <a
+              href={model.targetUrl}
+              class="model-row"
+              role="listitem"
+              aria-label={`${selectedYear ? `${selectedYear} ` : ''}${make.name} ${model.name} towing specifications`}
+            >
+              <div class="model-row__info">
+                <span class="model-row__name">{selectedYear ? `${selectedYear} ` : ''}{model.name}</span>
+                {model.body_style && (
+                  <span class="model-row__type">{model.body_style.replace('_', ' ')}</span>
+                )}
+              </div>
+              <span class="model-row__cta">View {selectedYear ? `${selectedYear} ` : ''}specs</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8h9M9.5 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p>No verified {selectedYear ? `${selectedYear} ` : ''}models found for {make.name}.</p>
+          <p style="margin-top:0.5rem;">
+            Our data team verifies specifications from manufacturer documentation before publishing.
+          </p>
+          {selectedYear && (
+            <div style="margin-top: 1.5rem;">
+              <a href={`/vehicles/${make.slug}/`} class="btn btn--secondary">
+                Browse All {make.name} Model Years
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .page-header {
+    margin-bottom: 2rem;
+  }
+  .page-header__title {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    margin-bottom: 0.625rem;
+  }
+  .page-header__desc {
+    color: var(--color-pewter);
+    font-size: var(--text-base);
+    max-width: 60ch;
+  }
+
+  .models-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .model-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.125rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--color-cloud-gray);
+    transition: background-color var(--transition-fast);
+  }
+
+  .model-row:last-child { border-bottom: none; }
+
+  .model-row:hover {
+    background-color: var(--color-light-ash);
+  }
+
+  .model-row__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .model-row__name {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+  }
+
+  .model-row__type {
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    text-transform: capitalize;
+    background: var(--color-light-ash);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+  }
+
+  .model-row__cta {
+    font-size: var(--text-sm);
+    color: var(--color-electric-blue);
+    font-weight: 500;
+  }
+
+  .model-row svg {
+    color: var(--color-pale-silver);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .model-row:hover svg {
+    color: var(--color-electric-blue);
+    transform: translateX(3px);
+  }
+
+  .empty-state {
+    padding: 3rem 0;
+    color: var(--color-pewter);
+    font-size: var(--text-sm);
+  }
+</style>

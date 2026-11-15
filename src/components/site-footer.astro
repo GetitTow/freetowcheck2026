@@ -1,0 +1,169 @@
+---
+/**
+ * SiteFooter — full footer for TowingSpecs
+ */
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="site-footer__grid">
+      <!-- Brand column -->
+      <div class="site-footer__brand">
+        <a href="/" class="site-footer__logo" aria-label="TowingSpecs — home">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="2" y="8" width="20" height="10" rx="2" stroke="rgba(255,255,255,0.6)" stroke-width="1.75" fill="none"/>
+            <circle cx="6.5" cy="18" r="2.25" fill="rgba(255,255,255,0.6)"/>
+            <circle cx="17.5" cy="18" r="2.25" fill="rgba(255,255,255,0.6)"/>
+            <path d="M2 11h4l2-3h8l2 3" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          TowingSpecs
+        </a>
+        <p class="site-footer__tagline">
+          Verified towing specifications for trucks, SUVs, and vans.
+          An independent automotive reference platform.
+        </p>
+      </div>
+
+      <!-- Links -->
+      <nav class="site-footer__nav" aria-label="Footer navigation">
+        <div class="site-footer__col">
+          <h3 class="site-footer__heading">Lookup</h3>
+          <ul role="list">
+            <li><a href="/vehicles/">Browse Vehicles</a></li>
+            <li><a href="/trailer-matcher/">Trailer Matcher</a></li>
+            <li><a href="/compare/">Compare Vehicles</a></li>
+            <li><a href="/coverage/">Coverage Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="site-footer__col">
+          <h3 class="site-footer__heading">Learn</h3>
+          <ul role="list">
+            <li><a href="/guides/">Towing Guides</a></li>
+            <li><a href="/guides/towing-capacity-explained/">Capacity Explained</a></li>
+            <li><a href="/guides/tongue-weight/">Tongue Weight</a></li>
+            <li><a href="/guides/gcwr/">GCWR Guide</a></li>
+          </ul>
+        </div>
+        <div class="site-footer__col">
+          <h3 class="site-footer__heading">About</h3>
+          <ul role="list">
+            <li><a href="/about/">About TowingSpecs</a></li>
+            <li><a href="/methodology/">Data Methodology</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li><a href="/sitemap.xml">Sitemap</a></li>
+          </ul>
+        </div>
+        <div class="site-footer__col">
+          <h3 class="site-footer__heading">Legal</h3>
+          <ul role="list">
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Use</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <hr class="site-footer__divider" />
+
+    <div class="site-footer__bottom">
+      <p class="site-footer__copyright">
+        &copy; {currentYear} TowingSpecs. All towing specifications are sourced from manufacturer documentation and are provided for reference only.
+        Always consult your vehicle owner's manual and a qualified professional before towing.
+      </p>
+      <p class="site-footer__disclaimer">
+        TowingSpecs is an independent reference platform and is not affiliated with any vehicle manufacturer.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer__grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+  }
+
+  .site-footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    margin-bottom: 0.875rem;
+  }
+
+  .site-footer__tagline {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.7;
+    max-width: 26ch;
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .site-footer__col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.625rem;
+  }
+
+  .site-footer__heading {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .site-footer__divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-block: 2rem;
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .site-footer__copyright,
+  .site-footer__disclaimer {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.35);
+    line-height: 1.6;
+    max-width: 80ch;
+  }
+
+  @media (max-width: 900px) {
+    .site-footer__grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .site-footer__nav {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .site-footer__tagline {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-footer__nav {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,832 @@
+[
+  {
+    "id": "src-ford-2025-rv-guide",
+    "url": "https://www.ford.com/cmslibs/content/dam/brand_ford/en_us/brand/resources/general/pdf/guides/2025_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2025 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://www.ford.com/cmslibs/content/dam/brand_ford/en_us/brand/resources/general/pdf/guides/2025_Ford_RV_Trailer_Towing_Guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ford-2025-sd-guide",
+    "url": "https://www.ford.com/cmslibs/content/dam/brand_ford/en_us/brand/resources/general/pdf/guides/2025_Ford_Super_Duty_Towing_Guide.pdf",
+    "title": "2025 Ford Super Duty Technical Specifications & Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://www.ford.com/cmslibs/content/dam/brand_ford/en_us/brand/resources/general/pdf/guides/2025_Ford_Super_Duty_Towing_Guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ford-2025-explorer",
+    "url": "https://media.ford.com/content/dam/fordmedia/North%20America/US/product/2025/explorer/2025-Ford-Explorer-Tech-Specs.pdf",
+    "title": "2025 Ford Explorer Technical Specifications",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://www.fromtheroad.ford.com/us/en/home",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2025-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals/2025-chevrolet-trailering-guide.pdf",
+    "title": "2025 Chevrolet Trailering Guide",
+    "publisher": "General Motors",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals/2025-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2025-tahoe",
+    "url": "https://media.chevrolet.com/content/dam/media/us/en/chevrolet/vehicles/tahoe/2025/2025-chevrolet-tahoe-specifications.pdf",
+    "title": "2025 Chevrolet Tahoe Technical Specifications",
+    "publisher": "General Motors",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://media.chevrolet.com/content/dam/media/us/en/chevrolet/vehicles/tahoe/2025/2025-chevrolet-tahoe-specifications.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2025-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing/2025-ram-1500-towing-specs.pdf",
+    "title": "2025 Ram 1500 Towing & Payload Capacity Chart",
+    "publisher": "Stellantis North America",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing/2025-ram-1500-towing-specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2025-tundra",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2025/tundra_towing_guide.pdf",
+    "title": "2025 Toyota Tundra Towing Guide",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2025/tundra_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2025-tacoma",
+    "url": "https://pressroom.toyota.com/vehicle/2025-toyota-tacoma/",
+    "title": "2025 Toyota Tacoma Product Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://pressroom.toyota.com/vehicle/2025-toyota-tacoma/",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2025-rav4",
+    "url": "https://www.toyota.com/owners/resources/warranty-owners-manuals/rav4/2025",
+    "title": "2025 Toyota RAV4 Owner's Manual",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/owners/resources/warranty-owners-manuals/rav4/2025/",
+    "error": null
+  },
+  {
+    "id": "src-gmc-2025-trailering",
+    "url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals/2025-gmc-trailering-guide.pdf",
+    "title": "2025 GMC Trailering Guide",
+    "publisher": "General Motors",
+    "recorded_status": "source_unavailable",
+    "http_status": 404,
+    "final_url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals/2025-gmc-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2024-towing-guide",
+    "url": "https://www.toyota.com/owners/resources/warranty-owners-manuals",
+    "title": "2024 Toyota Towing & Capacity Guide",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.toyota.com/owners/warranty-owners-manuals",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2022-highlander",
+    "url": "https://pressroom.toyota.com/2022-toyota-highlander-updates-include-new-hybrid-only-bronze-edition/",
+    "title": "2022 Toyota Highlander Product Specifications & eBrochure",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://pressroom.toyota.com/2022-toyota-highlander-updates-include-new-hybrid-only-bronze-edition/",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2013-towing-guide",
+    "url": "https://www.toyota.com/owners/resources/warranty-owners-manuals",
+    "title": "2013 Toyota Towing & Capacity Guide",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.toyota.com/owners/warranty-owners-manuals",
+    "error": null
+  },
+  {
+    "id": "src-ford-2013-towing-guide",
+    "url": "https://www.ford.com/support/category/towing/",
+    "title": "2013 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": "FETCH_ERROR",
+    "final_url": "https://www.ford.com/support/category/towing/",
+    "error": "This operation was aborted"
+  },
+  {
+    "id": "src-chevy-2013-trailering",
+    "url": "https://www.chevrolet.com/owners/manuals",
+    "title": "2013 Chevrolet Trailering Guide",
+    "publisher": "General Motors",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/owners/manuals",
+    "error": null
+  },
+  {
+    "id": "src-ram-2013-towing",
+    "url": "https://www.ramtrucks.com/owners/manuals.html",
+    "title": "2013 Ram Trucks Towing & Capacity Chart",
+    "publisher": "Chrysler Group LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/owners/manuals.html",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2025-crown-signia",
+    "url": "https://pressroom.toyota.com/vehicle/2025-toyota-crown-signia/",
+    "title": "2025 Toyota Crown Signia Product Specifications & Capacity Sheet",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://pressroom.toyota.com/vehicle/2025-toyota-crown-signia/",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2024-venza",
+    "url": "https://www.toyota.com/owners/resources/warranty-owners-manuals",
+    "title": "2024 Toyota Venza Owner's Manual",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://www.toyota.com/owners/warranty-owners-manuals",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2021-tacoma",
+    "url": "https://www.toyota.com/owners/resources/warranty-owners-manuals",
+    "title": "2021 Toyota Tacoma eBrochure & Towing Guide",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.toyota.com/owners/warranty-owners-manuals",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2021-tundra",
+    "url": "https://www.toyota.com/owners/resources/warranty-owners-manuals",
+    "title": "2021 Toyota Tundra eBrochure & Towing Matrix",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.toyota.com/owners/warranty-owners-manuals",
+    "error": null
+  },
+  {
+    "id": "src-subaru-2024-outback",
+    "url": "https://media.subaru.com/pressreleases.do?search=2024+Outback+specs",
+    "title": "2024 Subaru Outback Vehicle Specifications & Towing Ratings",
+    "publisher": "Subaru of America, Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://media.subaru.com/pressreleases.do?search=2024+Outback+specs",
+    "error": null
+  },
+  {
+    "id": "src-subaru-2024-ascent",
+    "url": "https://media.subaru.com/pressreleases.do?search=2024+Ascent+specs",
+    "title": "2024 Subaru Ascent Technical Specifications",
+    "publisher": "Subaru of America, Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://media.subaru.com/pressreleases.do?search=2024+Ascent+specs",
+    "error": null
+  },
+  {
+    "id": "src-honda-2024-pilot",
+    "url": "https://hondanews.com/en-US/releases/2024-honda-pilot-specifications-features",
+    "title": "2024 Honda Pilot Specifications & Features",
+    "publisher": "American Honda Motor Co., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://hondanews.com/en-US/releases/2024-honda-pilot-specifications-features",
+    "error": null
+  },
+  {
+    "id": "src-honda-2024-ridgeline",
+    "url": "https://hondanews.com/en-US/honda-automobiles/channels/honda-ridgeline?selectedTabId=honda-ridgeline-specs",
+    "title": "2024 Honda Ridgeline Engineering & Towing Specifications",
+    "publisher": "American Honda Motor Co., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://hondanews.com/en-US/honda-automobiles/channels/honda-ridgeline?selectedTabId=honda-ridgeline-specs",
+    "error": null
+  },
+  {
+    "id": "src-jeep-2024-grand-cherokee",
+    "url": "https://media.stellantisnorthamerica.com/newsrelease.do?id=25123&mid=1",
+    "title": "2024 Jeep Grand Cherokee Technical Specifications",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://media.stellantisnorthamerica.com/newsrelease.do?id=25123&mid=1",
+    "error": null
+  },
+  {
+    "id": "src-jeep-2024-wrangler",
+    "url": "https://media.stellantisnorthamerica.com/newsrelease.do?id=25120&mid=1",
+    "title": "2024 Jeep Wrangler Specifications & Full-Float Axle Ratings",
+    "publisher": "FCA US LLC",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://media.stellantisnorthamerica.com/newsrelease.do?id=25120&mid=1",
+    "error": null
+  },
+  {
+    "id": "src-nissan-2024-frontier",
+    "url": "https://usa.nissannews.com/en-US/releases/2024-nissan-frontier-specifications",
+    "title": "2024 Nissan Frontier Technical Specifications",
+    "publisher": "Nissan North America, Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://usa.nissannews.com/en-US/releases/2024-nissan-frontier-specifications",
+    "error": null
+  },
+  {
+    "id": "src-nissan-2024-pathfinder",
+    "url": "https://usa.nissannews.com/en-US/releases/2024-nissan-pathfinder-specifications",
+    "title": "2024 Nissan Pathfinder Specifications & Towing Ratings",
+    "publisher": "Nissan North America, Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://usa.nissannews.com/en-US/releases/2024-nissan-pathfinder-specifications",
+    "error": null
+  },
+  {
+    "id": "src-ford-2014-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2014_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2014 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-ford-2015-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2015_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2015 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-ford-2016-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2016_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2016 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-ford-2017-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2017_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2017 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-ford-2018-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2018_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2018 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-ford-2019-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2019_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2019 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-ford-2020-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2020_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2020 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2014-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2014-chevrolet-trailering-guide.pdf",
+    "title": "2014 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2014-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2015-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2015-chevrolet-trailering-guide.pdf",
+    "title": "2015 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2015-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-gmc-2015-trailering",
+    "url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals-and-videos/02-pdf/2015-gmc-trailering-guide.pdf",
+    "title": "2015 GMC Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals-and-videos/02-pdf/2015-gmc-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2016-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2016-chevrolet-trailering-guide.pdf",
+    "title": "2016 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2016-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2017-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2017-chevrolet-trailering-guide.pdf",
+    "title": "2017 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2017-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-gmc-2017-trailering",
+    "url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals-and-videos/02-pdf/2017-gmc-trailering-guide.pdf",
+    "title": "2017 GMC Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals-and-videos/02-pdf/2017-gmc-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2018-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2018-chevrolet-trailering-guide.pdf",
+    "title": "2018 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2018-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2019-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2019-chevrolet-trailering-guide.pdf",
+    "title": "2019 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2019-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-gmc-2019-trailering",
+    "url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals-and-videos/02-pdf/2019-gmc-trailering-guide.pdf",
+    "title": "2019 GMC Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/owners/manuals-and-videos/02-pdf/2019-gmc-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2020-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2020-chevrolet-trailering-guide.pdf",
+    "title": "2020 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/owners/manuals-and-videos/02-pdf/2020-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2014-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2014_Ram_1500_Towing_Specs.pdf",
+    "title": "2014 Ram 1500 Towing and Capacity Chart",
+    "publisher": "Chrysler Group LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2014_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2015-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2015_Ram_1500_Towing_Specs.pdf",
+    "title": "2015 Ram 1500 Towing and Capacity Chart",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2015_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2016-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2016_Ram_1500_Towing_Specs.pdf",
+    "title": "2016 Ram 1500 Towing and Capacity Chart",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2016_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2017-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2017_Ram_1500_Towing_Specs.pdf",
+    "title": "2017 Ram 1500 Towing and Capacity Chart",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2017_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2018-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2018_Ram_1500_Towing_Specs.pdf",
+    "title": "2018 Ram 1500 Towing and Capacity Chart",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2018_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2019-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2019_Ram_1500_Towing_Specs.pdf",
+    "title": "2019 Ram 1500 Trailer Towing & Capacity Guide",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2019_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2020-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2020_Ram_1500_Towing_Specs.pdf",
+    "title": "2020 Ram 1500 Towing and Payload Ratings",
+    "publisher": "FCA US LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2020_Ram_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2014-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2014/toyota_towing_guide.pdf",
+    "title": "2014 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2014/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2015-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2015/toyota_towing_guide.pdf",
+    "title": "2015 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2015/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2016-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2016/toyota_towing_guide.pdf",
+    "title": "2016 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2016/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2017-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2017/toyota_towing_guide.pdf",
+    "title": "2017 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2017/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2018-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2018/toyota_towing_guide.pdf",
+    "title": "2018 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2018/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2019-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2019/toyota_towing_guide.pdf",
+    "title": "2019 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2019/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2020-towing",
+    "url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2020/toyota_towing_guide.pdf",
+    "title": "2020 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.toyota.com/content/dam/toyota/brochures/pdf/2020/toyota_towing_guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-honda-2016-pilot",
+    "url": "https://hondanews.com/en-US/releases/2016-honda-pilot-specifications-and-features",
+    "title": "2016 Honda Pilot Specifications & Towing Ratings",
+    "publisher": "American Honda Motor Co., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://hondanews.com/en-US/releases/2016-honda-pilot-specifications-and-features",
+    "error": null
+  },
+  {
+    "id": "src-honda-2019-pilot",
+    "url": "https://hondanews.com/en-US/releases/2019-honda-pilot-specifications-features",
+    "title": "2019 Honda Pilot Specifications & Features",
+    "publisher": "American Honda Motor Co., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://hondanews.com/en-US/releases/2019-honda-pilot-specifications-features",
+    "error": null
+  },
+  {
+    "id": "src-nissan-2016-frontier",
+    "url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals_guides/Frontier/2016/2016-nissan-frontier-towing-guide.pdf",
+    "title": "2016 Nissan Frontier Towing Guide",
+    "publisher": "Nissan North America, Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals_guides/Frontier/2016/2016-nissan-frontier-towing-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-nissan-2019-frontier",
+    "url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals_guides/Frontier/2019/2019-nissan-frontier-towing-guide.pdf",
+    "title": "2019 Nissan Frontier Towing Guide",
+    "publisher": "Nissan North America, Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals_guides/Frontier/2019/2019-nissan-frontier-towing-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ford-2010-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2010_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2010 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2010-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2010-chevrolet-trailering-guide.pdf",
+    "title": "2010 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2010-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2010-towing",
+    "url": "https://www.ramtrucks.com/en/towing_guide/pdf/2010-RAM.1500.Towing.Specs.pdf",
+    "title": "2010 Ram 1500 Specifications & Towing Guide",
+    "publisher": "Chrysler Group LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.ramtrucks.com/",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2010-specs",
+    "url": "https://pressroom.toyota.com/vehicle/2010-toyota-tundra-specs/",
+    "title": "2010 Toyota Towing & Capacity Specifications",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://pressroom.toyota.com/vehicle/2010-toyota-tundra-specs/",
+    "error": null
+  },
+  {
+    "id": "src-ford-2011-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2011_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2011 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2011-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2011-chevrolet-trailering-guide.pdf",
+    "title": "2011 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2011-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2011-towing",
+    "url": "https://www.ramtrucks.com/en/towing_guide/pdf/2011-RAM.1500.Towing.Specs.pdf",
+    "title": "2011 Ram 1500 Towing Specifications & Capability Chart",
+    "publisher": "Chrysler Group LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.ramtrucks.com/",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2011-specs",
+    "url": "https://pressroom.toyota.com/vehicle/2011-toyota-tundra-specs/",
+    "title": "2011 Toyota Towing & Capacity Specifications (SAE J2807 Certified)",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://pressroom.toyota.com/vehicle/2011-toyota-tundra-specs/",
+    "error": null
+  },
+  {
+    "id": "src-ford-2012-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2012_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2012 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2012-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2012-chevrolet-trailering-guide.pdf",
+    "title": "2012 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2012-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-gmc-2012-trailering",
+    "url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/vehicle-groups/trailering-and-towing/02-pdf/2012-gmc-trailering-guide.pdf",
+    "title": "2012 GMC Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/vehicle-groups/trailering-and-towing/02-pdf/2012-gmc-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2012-towing",
+    "url": "https://www.ramtrucks.com/en/towing_guide/pdf/2012-RAM.1500.Towing.Specs.pdf",
+    "title": "2012 Ram 1500 Towing Specifications & Matrix",
+    "publisher": "Chrysler Group LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.ramtrucks.com/",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2012-specs",
+    "url": "https://pressroom.toyota.com/vehicle/2012-toyota-tundra-specs/",
+    "title": "2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://pressroom.toyota.com/vehicle/2012-toyota-tundra-specs/",
+    "error": null
+  },
+  {
+    "id": "src-ford-2023-rv-guide",
+    "url": "https://www.fleet.ford.com/content/dam/aem_fleet/en_us/fleet/towing-guides/2023_Ford_RV_Trailer_Towing_Guide.pdf",
+    "title": "2023 Ford RV & Trailer Towing Guide",
+    "publisher": "Ford Motor Company",
+    "recorded_status": "partially_verified",
+    "http_status": 200,
+    "final_url": "https://www.fordpro.com/en-us/?redirectFromFleet=1",
+    "error": null
+  },
+  {
+    "id": "src-chevy-2023-trailering",
+    "url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2023-chevrolet-trailering-guide.pdf",
+    "title": "2023 Chevrolet Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.chevrolet.com/content/dam/chevrolet/na/us/english/index/vehicle-groups/trailering-and-towing/trucks/02-pdf/2023-chevrolet-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-gmc-2023-trailering",
+    "url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/vehicle-groups/trailering-and-towing/02-pdf/2023-gmc-trailering-guide.pdf",
+    "title": "2023 GMC Trailering Guide",
+    "publisher": "General Motors LLC",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.gmc.com/content/dam/gmc/na/us/english/index/vehicle-groups/trailering-and-towing/02-pdf/2023-gmc-trailering-guide.pdf",
+    "error": null
+  },
+  {
+    "id": "src-ram-2023-towing",
+    "url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2023_RAM_1500_Towing_Specs.pdf",
+    "title": "2023 Ram 1500 Towing Specifications & Matrix",
+    "publisher": "FCA US LLC / Stellantis",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.ramtrucks.com/content/dam/fca-brands/na/ramtrucks/en_us/towing-guide/2023_RAM_1500_Towing_Specs.pdf",
+    "error": null
+  },
+  {
+    "id": "src-toyota-2023-specs",
+    "url": "https://pressroom.toyota.com/vehicle/2023-toyota-tundra-specs/",
+    "title": "2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)",
+    "publisher": "Toyota Motor Sales, U.S.A., Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://pressroom.toyota.com/vehicle/2023-toyota-tundra-specs/",
+    "error": null
+  },
+  {
+    "id": "src-honda-2023-pilot",
+    "url": "https://hondanews.com/en-US/releases/2023-honda-pilot-specifications-features",
+    "title": "2023 Honda Pilot Specifications & Towing Ratings",
+    "publisher": "American Honda Motor Co., Inc.",
+    "recorded_status": "manufacturer_verified",
+    "http_status": 200,
+    "final_url": "https://hondanews.com/en-US/releases/2023-honda-pilot-specifications-features",
+    "error": null
+  },
+  {
+    "id": "src-nissan-2023-frontier",
+    "url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals_guides/Frontier/2023/2023-nissan-frontier-towing-guide.pdf",
+    "title": "2023 Nissan Frontier Towing Guide",
+    "publisher": "Nissan North America, Inc.",
+    "recorded_status": "partially_verified",
+    "http_status": 404,
+    "final_url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals_guides/Frontier/2023/2023-nissan-frontier-towing-guide.pdf",
+    "error": null
+  }
+]

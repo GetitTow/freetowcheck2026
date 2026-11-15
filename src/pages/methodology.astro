@@ -1,0 +1,211 @@
+---
+/**
+ * /methodology/ — Data methodology and editorial standards
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+---
+
+<Layout
+  title="Data Methodology — How TowingSpecs Verifies Towing Data"
+  description="How TowingSpecs sources, verifies, and publishes vehicle towing specifications. Our editorial standards, source policy, and data integrity practices."
+  canonicalUrl="/methodology/"
+  breadcrumbs={[{ name: 'Methodology', url: '/methodology/' }]}
+>
+  <SiteHeader currentPath="/methodology/" />
+
+  <main id="main-content">
+    <div class="container container--narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+      <Breadcrumbs crumbs={[{ name: 'Methodology' }]} />
+
+      <h1 style="font-size: clamp(2rem, 4vw, 2.75rem); margin-bottom: 0.75rem;">Data Methodology</h1>
+      <p style="color: var(--color-pewter); font-size: var(--text-md); margin-bottom: 3rem; max-width: 54ch;">
+        How TowingSpecs sources, verifies, and publishes vehicle towing specifications.
+      </p>
+
+      <section class="method-section" aria-labelledby="method-priority">
+        <h2 id="method-priority">Source Priority</h2>
+        <p>
+          TowingSpecs publishes towing specifications only when a supporting manufacturer source document
+          can be identified and linked. We do not publish figures derived solely from third-party websites,
+          press reports, or dealer-provided information.
+        </p>
+        <p>
+          Sources are evaluated in this order of preference:
+        </p>
+        <ol class="method-list">
+          <li>
+            <strong>Official manufacturer towing guides</strong> — dedicated documents published by the
+            vehicle manufacturer specifically for towing capacity information.
+          </li>
+          <li>
+            <strong>Owner's manuals</strong> — factory-issued owner's manuals that include towing
+            capacity tables and equipment requirements.
+          </li>
+          <li>
+            <strong>Manufacturer specification sheets</strong> — official spec documents published
+            at time of vehicle launch.
+          </li>
+          <li>
+            <strong>Manufacturer website</strong> — capacity figures published on the manufacturer's
+            official website, provided we can link to the source page.
+          </li>
+          <li>
+            <strong>Official brochures</strong> — only when the above sources are unavailable and
+            the brochure includes equipment context.
+          </li>
+        </ol>
+      </section>
+
+      <hr class="divider" />
+
+      <section class="method-section" aria-labelledby="method-status">
+        <h2 id="method-status">Verification Status Definitions</h2>
+
+        <dl class="status-list">
+          <div class="status-item">
+            <dt><span class="badge badge--verified">Manufacturer-confirmed</span></dt>
+            <dd>The exact displayed configuration and relevant rating are supported by accessible primary manufacturer evidence (owner manual, official technical specs, or OEM specification sheet).</dd>
+          </div>
+          <div class="status-item">
+            <dt><span class="badge badge--partial">Official document; details under review</span></dt>
+            <dd>An official document exists, but the exact configuration, equipment prerequisite or relevant footnote is not fully confirmed.</dd>
+          </div>
+          <div class="status-item">
+            <dt><span class="badge badge--link-repair">Source link needs repair</span></dt>
+            <dd>The original evidence has been identified, but the exact document cannot currently be opened at its recorded URL.</dd>
+          </div>
+          <div class="status-item">
+            <dt><span class="badge badge--pending">Not verified</span></dt>
+            <dd>The rating has not passed the required evidence review. Do not present it as a confirmed rating.</dd>
+          </div>
+          <div class="status-item">
+            <dt><span class="badge badge--conflict">Conflicting evidence</span></dt>
+            <dd>Discrepancy detected between multiple official sources; TowingSpecs flags the conflict and documents both references rather than guessing.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <hr class="divider" />
+
+      <section class="method-section" aria-labelledby="method-config">
+        <h2 id="method-config">Configuration-Specific Ratings</h2>
+        <p>
+          Towing capacity varies significantly by vehicle configuration. TowingSpecs records separate
+          specification entries for different:
+        </p>
+        <ul class="method-list">
+          <li>Trim levels</li>
+          <li>Engine and transmission combinations</li>
+          <li>Drivetrain (4x2, 4x4, AWD, etc.)</li>
+          <li>Cab and bed configurations (where applicable)</li>
+          <li>Axle ratios</li>
+          <li>Factory tow package equipment</li>
+        </ul>
+        <p>
+          We never present the maximum available rating as a general figure for a model.
+          Where ratings vary by configuration, every individual rating is shown with its
+          applicable configuration clearly noted.
+        </p>
+      </section>
+
+      <hr class="divider" />
+
+      <section class="method-section" aria-labelledby="method-never">
+        <h2 id="method-never">What We Never Do</h2>
+        <ul class="method-list method-list--check">
+          <li>Publish a towing capacity without a linked manufacturer source</li>
+          <li>Substitute a secondary source (competitor site, review, forum) for manufacturer evidence</li>
+          <li>Show a guessed number or zero when a figure is unknown</li>
+          <li>Scrape competitor websites and republish their data</li>
+          <li>Present the highest available rating as applying to every configuration</li>
+          <li>Fabricate vehicle data to populate an attractive initial dataset</li>
+          <li>Claim manufacturer verification when only a third-party site was consulted</li>
+        </ul>
+      </section>
+
+      <hr class="divider" />
+
+      <section class="method-section" aria-labelledby="method-corrections">
+        <h2 id="method-corrections">Corrections and Updates</h2>
+        <p>
+          When a specification is found to be incorrect, we update the record, document the
+          correction reason, and retain the previous value in the import history. Corrections
+          are auditable.
+        </p>
+        <p>
+          If you believe a published figure is incorrect or can supply a better source,
+          <a href="/contact/" class="text-link">please contact us</a>. We review all submissions
+          and respond with the outcome.
+        </p>
+      </section>
+
+      <hr class="divider" />
+
+      <section class="method-section" aria-labelledby="method-disclaimer">
+        <h2 id="method-disclaimer">Safety Disclaimer</h2>
+        <p>
+          TowingSpecs is an independent reference platform. All specifications are provided for
+          informational purposes only. Always consult your vehicle owner's manual, the trailer
+          manufacturer's documentation, and a qualified professional before towing. Exceeding any
+          manufacturer-rated limit is unsafe and may be unlawful.
+        </p>
+        <p>
+          TowingSpecs is not affiliated with any vehicle manufacturer.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .method-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .method-section h2 {
+    font-size: var(--text-xl);
+    margin-bottom: 1rem;
+  }
+
+  .method-section p {
+    color: var(--color-graphite);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    margin-bottom: 0.875rem;
+    max-width: none;
+  }
+
+  .method-list {
+    color: var(--color-graphite);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    margin: 0.75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .status-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .status-item dt {
+    margin-bottom: 0.4rem;
+  }
+
+  .status-item dd {
+    font-size: var(--text-sm);
+    color: var(--color-graphite);
+    line-height: 1.65;
+    margin-left: 0;
+  }
+</style>

@@ -1,0 +1,301 @@
+---
+/**
+ * /vehicles/ — Browse all vehicles with towing data
+ */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/site-header.astro';
+import SiteFooter from '../../components/site-footer.astro';
+import Breadcrumbs from '../../components/breadcrumbs.astro';
+import YearBrowser from '../../components/year-browser.astro';
+import { getMakes, getMakesForYear } from '../../lib/db.ts';
+import { getYearScopeInfo, getNearestVerifiedYears } from '../../lib/catalog-years.ts';
+
+const url = Astro.url;
+const yearParam = url.searchParams.get('year');
+const selectedYear = yearParam ? parseInt(yearParam, 10) : null;
+const scopeInfo = selectedYear ? getYearScopeInfo(selectedYear) : null;
+
+// If a year is requested, fetch makes genuinely available for that year
+let makes = [];
+let error = null;
+
+if (selectedYear) {
+  const makesRes = await getMakesForYear(selectedYear);
+  makes = makesRes.data ?? [];
+  error = makesRes.error;
+} else {
+  const makesRes = await getMakes();
+  makes = makesRes.data ?? [];
+  error = makesRes.error;
+}
+
+const bodyStyles = [
+  { value: 'pickup', label: 'Pickup Trucks' },
+  { value: 'suv', label: 'SUVs' },
+  { value: 'van', label: 'Vans' },
+  { value: 'minivan', label: 'Minivans' },
+  { value: 'crossover', label: 'Crossovers' },
+];
+
+const pageTitle = selectedYear
+  ? `${selectedYear} Towing Specifications by Make`
+  : 'Browse Vehicle Towing Specifications';
+
+const pageDescription = selectedYear
+  ? `Browse verified ${selectedYear} towing capacity specifications by make and model. Sourced directly from official manufacturer documentation.`
+  : 'Browse manufacturer-verified towing capacity specifications by make, model, and year. Trucks, SUVs, vans, and more.';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: pageTitle,
+  description: pageDescription,
+  url: selectedYear
+    ? `${import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com'}/vehicles/?year=${selectedYear}`
+    : `${import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com'}/vehicles/`,
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalUrl={selectedYear ? `/vehicles/?year=${selectedYear}` : '/vehicles/'}
+  jsonLd={jsonLd}
+  breadcrumbs={selectedYear ? [
+    { name: 'Vehicles', url: '/vehicles/' },
+    { name: `${selectedYear} Models`, url: `/vehicles/?year=${selectedYear}` },
+  ] : [{ name: 'Vehicles', url: '/vehicles/' }]}
+>
+  <SiteHeader currentPath="/vehicles/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs crumbs={selectedYear ? [
+        { name: 'Vehicles', href: '/vehicles/' },
+        { name: `${selectedYear} Specs` },
+      ] : [{ name: 'Vehicles' }]} />
+
+      <div class="page-header">
+        {selectedYear ? (
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+              <h1 class="page-header__title" style="margin-bottom: 0;">{selectedYear} Towing Specifications</h1>
+              {scopeInfo?.hasPublishedRecords ? (
+                <span class="badge badge--verified">Data available</span>
+              ) : (
+                <span class="badge badge--planned">Research in progress</span>
+              )}
+            </div>
+            <p class="page-header__desc">
+              {scopeInfo?.hasPublishedRecords ? (
+                `Verified records available for ${makes.length} ${makes.length === 1 ? 'make' : 'makes'} and ${scopeInfo.modelsCount} ${scopeInfo.modelsCount === 1 ? 'model' : 'models'} (${scopeInfo.configsCount} ${scopeInfo.configsCount === 1 ? 'configuration' : 'configurations'}). All figures verified from official ${selectedYear} manufacturer documentation.`
+              ) : (
+                `Official manufacturer fleet towing guides and technical specifications for ${selectedYear} are currently in our technical review queue. Zero unverified estimates are published.`
+              )}
+            </p>
+            <div style="margin-top: 0.75rem;">
+              <a href="/vehicles/" class="btn btn--secondary btn--sm">← View All Model Years (2010–2026)</a>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <h1 class="page-header__title">Browse Towing Specifications</h1>
+            <p class="page-header__desc">
+              Select a make to view model and year-specific towing capacity data.
+              All figures are sourced directly from manufacturer documentation.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <!-- Body Style Filter -->
+      <nav class="filter-bar" aria-label="Filter by vehicle type">
+        <a href={selectedYear ? `/vehicles/?year=${selectedYear}` : '/vehicles/'} class="filter-tag filter-tag--active">All Types</a>
+        {bodyStyles.map((bs) => (
+          <a href={selectedYear ? `/vehicles/?year=${selectedYear}&type=${bs.value}` : `/vehicles/?type=${bs.value}`} class="filter-tag">{bs.label}</a>
+        ))}
+      </nav>
+
+      {error ? (
+        <div class="alert alert--warning" role="alert">
+          <svg class="alert__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 2l8 15H2L10 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M10 8v4M10 14.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>Vehicle data is temporarily unavailable. Please try again in a moment.</p>
+        </div>
+      ) : makes && makes.length > 0 ? (
+        <div class="makes-grid" role="list" aria-label="Vehicle makes">
+          {makes.map((make) => (
+            <a
+              href={selectedYear ? `/vehicles/${make.slug}/?year=${selectedYear}` : `/vehicles/${make.slug}/`}
+              class="make-card"
+              role="listitem"
+              aria-label={`Browse ${selectedYear ? `${selectedYear} ` : ''}${make.name} towing specifications`}
+            >
+              <div>
+                <span class="make-card__name">{make.name}</span>
+                {selectedYear && (
+                  <span style="display:block; font-size: 0.75rem; color: var(--color-pewter); margin-top: 0.2rem;">
+                    {selectedYear} Specifications Available
+                  </span>
+                )}
+              </div>
+              <svg class="make-card__arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8h9M9.5 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          ))}
+        </div>
+      ) : selectedYear && !scopeInfo?.hasPublishedRecords ? (
+        <div class="empty-state">
+          <p class="empty-state__title">Model Year {selectedYear} — Research in Progress</p>
+          <p class="empty-state__desc">
+            Official manufacturer towing guides and owner manuals for {selectedYear} are currently undergoing technical review.
+            TowingSpecs publishes only confirmed, configuration-specific ratings and will not display preliminary estimates.
+          </p>
+          <div style="margin-top: 1.5rem;">
+            <p style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Nearest Available Model Years with Verified Data:</p>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              {getNearestVerifiedYears(selectedYear).map((ny) => (
+                <a href={`/vehicles/?year=${ny.year}`} class="btn btn--secondary btn--sm">
+                  {ny.year} ({ny.modelsCount === 1 ? '1 model' : `${ny.modelsCount} models`})
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="empty-state">
+          <p class="empty-state__title">No vehicle data published yet</p>
+          <p class="empty-state__desc">
+            TowingSpecs is building its verified vehicle database incrementally.
+            Each entry requires manufacturer source documentation before publication.
+            Check back as we add more verified records.
+          </p>
+          <a href="/methodology/" class="btn btn--secondary" style="margin-top:1.5rem;">
+            Read our data methodology
+          </a>
+        </div>
+      )}
+    </div>
+
+    <YearBrowser
+      title="Explore By Model Year (2010–2026)"
+      subtitle="Discover towing capacity records across our complete 17-year catalog scope. Browse verified model years or check our digitization queue."
+    />
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .page-header__title {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    margin-bottom: 0.625rem;
+  }
+
+  .page-header__desc {
+    color: var(--color-pewter);
+    font-size: var(--text-base);
+    max-width: 56ch;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.875rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-pale-silver);
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-tag:hover,
+  .filter-tag--active {
+    background-color: var(--color-carbon-dark);
+    border-color: var(--color-carbon-dark);
+    color: var(--color-pure-white);
+  }
+
+  .makes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .make-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.125rem 1.25rem;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    gap: 0.5rem;
+  }
+
+  .make-card:hover {
+    border-color: var(--color-electric-blue);
+    box-shadow: 0 0 0 1px var(--color-electric-blue);
+  }
+
+  .make-card__name {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+  }
+
+  .make-card__origin {
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    flex: 1;
+  }
+
+  .make-card__arrow {
+    color: var(--color-pale-silver);
+    flex-shrink: 0;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .make-card:hover .make-card__arrow {
+    color: var(--color-electric-blue);
+    transform: translateX(3px);
+  }
+
+  .empty-state {
+    padding: 4rem 0;
+    text-align: center;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .empty-state__title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-state__desc {
+    color: var(--color-pewter);
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    max-width: none;
+  }
+</style>

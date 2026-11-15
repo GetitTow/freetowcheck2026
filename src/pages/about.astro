@@ -1,0 +1,106 @@
+---
+/**
+ * /about/ — About TowingSpecs
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+---
+
+<Layout
+  title="About TowingSpecs"
+  description="TowingSpecs is an independent vehicle towing specification reference platform. Learn about our mission to provide accurate, source-backed towing data."
+  canonicalUrl="/about/"
+  breadcrumbs={[{ name: 'About', url: '/about/' }]}
+>
+  <SiteHeader currentPath="/about/" />
+
+  <main id="main-content">
+    <div class="container container--narrow" style="padding-top: 2.5rem; padding-bottom: 5rem;">
+      <Breadcrumbs crumbs={[{ name: 'About' }]} />
+
+      <h1 style="font-size: clamp(2rem, 4vw, 2.75rem); margin-bottom: 0.75rem;">About TowingSpecs</h1>
+      <p class="about-lead">
+        TowingSpecs is an independent automotive reference platform dedicated to publishing
+        accurate, source-verified towing capacity specifications for trucks, SUVs, and vans.
+      </p>
+
+      <section class="about-section">
+        <h2>Our mission</h2>
+        <p>
+          Finding the correct towing capacity for a specific vehicle configuration is harder than it
+          should be. Manufacturer ratings vary by engine, drivetrain, axle, cab, and equipment —
+          yet many sources publish a single headline figure without explaining which configurations
+          it applies to, or where the number came from.
+        </p>
+        <p>
+          TowingSpecs was built to fix that. We source every figure directly from manufacturer
+          documentation, document the applicable configuration in detail, and make the source
+          available to users. Our goal is to help people understand not just the number, but
+          what it means, what it assumes, and what its limits are.
+        </p>
+      </section>
+
+      <section class="about-section">
+        <h2>Who we are</h2>
+        <p>
+          TowingSpecs is an independent platform and is not affiliated with any vehicle manufacturer,
+          dealer group, trailer company, or towing equipment brand. We receive no compensation from
+          manufacturers for publishing their specifications.
+        </p>
+        <p>
+          Our data team verifies specifications against manufacturer documentation before
+          any figure is published. We maintain a documented source record for every rating we publish.
+        </p>
+      </section>
+
+      <section class="about-section">
+        <h2>Accuracy over completeness</h2>
+        <p>
+          We do not fabricate data to populate a large initial catalog. If a manufacturer source
+          cannot be found for a vehicle or configuration, that field remains unpublished.
+          A smaller, accurate dataset is more useful than a large, unreliable one.
+        </p>
+      </section>
+
+      <section class="about-section">
+        <h2>Contact and corrections</h2>
+        <p>
+          If you find an error, have a source that improves on our data, or want to suggest a
+          vehicle that should be added, please <a href="/contact/" class="text-link">contact us</a>.
+          We take accuracy seriously and review all submissions.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .about-lead {
+    font-size: var(--text-lg);
+    color: var(--color-graphite);
+    line-height: 1.65;
+    margin-bottom: 2.5rem;
+    max-width: 60ch;
+  }
+
+  .about-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .about-section h2 {
+    font-size: var(--text-xl);
+    margin-bottom: 0.875rem;
+  }
+
+  .about-section p {
+    color: var(--color-graphite);
+    font-size: var(--text-base);
+    line-height: 1.7;
+    margin-bottom: 0.875rem;
+    max-width: none;
+  }
+</style>

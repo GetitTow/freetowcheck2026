@@ -1,0 +1,132 @@
+---
+/**
+ * AffiliateCard.astro — FTC-Compliant Towing Equipment Recommendation Card
+ *
+ * Implements strict FTC compliance (16 CFR Part 255):
+ * 1. Prominent sponsored attribution.
+ * 2. Links tagged with rel="sponsored nofollow noopener noreferrer".
+ * 3. Clear distinction between third-party accessories and manufacturer-certified weight ratings.
+ */
+
+interface Props {
+  title: string;
+  category: 'Weight-Distribution Hitch' | 'Brake Controller' | 'Towing Mirrors' | 'Hitch Receiver & Ball Mount' | 'Towing Accessory';
+  description: string;
+  recommendedFor?: string;
+  productUrl: string;
+  merchantName?: string;
+}
+
+const {
+  title,
+  category,
+  description,
+  recommendedFor,
+  productUrl,
+  merchantName = 'Authorized Retailer',
+} = Astro.props;
+
+// Monetization disabled until audience threshold (100-150 daily visitors) is reached.
+const MONETIZATION_ENABLED = false;
+if (!MONETIZATION_ENABLED) return null;
+---
+
+<div class="affiliate-card card">
+  <div class="affiliate-card__header">
+    <span class="affiliate-card__badge tag tag--info">{category}</span>
+    <span class="affiliate-card__sponsor-tag">Sponsored Link</span>
+  </div>
+
+  <h3 class="affiliate-card__title">{title}</h3>
+  <p class="affiliate-card__desc">{description}</p>
+
+  {recommendedFor && (
+    <div class="affiliate-card__recommended">
+      <strong>Best Suited For:</strong> {recommendedFor}
+    </div>
+  )}
+
+  <div class="affiliate-card__footer">
+    <a
+      href={productUrl}
+      target="_blank"
+      rel="sponsored nofollow noopener noreferrer"
+      class="btn btn--secondary btn--sm affiliate-card__btn"
+      aria-label={`Check availability for ${title} on ${merchantName} (Sponsored Link)`}
+    >
+      View on {merchantName} &rarr;
+    </a>
+  </div>
+</div>
+
+<style>
+  .affiliate-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .affiliate-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .affiliate-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .affiliate-card__sponsor-tag {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-silver-fog);
+  }
+
+  .affiliate-card__title {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    margin: 0 0 0.5rem;
+    line-height: 1.35;
+  }
+
+  .affiliate-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    margin: 0 0 0.875rem;
+    line-height: 1.5;
+  }
+
+  .affiliate-card__recommended {
+    font-size: var(--text-xs);
+    color: var(--color-slate-steel);
+    background: var(--color-light-ash);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .affiliate-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-cloud-gray);
+  }
+
+  .affiliate-card__btn {
+    text-decoration: none;
+    font-size: var(--text-xs);
+  }
+</style>

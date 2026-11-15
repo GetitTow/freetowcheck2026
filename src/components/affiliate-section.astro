@@ -1,0 +1,148 @@
+---
+/**
+ * AffiliateSection.astro — Equipment section with FTC disclosure
+ */
+import AffiliateCard from './affiliate-card.astro';
+
+interface ProductItem {
+  title: string;
+  category: 'Weight-Distribution Hitch' | 'Brake Controller' | 'Towing Mirrors' | 'Hitch Receiver & Ball Mount' | 'Towing Accessory';
+  description: string;
+  recommendedFor?: string;
+  productUrl: string;
+  merchantName?: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  products?: ProductItem[];
+}
+
+const defaultProducts: ProductItem[] = [
+  {
+    title: 'Equal-i-zer 4-Point Weight Distribution Hitch',
+    category: 'Weight-Distribution Hitch',
+    description: 'Integrated 4-point sway control and weight distribution system. Essential for trailers exceeding 5,000 lbs to maintain steering control and prevent sway.',
+    recommendedFor: 'Conventional travel trailers and campers 5,000–10,000 lbs',
+    productUrl: 'https://www.amazon.com/dp/B004TR8F5C?tag=towingspecs-20',
+    merchantName: 'Amazon',
+  },
+  {
+    title: 'Tekonsha Prodigy P3 Electronic Brake Controller',
+    category: 'Brake Controller',
+    description: 'Proportional electric trailer brake controller with real-time digital diagnostics. Supports 1 to 4 axles with customizable boost modes.',
+    recommendedFor: 'Trailers equipped with electric or electric-over-hydraulic brakes',
+    productUrl: 'https://www.amazon.com/dp/B000P17NXQ?tag=towingspecs-20',
+    merchantName: 'Amazon',
+  },
+  {
+    title: 'CURT 45056 Heavy-Duty Loaded Ball Mount with 2" Ball',
+    category: 'Hitch Receiver & Ball Mount',
+    description: 'Class III/IV steel ball mount rated for 7,500 lbs gross trailer weight. Includes 2-inch drop or 3/4-inch rise with pre-torqued hitch ball.',
+    recommendedFor: 'Class III and Class IV 2-inch hitch receivers',
+    productUrl: 'https://www.amazon.com/dp/B00076RJ5W?tag=towingspecs-20',
+    merchantName: 'Amazon',
+  },
+];
+
+const {
+  title = 'Recommended Compatible Towing Equipment',
+  subtitle = 'High-grade safety gear, weight-distribution systems, and brake controllers matching published vehicle limits.',
+  products = defaultProducts,
+} = Astro.props;
+
+// Monetization disabled until audience threshold (100-150 daily visitors) is reached.
+const MONETIZATION_ENABLED = false;
+if (!MONETIZATION_ENABLED) return null;
+---
+
+<section class="affiliate-section" aria-labelledby="equipment-heading">
+  <div class="affiliate-section__header">
+    <div>
+      <h2 id="equipment-heading" class="affiliate-section__title">{title}</h2>
+      <p class="affiliate-section__subtitle">{subtitle}</p>
+    </div>
+  </div>
+
+  <div class="affiliate-disclosure-banner">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 5v4M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <p>
+      <strong>Affiliate Disclosure:</strong> TowingSpecs may earn an affiliate commission from qualifying purchases through links on this page at no extra cost to you. Equipment recommendations are evaluated independently and <strong>never alter or influence manufacturer-published towing ratings</strong>. Adding aftermarket hitches does not increase your vehicle's factory GVWR or GCWR. <a href="/affiliate-disclosure/">Read our full Affiliate Disclosure policy</a>.
+    </p>
+  </div>
+
+  <div class="affiliate-grid">
+    {products.map((item) => (
+      <AffiliateCard
+        title={item.title}
+        category={item.category}
+        description={item.description}
+        recommendedFor={item.recommendedFor}
+        productUrl={item.productUrl}
+        merchantName={item.merchantName}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .affiliate-section {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-cloud-gray);
+  }
+
+  .affiliate-section__title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    margin: 0 0 0.5rem;
+  }
+
+  .affiliate-section__subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    margin: 0 0 1.25rem;
+    max-width: 65ch;
+  }
+
+  .affiliate-disclosure-banner {
+    display: flex;
+    gap: 0.75rem;
+    background: var(--color-light-ash);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 0.875rem 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .affiliate-disclosure-banner svg {
+    color: var(--color-slate-steel);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  .affiliate-disclosure-banner p {
+    font-size: var(--text-xs);
+    color: var(--color-slate-steel);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .affiliate-disclosure-banner a {
+    color: var(--color-carbon-dark);
+    font-weight: 500;
+    text-decoration: underline;
+  }
+
+  .affiliate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 1.25rem;
+  }
+</style>

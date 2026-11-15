@@ -1,0 +1,69 @@
+---
+/**
+ * 404 — Not Found page
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+---
+
+<Layout
+  title="Page Not Found — TowingSpecs"
+  description="The page you are looking for could not be found."
+  noindex={true}
+>
+  <SiteHeader />
+
+  <main id="main-content">
+    <div class="container not-found" aria-labelledby="not-found-heading">
+      <span class="not-found__code">404</span>
+      <h1 class="not-found__title" id="not-found-heading">Page not found</h1>
+      <p class="not-found__desc">
+        The page you are looking for does not exist or has been moved.
+      </p>
+      <div class="not-found__actions">
+        <a href="/" class="btn btn--primary">Go to home page</a>
+        <a href="/vehicles/" class="btn btn--secondary">Browse vehicles</a>
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .not-found {
+    text-align: center;
+    padding-block: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .not-found__code {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 500;
+    color: var(--color-cloud-gray);
+    line-height: 1;
+  }
+
+  .not-found__title {
+    font-size: 1.5rem;
+  }
+
+  .not-found__desc {
+    color: var(--color-pewter);
+    font-size: var(--text-base);
+    max-width: 40ch;
+  }
+
+  .not-found__actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>

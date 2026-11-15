@@ -1,0 +1,97 @@
+---
+/**
+ * VerificationStatus — displays the verification badge + date for a data record
+ */
+
+export type VerificationStatus =
+  | 'manufacturer_verified'
+  | 'partially_verified'
+  | 'pending_verification'
+  | 'conflicting_sources'
+  | 'source_unavailable';
+
+interface Props {
+  status: VerificationStatus;
+  verifiedDate?: string | null;
+  compact?: boolean;
+}
+
+const { status, verifiedDate, compact = false } = Astro.props;
+
+const statusConfig: Record<VerificationStatus, { label: string; compactLabel: string; cssClass: string; icon: string; title: string }> = {
+  manufacturer_verified: {
+    label: 'Manufacturer-confirmed',
+    compactLabel: 'Manufacturer-confirmed',
+    cssClass: 'badge--verified',
+    title: 'The exact displayed configuration and relevant rating are supported by accessible primary manufacturer evidence.',
+    icon: `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  },
+  partially_verified: {
+    label: 'Official document; details under review',
+    compactLabel: 'Details under review',
+    cssClass: 'badge--partial',
+    title: 'An official document exists, but the exact configuration, equipment prerequisite or relevant footnote is not fully confirmed.',
+    icon: `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3.5v3l2 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  },
+  source_unavailable: {
+    label: 'Source link needs repair',
+    compactLabel: 'Source link needs repair',
+    cssClass: 'badge--link-repair',
+    title: 'The original evidence has been identified, but the exact document cannot currently be opened at its recorded URL.',
+    icon: `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="8.5" r="0.75" fill="currentColor"/></svg>`,
+  },
+  pending_verification: {
+    label: 'Not verified',
+    compactLabel: 'Not verified',
+    cssClass: 'badge--pending',
+    title: 'The rating has not passed the required evidence review. Do not present it as a confirmed rating.',
+    icon: `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M6 4v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="8.5" r="0.75" fill="currentColor"/></svg>`,
+  },
+  conflicting_sources: {
+    label: 'Conflicting evidence',
+    compactLabel: 'Conflicting evidence',
+    cssClass: 'badge--conflict',
+    title: 'Discrepancy detected between multiple official sources; review details in vehicle documentation.',
+    icon: `<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 1.5l4.5 8H1.5L6 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 5v2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="8.75" r="0.6" fill="currentColor"/></svg>`,
+  },
+};
+
+const config = statusConfig[status] || statusConfig.manufacturer_verified;
+
+const formattedDate = verifiedDate
+  ? new Date(verifiedDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  : null;
+---
+
+<div class:list={['verification-status', { 'verification-status--compact': compact }]}>
+  <span
+    class:list={['badge', config.cssClass]}
+    role="status"
+    aria-label={`Verification status: ${config.label}`}
+    title={config.title}
+  >
+    <span set:html={config.icon} />
+    {compact ? config.compactLabel : config.label}
+  </span>
+  {formattedDate && !compact && (
+    <span class="verification-status__date">Verified {formattedDate}</span>
+  )}
+</div>
+
+<style>
+  .verification-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .verification-status__date {
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+  }
+
+  .verification-status--compact {
+    gap: 0.375rem;
+  }
+</style>

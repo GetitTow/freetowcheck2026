@@ -1,0 +1,94 @@
+---
+/**
+ * /affiliate-disclosure/ — FTC Affiliate & Commercial Disclosure Policy
+ * Strictly adheres to 16 CFR Part 255 (FTC Endorsement and Testimonial Guides).
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Affiliate Disclosure — TowingSpecs',
+  description: 'Full disclosure regarding affiliate links, advertising, and commercial partnerships on TowingSpecs.',
+  url: `${import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com'}/affiliate-disclosure/`,
+};
+---
+
+<Layout
+  title="Affiliate & Commercial Disclosure — TowingSpecs"
+  description="Full FTC-compliant affiliate disclosure policy. Learn how TowingSpecs maintains strict separation between editorial ratings and commercial partnerships."
+  canonicalUrl="/affiliate-disclosure/"
+  noindex={true}
+  jsonLd={jsonLd}
+  breadcrumbs={[{ name: 'Affiliate Disclosure', url: '/affiliate-disclosure/' }]}
+>
+  <SiteHeader currentPath="/affiliate-disclosure/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem; max-width: 800px;">
+      <Breadcrumbs crumbs={[{ name: 'Affiliate Disclosure' }]} />
+
+      <header class="page-header" style="margin-bottom: 2rem;">
+        <h1 style="font-size: clamp(1.75rem, 3vw, 2.25rem); margin-bottom: 0.5rem;">
+          Affiliate & Commercial Disclosure
+        </h1>
+        <p style="color: var(--color-pewter); font-size: var(--text-sm);">
+          Last updated: October 2024 · Strictly compliant with FTC 16 CFR Part 255
+        </p>
+      </header>
+
+      <article class="prose" style="line-height: 1.7; color: var(--color-slate-steel);">
+        <section class="card" style="padding: 1.5rem; background: var(--color-light-ash); margin-bottom: 2rem; border-left: 4px solid var(--color-accent-blue, #2563eb);">
+          <h2 style="font-size: var(--text-md); margin-top: 0; color: var(--color-carbon-dark);">Summary Disclosure Statement</h2>
+          <p style="margin-bottom: 0; font-size: var(--text-sm);">
+            TowingSpecs (towingspecs.com) participates in affiliate marketing programs. This means that if you click on certain product links on our website and make a purchase, we may receive a monetary commission at no additional cost to you. However, our editorial evaluations, calculation engines, and manufacturer towing specifications remain completely independent and uninfluenced by commercial partnerships.
+          </p>
+        </section>
+
+        <h2>1. Compliance with the Federal Trade Commission (FTC)</h2>
+        <p>
+          In accordance with the Federal Trade Commission's Guides Concerning the Use of Endorsements and Testimonials in Advertising (16 CFR Part 255), this disclosure statement transparently identifies any commercial connections that could potentially influence product presentations on TowingSpecs.
+        </p>
+
+        <h2>2. Complete Separation of Ratings and Commercial Links</h2>
+        <p>
+          We operate under a strict foundational rule: <strong>Commercial relationships never influence vehicle specifications, mathematical compatibility evaluations, or safety determinations.</strong>
+        </p>
+        <ul>
+          <li><strong>Manufacturer Towing Capacities:</strong> Sourced exclusively from official vehicle manufacturer documents (towing guides, owner's manuals, engineering specification sheets). No commercial advertiser or affiliate partner can alter, purchase, or sponsor any published specification.</li>
+          <li><strong>Trailer Compatibility Calculations:</strong> Driven entirely by mathematical algorithms checking user inputs against manufacturer ratings. Calculation outputs are never weighted or altered to encourage product purchases.</li>
+          <li><strong>Verification Status:</strong> Verification status badges (Manufacturer Verified, Partially Verified, Pending Verification) reflect strict document audit standards, never commercial ties.</li>
+        </ul>
+
+        <h2>3. Physical & Legal Limitation Warning: Aftermarket Equipment</h2>
+        <p>
+          <strong>Critical Safety Notice:</strong> Installing high-capacity aftermarket equipment—such as a Class V hitch receiver, heavy-duty ball mount, helper springs, air bags, or a weight-distribution hitch—<strong>does not increase your vehicle's factory Gross Vehicle Weight Rating (GVWR) or Gross Combined Weight Rating (GCWR)</strong>. Your vehicle's safe operating limits remain governed solely by the lowest controlling rating on your vehicle's certification label.
+        </p>
+
+        <h2>4. Affiliate Programs Participated In</h2>
+        <p>
+          TowingSpecs currently participates in, or plans to participate in, the following authorized retail affiliate networks:
+        </p>
+        <ul>
+          <li><strong>Amazon Services LLC Associates Program:</strong> An affiliate advertising program designed to provide a means for websites to earn advertising fees by linking to Amazon.com and affiliated sites.</li>
+          <li><strong>Automotive Parts & Specialty Retailers:</strong> Selected direct affiliate relationships with reputable towing hardware, hitch, and brake controller manufacturers.</li>
+        </ul>
+
+        <h2>5. Identifying Sponsored Links</h2>
+        <p>
+          All affiliate links across TowingSpecs are labeled with clear visual indicators ("Sponsored Link", "Affiliate Link") and programmatically tagged with <code>rel="sponsored nofollow noopener noreferrer"</code> in accordance with search engine webmaster guidelines.
+        </p>
+
+        <h2>6. Questions & Contact</h2>
+        <p>
+          If you have questions regarding our affiliate relationships, editorial integrity, or data sources, please reach out via our <a href="/contact/">Contact page</a>.
+        </p>
+      </article>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>

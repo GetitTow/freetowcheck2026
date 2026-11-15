@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /vehicles/search/
+
+Sitemap: https://towingspecs.com/sitemap.xml

@@ -1,0 +1,241 @@
+---
+/**
+ * /contact/ — Contact, Data Correction & Verification Submission
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact TowingSpecs & Submit Corrections',
+  description: 'Submit data corrections, manufacturer towing documentation, or reach out to the TowingSpecs engineering team.',
+  url: `${siteUrl}/contact/`,
+};
+---
+
+<Layout
+  title="Contact Us & Submit Data Corrections — TowingSpecs"
+  description="Report a discrepancy, submit manufacturer towing guides, or contact the TowingSpecs automotive verification team."
+  canonicalUrl="/contact/"
+  jsonLd={jsonLd}
+  breadcrumbs={[{ name: 'Contact', url: '/contact/' }]}
+>
+  <SiteHeader currentPath="/contact/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs crumbs={[{ name: 'Contact' }]} />
+
+      <div class="contact-layout">
+        <!-- Left: Form -->
+        <div class="contact-form-section">
+          <h1 class="contact-title">Contact & Data Verification</h1>
+          <p class="contact-lead">
+            We are committed to absolute data accuracy. If you notice a specification discrepancy, have an official manufacturer towing document to submit, or have a question, let us know below.
+          </p>
+
+          <form class="contact-form" id="contact-form" onsubmit="event.preventDefault(); document.getElementById('form-success').style.display='block'; this.reset();">
+            <div class="form-field">
+              <label for="category" class="form-label">Inquiry Type</label>
+              <select id="category" name="category" class="form-select" required>
+                <option value="data-correction">Data Correction / Discrepancy Report</option>
+                <option value="source-submission">Submit Manufacturer Towing Guide / Spec Sheet</option>
+                <option value="vehicle-request">Request Vehicle Coverage</option>
+                <option value="general">General Inquiry or Feedback</option>
+              </select>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="Jane Doe" required />
+              </div>
+              <div class="form-field">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="jane@example.com" required />
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="vehicle" class="form-label">Vehicle Details (Optional)</label>
+              <input type="text" id="vehicle" name="vehicle" class="form-input" placeholder="e.g. 2025 Ford F-150 SuperCrew 3.5L EcoBoost" />
+            </div>
+
+            <div class="form-field">
+              <label for="source-url" class="form-label">Official Document Link / Source URL (Optional)</label>
+              <input type="url" id="source-url" name="source-url" class="form-input" placeholder="https://media.ford.com/... or manufacturer PDF link" />
+            </div>
+
+            <div class="form-field">
+              <label for="message" class="form-label">Details / Explanation</label>
+              <textarea id="message" name="message" class="form-textarea" rows="5" placeholder="Please describe the discrepancy, cite page numbers in the manufacturer guide, or state your question..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="margin-top: 0.5rem;">
+              Submit Verification Request &rarr;
+            </button>
+
+            <div id="form-success" class="alert alert--success" style="display: none; margin-top: 1rem;" role="alert">
+              <strong>Thank you.</strong> Your submission has been received. Our automotive data verification team reviews all source documentation within 48 business hours.
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Verification SLA & Trust Info -->
+        <aside class="contact-sidebar">
+          <div class="sidebar-card">
+            <h2 class="sidebar-card__title">Verification Protocol</h2>
+            <p class="sidebar-card__text">
+              Every data update is verified against primary manufacturer literature. We do not accept secondary forum posts or unverified dealer marketing copy.
+            </p>
+            <ul class="sidebar-list">
+              <li>
+                <strong>Accepted Sources:</strong> Factory RV & Towing Guides, Official Owner's Manuals, Manufacturer Media Tech Spec PDFs, and NHTSA safety filings.
+              </li>
+              <li>
+                <strong>Review SLA:</strong> 48 hours for reported data discrepancies.
+              </li>
+              <li>
+                <strong>Versioned Audit Trail:</strong> All corrections update the public verification date and citation link on the respective vehicle spec page.
+              </li>
+            </ul>
+          </div>
+
+          <div class="sidebar-card" style="margin-top: 1.5rem;">
+            <h2 class="sidebar-card__title">Editorial Transparency</h2>
+            <p class="sidebar-card__text">
+              TowingSpecs is an independent automotive data reference. We maintain no financial bias toward any vehicle manufacturer or dealership network.
+            </p>
+            <a href="/methodology/" class="sidebar-link">
+              Read our full Data Methodology &rarr;
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 840px) {
+    .contact-layout {
+      grid-template-columns: 1.6fr 1fr;
+    }
+  }
+
+  .contact-title {
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-lead {
+    font-size: var(--text-md);
+    color: var(--color-pewter);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 2rem;
+  }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 540px) {
+    .form-grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .form-textarea {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    resize: vertical;
+  }
+
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-electric-blue);
+    box-shadow: 0 0 0 1px var(--color-electric-blue);
+  }
+
+  .sidebar-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+  }
+
+  .sidebar-card__title {
+    font-size: var(--text-md);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar-card__text {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: var(--text-xs);
+    color: var(--color-carbon-dark);
+    line-height: 1.5;
+  }
+
+  .sidebar-link {
+    font-size: var(--text-sm);
+    color: var(--color-electric-blue);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .sidebar-link:hover {
+    text-decoration: underline;
+  }
+
+  .alert--success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+  }
+</style>

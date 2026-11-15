@@ -1,0 +1,1174 @@
+---
+/**
+ * /vehicles/[make]/[model]/ — Model Hub & Multi-Year Overview
+ * Comprehensive towing specifications, model-year navigation, configuration tables,
+ * tow package requirements, and educational guidance.
+ */
+import Layout from '../../../../layouts/Layout.astro';
+import SiteHeader from '../../../../components/site-header.astro';
+import SiteFooter from '../../../../components/site-footer.astro';
+import Breadcrumbs from '../../../../components/breadcrumbs.astro';
+import VerificationStatus from '../../../../components/verification-status.astro';
+import {
+  getMakeBySlug,
+  getModelBySlug,
+  getModelYears,
+  getAllDetailedConfigurations,
+} from '../../../../lib/db.ts';
+
+const { make: makeSlug, model: modelSlug } = Astro.params;
+if (!makeSlug || !modelSlug) return Astro.redirect('/vehicles/', 302);
+
+const { data: make } = await getMakeBySlug(makeSlug);
+if (!make) return new Response(null, { status: 404 });
+
+const { data: model } = await getModelBySlug(make.id, modelSlug);
+if (!model) return new Response(null, { status: 404 });
+
+const { data: years } = await getModelYears(model.id);
+const allConfigs = await getAllDetailedConfigurations();
+const modelConfigs = allConfigs.filter((c) => c.model.id === model.id);
+
+const isTacoma = make.slug === 'toyota' && model.slug === 'tacoma';
+
+// Model years sorted descending
+const sortedYears = [...(years ?? [])].sort((a, b) => b.year - a.year);
+
+// Calculate overall ranges
+const towings = modelConfigs
+  .map((c) => c.spec?.max_towing_capacity_lbs)
+  .filter((t): t is number => typeof t === 'number' && t > 0);
+const minTow = towings.length > 0 ? Math.min(...towings) : null;
+const maxTow = towings.length > 0 ? Math.max(...towings) : null;
+
+const tongues = modelConfigs
+  .map((c) => c.spec?.max_tongue_weight_lbs)
+  .filter((t): t is number => typeof t === 'number' && t > 0);
+const minTongue = tongues.length > 0 ? Math.min(...tongues) : null;
+const maxTongue = tongues.length > 0 ? Math.max(...tongues) : null;
+
+const payloads = modelConfigs
+  .map((c) => c.spec?.max_payload_lbs)
+  .filter((p): p is number => typeof p === 'number' && p > 0);
+const minPayload = payloads.length > 0 ? Math.min(...payloads) : null;
+const maxPayload = payloads.length > 0 ? Math.max(...payloads) : null;
+
+function formatLbs(v: number | null | undefined): string {
+  if (v === null || v === undefined) return 'N/A';
+  return v.toLocaleString('en-US');
+}
+
+// Year summary data
+const yearSummaries = sortedYears.map((my) => {
+  const cfgs = modelConfigs.filter((c) => c.year === my.year);
+  const yrTows = cfgs.map((c) => c.spec?.max_towing_capacity_lbs).filter((t): t is number => typeof t === 'number' && t > 0);
+  const yrMinTow = yrTows.length > 0 ? Math.min(...yrTows) : null;
+  const yrMaxTow = yrTows.length > 0 ? Math.max(...yrTows) : null;
+  const yrStatus = cfgs[0]?.sources?.[0]?.verification_status ?? 'partially_verified';
+  return {
+    year: my.year,
+    configCount: cfgs.length,
+    minTow: yrMinTow,
+    maxTow: yrMaxTow,
+    status: yrStatus,
+  };
+});
+
+// Tacoma-specific FAQs
+const tacomaFaqs = [
+  {
+    q: 'How much can a Toyota Tacoma tow?',
+    a: 'Across all factory configurations and generations, the Toyota Tacoma is rated to tow between 3,500 and 6,800 pounds. Base 2.7L four-cylinder models (and V6 models without the factory tow package) are rated for 3,500 lbs. Equipped with the factory Class IV Tow Package, third-generation (2016–2023) V6 Access Cab 4x2 models achieve up to 6,800 lbs, while 4WD Double Cab V6 models reach 6,400 lbs. Fourth-generation (2024–2025) i-FORCE 2.4L Turbo models tow up to 6,500 lbs (select XtraCab grades) or 6,400 lbs (Double Cab 4WD), and i-FORCE MAX hybrid models tow up to 6,000 lbs. Second-generation (2010–2015) 4.0L V6 models tow up to 6,400–6,500 lbs.',
+  },
+  {
+    q: 'Can every Toyota Tacoma tow 6,500 or 6,800 pounds?',
+    a: 'No. To exceed 3,500 lbs, a Tacoma strictly requires the upgraded V6 or i-FORCE Turbo powertrain and the factory-installed Tow Package. Four-cylinder models and standard bumper-hitch configurations are limited by Toyota to 3,500 lbs. Furthermore, ratings vary by cab, drivetrain, and bed length; 4WD hardware adds vehicle weight and reduces maximum towing capacity relative to comparable 2WD models.',
+  },
+  {
+    q: 'What is included in the Toyota Tacoma factory Tow Package?',
+    a: 'Equipment depends strictly on the model year and generation: On 2nd Gen (2010–2015 4.0L V6) and 3rd Gen (2016–2023 3.5L V6), the factory package included a frame-mounted Class IV hitch receiver, supplemental engine oil cooler, power steering cooler (hydraulic steering), 130A alternator, 4-pin/7-pin connector, and Trailer Sway Control (with auxiliary transmission cooling on automatic models). On the 4th Gen (2024–2025 i-FORCE), the truck features Electric Power Steering (EPS, which uses no hydraulic fluid or cooler), and the tow package includes a Class IV receiver, dual 7-pin/4-pin connectors, integrated electronic trailer brake controller, heavy-duty engine cooling, and Trailer Sway Control.',
+  },
+  {
+    q: 'What is the maximum tongue weight for a Toyota Tacoma?',
+    a: 'Maximum tongue weight is certified under SAE J2807 standards as 10% of the vehicle maximum towing rating: 350 lbs for 3,500-lb base models, 640 lbs for 6,400-lb 4WD configurations, 650 lbs for 6,500-lb configurations, and up to 680 lbs for 6,800-lb Access Cab V6 models.',
+  },
+  {
+    q: 'Can a Toyota Tacoma tow a travel trailer or camper?',
+    a: 'Yes, properly equipped V6 or i-FORCE Tacomas can tow small to midsize travel trailers, pop-up campers, teardrops, and lightweight fiberglass campers typically weighing 3,000 to 5,000 lbs loaded. However, payload capacity (which ranges from 1,120 to 1,709 lbs depending on trim, cab, and options) is often the true limiting factor when factoring in passenger and cargo weight.',
+  },
+  {
+    q: 'Is a weight-distribution hitch required for a Toyota Tacoma?',
+    a: 'Toyota owner manuals recommend a weight-distribution hitch (WDH) when towing trailers over 5,000 lbs, provided the receiver hitch is rated for weight distribution. A properly calibrated WDH helps level the vehicle and redistributes tongue weight across both axles.',
+  },
+];
+
+// Schema.org Structured Data
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com';
+const pageCanonical = `${siteUrl}/vehicles/${make.slug}/${model.slug}/`;
+
+const pageTitle = isTacoma
+  ? 'Toyota Tacoma Towing Capacity by Year (3,500–6,800 lbs) | TowingSpecs'
+  : `${make.name} ${model.name} Towing Capacity by Year | TowingSpecs`;
+
+const pageDesc = isTacoma
+  ? 'Complete Toyota Tacoma towing capacity guide by model year (2010–2025). Official ratings from 3,500 to 6,800 lbs across configurations, engines, cabs, payloads, and factory tow packages.'
+  : `Manufacturer-verified towing capacity specifications for the ${make.name} ${model.name} by model year. Compare towing, payload, tongue weight, and tow package requirements.`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: pageTitle,
+    description: pageDesc,
+    url: pageCanonical,
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: sortedYears.map((my, idx) => ({
+        '@type': 'ListItem',
+        position: idx + 1,
+        name: `${my.year} ${make.name} ${model.name} Towing Capacity`,
+        url: `${siteUrl}/vehicles/${make.slug}/${model.slug}/${my.year}/`,
+      })),
+    },
+  },
+  ...(isTacoma
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: tacomaFaqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.q,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.a,
+            },
+          })),
+        },
+      ]
+    : []),
+];
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDesc}
+  canonicalUrl={`/vehicles/${make.slug}/${model.slug}/`}
+  jsonLd={jsonLd}
+  breadcrumbs={[
+    { name: 'Vehicles', url: '/vehicles/' },
+    { name: make.name, url: `/vehicles/${make.slug}/` },
+    { name: model.name, url: `/vehicles/${make.slug}/${model.slug}/` },
+  ]}
+>
+  <SiteHeader currentPath="/vehicles/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 5rem;">
+      <Breadcrumbs
+        crumbs={[
+          { name: 'Vehicles', href: '/vehicles/' },
+          { name: make.name, href: `/vehicles/${make.slug}/` },
+          { name: model.name },
+        ]}
+      />
+
+      <!-- Hero Header -->
+      <header class="model-hero">
+        <span class="model-hero__badge">{make.name} Midsize Truck Guide</span>
+        <h1 class="model-hero__title">
+          {make.name} {model.name} Towing Capacity
+          {minTow && maxTow && (
+            <span class="model-hero__range">({minTow === maxTow ? `${formatLbs(maxTow)} lbs` : `${formatLbs(minTow)} – ${formatLbs(maxTow)} lbs`})</span>
+          )}
+        </h1>
+        <p class="model-hero__lead">
+          Official manufacturer towing capacity ratings, payload limits, tongue weight ratings, and factory tow package requirements across {sortedYears.length} model years and {modelConfigs.length} verified configurations.
+        </p>
+      </header>
+
+      <!-- Quick-Answer Direct Summary Box -->
+      <section class="quick-answer-card" aria-labelledby="quick-answer-title">
+        <div class="quick-answer-card__header">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4.5a1 1 0 110 2 1 1 0 010-2zm1 8.5H9v-5h2v5z" fill="currentColor"/>
+          </svg>
+          <h2 id="quick-answer-title" class="quick-answer-card__title">Quick Answer: How Much Can a {make.name} {model.name} Tow?</h2>
+        </div>
+        <p class="quick-answer-card__summary">
+          {isTacoma ? (
+            <>
+              Across all factory configurations, a <strong>Toyota Tacoma can tow between 3,500 lbs and 6,800 lbs</strong>. Standard <strong>2.7L four-cylinder models (and V6 models without factory tow prep) are limited to 3,500 lbs</strong>. To reach <strong>6,400 to 6,800 lbs</strong>, the Tacoma requires the <strong>V6 (3.5L or 4.0L) or 2.4L i-FORCE Turbo engine equipped with the factory Class IV Tow Package</strong> (which includes heavy-duty engine cooling, wiring harnesses, and a frame-mounted receiver). In FreeTowCheck's 29 cataloged configurations, verified ratings span 3,500 to 6,500 lbs.
+            </>
+          ) : (
+            <>
+              The {make.name} {model.name} has a maximum towing capacity ranging from <strong>{formatLbs(minTow)} lbs</strong> to <strong>{formatLbs(maxTow)} lbs</strong>. Maximum capacity depends on the model year, engine option, cab/bed style, axle ratio, and whether the vehicle includes the manufacturer's factory tow prep package.
+            </>
+          )}
+        </p>
+
+        <!-- Metric Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-card__label">Towing Capacity Range</span>
+            <span class="metric-card__value">{minTow ? `${formatLbs(minTow)} – ${formatLbs(maxTow)} lbs` : 'N/A'}</span>
+            <span class="metric-card__hint">Requires tow package for maximum rating</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-card__label">Tongue Weight Limit</span>
+            <span class="metric-card__value">{minTongue ? `${formatLbs(minTongue)} – ${formatLbs(maxTongue)} lbs` : 'N/A'}</span>
+            <span class="metric-card__hint">Standard 10% SAE J2807 rating</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-card__label">Payload Capacity Range</span>
+            <span class="metric-card__value">{minPayload ? `${formatLbs(minPayload)} – ${formatLbs(maxPayload)} lbs` : 'N/A'}</span>
+            <span class="metric-card__hint">Passengers + cargo + tongue weight</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-card__label">Factory Tow Prep</span>
+            <span class="metric-card__value">Class IV Required</span>
+            <span class="metric-card__hint">Required above 3,500 lbs</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Action Tools (Internal Linking) -->
+      <section class="tools-cta-banner">
+        <div class="tools-cta-box">
+          <div class="tools-cta-box__content">
+            <span class="tools-cta-box__eyebrow">Interactive Compatibility Engine</span>
+            <h3 class="tools-cta-box__title">Planning to tow a travel trailer with your {model.name}?</h3>
+            <p class="tools-cta-box__desc">
+              Towing capacity alone is not enough. Check trailer loaded weight, hitch tongue weight, passenger load, and GCWR simultaneously against official manufacturer limits.
+            </p>
+          </div>
+          <div class="tools-cta-box__actions">
+            <a href="/trailer-matcher/" class="btn-primary">
+              Launch Trailer Matcher
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3.5 8h9M9.5 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+            <a href="/compare/" class="btn-secondary">Compare Against Competitors</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Model-Year Navigation Grid -->
+      <section class="section-block" aria-labelledby="years-heading">
+        <div class="section-header">
+          <div>
+            <h2 id="years-heading" class="section-title">{make.name} {model.name} Towing Capacity by Year</h2>
+            <p class="section-subtitle">
+              Select your specific model year to view full door-jamb sticker baselines, standard equipment, and trim breakdowns.
+            </p>
+          </div>
+        </div>
+
+        <div class="years-grid">
+          {yearSummaries.map((yr) => (
+            <a href={`/vehicles/${make.slug}/${model.slug}/${yr.year}/`} class="year-card">
+              <div class="year-card__top">
+                <span class="year-card__year">{yr.year}</span>
+                <VerificationStatus status={yr.status} compact />
+              </div>
+              <div class="year-card__body">
+                <span class="year-card__model">{make.name} {model.name}</span>
+                <span class="year-card__tow">
+                  {yr.minTow === yr.maxTow ? `${formatLbs(yr.maxTow)} lbs` : `${formatLbs(yr.minTow)} – ${formatLbs(yr.maxTow)} lbs`}
+                </span>
+              </div>
+              <div class="year-card__footer">
+                <span class="year-card__count">{yr.configCount} {yr.configCount === 1 ? 'configuration' : 'configurations'}</span>
+                <span class="year-card__arrow">
+                  View specs &rarr;
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div class="catalog-scope-note">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 5v3.5M8 11.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>
+            <strong>Coverage Transparency:</strong> FreeTowCheck indexes 15 published model years for the Toyota Tacoma (2010–2021, 2023–2025). Model year 2022 is currently scheduled for future catalog expansion and is not yet seeded.
+          </p>
+        </div>
+      </section>
+
+      <!-- Generational Differences (Tacoma Specific) -->
+      {isTacoma && (
+        <section class="section-block" aria-labelledby="gen-heading">
+          <div class="section-header">
+            <h2 id="gen-heading" class="section-title">Toyota Tacoma Towing Capacity by Generation</h2>
+            <p class="section-subtitle">
+              How powertrain, chassis, and cooling technology evolved across second, third, and fourth-generation Tacomas.
+            </p>
+          </div>
+
+          <div class="generations-container">
+            <div class="gen-card">
+              <div class="gen-card__header">
+                <span class="gen-card__pill">4th Generation</span>
+                <h3 class="gen-card__title">2024 – 2025 Model Years</h3>
+                <span class="gen-card__engine">i-FORCE 2.4L Turbo & i-FORCE MAX Hybrid</span>
+              </div>
+              <p class="gen-card__desc">
+                Built on Toyota's TNGA-F global truck platform with a fully boxed high-strength steel ladder frame and multi-link coil rear suspension on Double Cab models (leaf springs on XtraCab). Utilizes Electric Power Steering (EPS), eliminating hydraulic power steering fluid and coolers. The 2.4L Turbo produces 278 hp and 317 lb-ft of torque with an 8-speed automatic, while the i-FORCE MAX Hybrid delivers 326 hp and 465 lb-ft.
+              </p>
+              <ul class="gen-card__specs">
+                <li><strong>Max Towing (Gas i-FORCE):</strong> Up to 6,500 lbs (SR5 / TRD PreRunner XtraCab); 6,400 lbs (Double Cab 4WD SR5 & TRD Off-Road)</li>
+                <li><strong>Max Towing (i-FORCE MAX Hybrid):</strong> Up to 6,000 lbs</li>
+                <li><strong>Max Tongue Weight:</strong> 600 – 650 lbs (certified under SAE J2807)</li>
+                <li><strong>Max Payload Range:</strong> 1,380 – 1,709 lbs (up to 1,709 lbs on 2024 TRD Off-Road i-FORCE; up to 1,705 lbs on 2025 configurations; lower on hybrid trims)</li>
+                <li><strong>Tow Equipment:</strong> Class IV receiver hitch, 7-pin/4-pin connector, Trailer Sway Control, integrated electronic trailer brake controller (standard on TRD grades / available on SR5)</li>
+                <li><strong>Status:</strong> 2025 is manufacturer-verified via Toyota Pressroom Specifications; 2024 is partially verified via official Toyota Towing Guides</li>
+              </ul>
+            </div>
+
+            <div class="gen-card">
+              <div class="gen-card__header">
+                <span class="gen-card__pill">3rd Generation</span>
+                <h3 class="gen-card__title">2016 – 2023 Model Years</h3>
+                <span class="gen-card__engine">3.5L V6 Atkinson-Cycle & 2.7L I-4</span>
+              </div>
+              <p class="gen-card__desc">
+                Featured Toyota's 2GR-FKS direct-injection 3.5L V6 (278 hp, 265 lb-ft) mated to a 6-speed automatic or manual. All V6 models strictly required the optional V6 Tow Package to exceed the 3,500 lb base rating. Fully certified under SAE J2807 standards across all configurations.
+              </p>
+              <ul class="gen-card__specs">
+                <li><strong>3.5L V6 with Tow Package:</strong> Up to 6,800 lbs (Access Cab 4x2); 6,700 lbs (Double Cab 4x2); 6,400 lbs (Double Cab 4x4, such as TRD Off-Road)</li>
+                <li><strong>2.7L 4-Cylinder Standard:</strong> 3,500 lbs max towing (350 lbs tongue weight)</li>
+                <li><strong>Payload Range:</strong> 1,120 – 1,685 lbs (e.g. 1,685 lbs on 2021 SR Access Cab 2.7L RWD; 1,155 lbs brochure rating on TRD Off-Road Double Cab 4x4)</li>
+                <li><strong>Factory Tow Package:</strong> Class IV hitch, supplemental engine oil cooler, hydraulic power steering cooler, 130A alternator (earlier years), 4/7-pin connector, Trailer Sway Control (transmission cooling integrated into radiator heat exchanger on 2020+ models)</li>
+                <li><strong>Status:</strong> Partially verified from official Toyota Towing Guides & eBrochures under SAE J2807</li>
+              </ul>
+            </div>
+
+            <div class="gen-card">
+              <div class="gen-card__header">
+                <span class="gen-card__pill">2nd Generation</span>
+                <h3 class="gen-card__title">2010 – 2015 Model Years</h3>
+                <span class="gen-card__engine">4.0L V6 1GR-FE & 2.7L I-4</span>
+              </div>
+              <p class="gen-card__desc">
+                Powered by the durable 4.0L 1GR-FE V6 (236 hp, 266 lb-ft of torque) and 5-speed automatic or 6-speed manual. While Toyota began voluntary SAE J2807 adoption in 2011 with the full-size Tundra, 2nd-gen Tacoma ratings were published under factory engineering and fleet standards.
+              </p>
+              <ul class="gen-card__specs">
+                <li><strong>4.0L V6 with Tow Package:</strong> 6,400 – 6,500 lbs max towing (640–650 lbs tongue weight)</li>
+                <li><strong>2.7L 4-Cylinder Standard:</strong> 3,500 lbs max towing (350 lbs tongue weight)</li>
+                <li><strong>Payload Range:</strong> 1,305 – 1,400 lbs across cataloged configurations</li>
+                <li><strong>Required Equipment:</strong> Factory Class IV hitch, auxiliary transmission fluid cooler, engine oil cooler, 130A alternator, heavy-duty battery, 7-pin connector</li>
+                <li><strong>Status:</strong> Partially verified from official Toyota Fleet and Towing Guides</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- Configuration-Specific Towing Specification Explorer Table -->
+      <section class="section-block" aria-labelledby="configs-heading">
+        <div class="section-header">
+          <h2 id="configs-heading" class="section-title">{make.name} {model.name} Configuration Towing Matrix</h2>
+          <p class="section-subtitle">
+            Every configuration is recorded with exact factory powertrain, drivetrain, cab, bed, and weight ratings.
+          </p>
+        </div>
+
+        <div class="table-container">
+          <table class="specs-table" aria-label={`${make.name} ${model.name} towing ratings by configuration`}>
+            <thead>
+              <tr>
+                <th scope="col">Year</th>
+                <th scope="col">Trim & Cab</th>
+                <th scope="col">Powertrain</th>
+                <th scope="col">Drivetrain</th>
+                <th scope="col">Tow Package</th>
+                <th scope="col">Max Towing</th>
+                <th scope="col">Max Tongue</th>
+                <th scope="col">Max Payload</th>
+                <th scope="col">GCWR</th>
+                <th scope="col">Evidence Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {modelConfigs.map((c) => (
+                <tr>
+                  <td class="font-bold">
+                    <a href={`/vehicles/${make.slug}/${model.slug}/${c.year}/`} class="table-year-link">
+                      {c.year}
+                    </a>
+                  </td>
+                  <td>
+                    <strong>{c.trim.name}</strong>
+                    <span class="table-sub">{c.config.cab_style}{c.config.bed_length ? ` (${c.config.bed_length})` : ''}</span>
+                  </td>
+                  <td>
+                    <span class="table-engine">{c.config.engine_description}</span>
+                    <span class="table-sub">{c.config.transmission}{c.config.axle_ratio ? ` · ${c.config.axle_ratio} axle` : ''}</span>
+                  </td>
+                  <td>
+                    <span class="table-badge">{c.config.drivetrain}</span>
+                  </td>
+                  <td>
+                    {c.config.has_tow_package ? (
+                      <span class="badge-tow-pkg badge-tow-pkg--yes">Class IV Required</span>
+                    ) : (
+                      <span class="badge-tow-pkg badge-tow-pkg--no">Standard (3,500 lbs max)</span>
+                    )}
+                  </td>
+                  <td class="font-bold text-blue">
+                    {c.spec?.max_towing_capacity_lbs ? `${formatLbs(c.spec.max_towing_capacity_lbs)} lbs` : 'N/A'}
+                  </td>
+                  <td>
+                    {c.spec?.max_tongue_weight_lbs ? `${formatLbs(c.spec.max_tongue_weight_lbs)} lbs` : 'N/A'}
+                  </td>
+                  <td>
+                    {c.spec?.max_payload_lbs ? `${formatLbs(c.spec.max_payload_lbs)} lbs` : 'N/A'}
+                  </td>
+                  <td>
+                    {c.spec?.gcwr_lbs ? `${formatLbs(c.spec.gcwr_lbs)} lbs` : 'N/A'}
+                  </td>
+                  <td>
+                    <VerificationStatus
+                      status={c.sources?.[0]?.verification_status ?? 'partially_verified'}
+                      compact
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Factory Tow Package & Engineering Constraints -->
+      <section class="section-block" aria-labelledby="tow-pkg-heading">
+        <div class="section-header">
+          <h2 id="tow-pkg-heading" class="section-title">The Toyota Tacoma Factory Tow Package Explained</h2>
+          <p class="section-subtitle">
+            Why you cannot safely exceed 3,500 pounds with an aftermarket hitch alone.
+          </p>
+        </div>
+
+        <div class="tow-pkg-content">
+          <div class="tow-pkg-card">
+            <h3 class="tow-pkg-card__title">Factory Tow Package Equipment by Generation</h3>
+            <p class="tow-pkg-card__text">
+              Across all Tacoma generations, exceeding the base 3,500-lb towing rating strictly mandates factory towing equipment. Installing an aftermarket bolt-on receiver does not upgrade engine cooling, electrical systems, or structural certifications. Equipment varies by generation:
+            </p>
+            <div class="tow-pkg-gen-block">
+              <strong class="tow-pkg-gen-title">4th Generation (2024–2025 i-FORCE TNGA-F):</strong>
+              <ul class="tow-pkg-list">
+                <li><strong>Class IV Hitch Receiver:</strong> Frame-mounted receiver certified up to 6,500 lbs under SAE J2807.</li>
+                <li><strong>High-Capacity Engine Cooling:</strong> Heavy-duty radiator and high-flow water pump engineered for sustained thermal loads.</li>
+                <li><strong>Dual Wiring Connectors:</strong> Standard 7-pin round blade and 4-pin flat trailer wiring harness.</li>
+                <li><strong>Integrated Trailer Brake Controller (ITBC):</strong> In-dash electronic gain and manual trailer brake control (standard on TRD grades).</li>
+                <li><strong>Trailer Sway Control & Tow/Haul:</strong> Integrated vehicle stability control and dedicated transmission shift logic.</li>
+                <li><strong>Electric Power Steering Note:</strong> 4th Gen Tacomas feature an all-electric power steering rack (EPS) with no hydraulic steering fluid, eliminating the need for a hydraulic power steering cooler.</li>
+              </ul>
+            </div>
+            <div class="tow-pkg-gen-block" style="margin-top: 1rem;">
+              <strong class="tow-pkg-gen-title">3rd Generation (2016–2023 3.5L V6 Tow Package):</strong>
+              <ul class="tow-pkg-list">
+                <li><strong>Class IV Hitch Receiver:</strong> Frame-mounted receiver rated for 6,400 to 6,800 lbs depending on cab/drivetrain.</li>
+                <li><strong>Supplemental Engine Oil Cooler:</strong> Maintains oil viscosity under sustained high-load towing.</li>
+                <li><strong>Hydraulic Power Steering Cooler:</strong> Cools power steering fluid on hydraulic steering systems.</li>
+                <li><strong>130-Amp Alternator:</strong> Heavy-duty alternator for trailer battery maintenance (earlier model years).</li>
+                <li><strong>Transmission Cooling:</strong> External auxiliary cooler on earlier automatics; integrated liquid-to-liquid heat exchanger on 2020+ models.</li>
+                <li><strong>Wiring & Sway Control:</strong> 7-pin/4-pin connector with converter and Trailer Sway Control (TSC).</li>
+              </ul>
+            </div>
+            <div class="tow-pkg-gen-block" style="margin-top: 1rem;">
+              <strong class="tow-pkg-gen-title">2nd Generation (2010–2015 4.0L V6 Tow Package):</strong>
+              <ul class="tow-pkg-list">
+                <li><strong>Class IV Frame Hitch:</strong> Rated for up to 6,500 lbs towing capacity.</li>
+                <li><strong>Auxiliary Transmission Fluid Cooler:</strong> Protects automatic transmission fluid from thermal breakdown.</li>
+                <li><strong>Engine Oil Cooler & 130A Alternator:</strong> Heavy-duty charging and engine thermal management with heavy-duty battery.</li>
+                <li><strong>7-Pin Connector:</strong> Factory round trailer electrical connector.</li>
+              </ul>
+            </div>
+            <div class="tow-pkg-link-box">
+              <a href="/guides/factory-tow-package/" class="text-link">
+                Read our in-depth guide: Factory Tow Package Requirements &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="tow-pkg-card">
+            <h3 class="tow-pkg-card__title">The Real Constraint: Payload vs. Towing Capacity</h3>
+            <p class="tow-pkg-card__text">
+              In real-world towing, Tacoma owners almost always hit their certified <strong>Payload Capacity limit</strong> before reaching the 6,400–6,800 lb towing limit.
+            </p>
+            <div class="payload-example-box">
+              <span class="payload-example-box__title">Real-World Case Study: 2019–2023 Tacoma TRD Off-Road Double Cab 4x4 (5-ft Bed, 3.5L V6 Auto)</span>
+              <ul class="payload-math-list">
+                <li>Published Brochure Base Payload: <strong>1,155 lbs</strong> (GVWR 5,600 lbs − Curb 4,445 lbs)</li>
+                <li>Loaded Travel Trailer Weight: <strong>6,000 lbs</strong> (well within 6,400 lb tow rating)</li>
+                <li>Trailer Tongue Weight (12% of trailer): <strong>- 720 lbs</strong></li>
+                <li>Weight-Distribution Hitch Hardware: <strong>- 80 lbs</strong></li>
+                <li>Remaining Available Payload for Cab Occupants & Gear: <strong>355 lbs</strong></li>
+                <li>Two Adult Occupants (175 lbs each): <strong>- 350 lbs</strong></li>
+                <li>Camping Gear, Cooler & Tools in Bed: <strong>- 150 lbs</strong></li>
+              </ul>
+              <p class="payload-math-verdict">
+                Final Result: 145 lbs OVER vehicle payload capacity, even though the trailer is 400 lbs below the maximum tow rating.
+              </p>
+            </div>
+            <div class="payload-warning-card" style="margin-top: 1rem; padding: 1rem; background: #fffbeb; border: 1px solid #fef3c7; border-radius: var(--radius-sm); font-size: var(--text-xs); line-height: 1.5; color: #92400e;">
+              <strong style="display: block; margin-bottom: 0.25rem; color: #78350f;">Important Safety Rule: Check Your Driver's Door Placard</strong>
+              Brochure payload figures (such as 1,155 lbs) represent an unoptioned base truck. Factory options (sunroof, skid plates, rock sliders, bed covers) and dealer accessories subtract from payload pound-for-pound. Door-jamb stickers on optioned TRD Off-Road Double Cabs often show certified payloads between 1,000 and 1,120 lbs. Always use the exact number printed on your vehicle's Tire and Loading Information placard.
+            </div>
+            <div class="tow-pkg-link-box">
+              <a href="/guides/payload-capacity/" class="text-link">
+                Read our guide: Why Payload Capacity Limits Real-World Towing &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Educational Guides Hub Callout (Step 4 Connection) -->
+      <section class="guides-crosslink-box">
+        <div class="guides-crosslink-box__inner">
+          <div>
+            <h3 class="guides-crosslink-box__title">Master Towing Physics & Engineering Rules</h3>
+            <p class="guides-crosslink-box__desc">
+              Understand the core mechanics before hitching: read our engineering guides on tongue weight balance, gross combined weight limits, and receiver hitch ratings.
+            </p>
+          </div>
+          <div class="guides-crosslink-box__links">
+            <a href="/guides/towing-capacity-explained/" class="guide-pill">Towing Capacity Explained</a>
+            <a href="/guides/tongue-weight/" class="guide-pill">Tongue Weight & Sway</a>
+            <a href="/guides/gcwr/" class="guide-pill">GCWR Calculations</a>
+            <a href="/guides/hitch-classes/" class="guide-pill">Class I–V Hitches</a>
+            <a href="/guides/" class="guide-pill guide-pill--primary">View All Towing Guides &rarr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Frequently Asked Questions (FAQ Section with native HTML details) -->
+      {isTacoma && (
+        <section class="section-block" aria-labelledby="faq-heading">
+          <div class="section-header">
+            <h2 id="faq-heading" class="section-title">Frequently Asked Questions: Toyota Tacoma Towing</h2>
+            <p class="section-subtitle">
+              Verified answers to the most common Toyota Tacoma towing capacity questions.
+            </p>
+          </div>
+
+          <div class="faq-accordion">
+            {tacomaFaqs.map((faq, i) => (
+              <details class="faq-item" open={i === 0}>
+                <summary class="faq-question">
+                  <span>{faq.q}</span>
+                  <svg class="faq-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </summary>
+                <div class="faq-answer">
+                  <p>{faq.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  /* ─── Hero Header ───────────────────────────────────────────────────────────── */
+  .model-hero {
+    margin-bottom: 2.5rem;
+  }
+  .model-hero__badge {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-electric-blue);
+    margin-bottom: 0.5rem;
+  }
+  .model-hero__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.75rem;
+  }
+  .model-hero__range {
+    color: var(--color-electric-blue);
+    font-weight: 600;
+  }
+  .model-hero__lead {
+    font-size: var(--text-md);
+    color: var(--color-pewter);
+    max-width: 65ch;
+    line-height: 1.6;
+  }
+
+  /* ─── Quick Answer Card ─────────────────────────────────────────────────────── */
+  .quick-answer-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-left: 4px solid var(--color-electric-blue);
+    border-radius: var(--radius-card);
+    padding: 1.75rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  .quick-answer-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--color-electric-blue);
+    margin-bottom: 0.75rem;
+  }
+  .quick-answer-card__title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    margin: 0;
+  }
+  .quick-answer-card__summary {
+    font-size: var(--text-base);
+    color: var(--color-graphite);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ─── Metrics Grid ─────────────────────────────────────────────────────────── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-cloud-gray);
+  }
+  .metric-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .metric-card__label {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-silver-fog);
+  }
+  .metric-card__value {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+  .metric-card__hint {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+  }
+
+  /* ─── Tools CTA Banner ─────────────────────────────────────────────────────── */
+  .tools-cta-banner {
+    margin-bottom: 3.5rem;
+  }
+  .tools-cta-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    background: linear-gradient(135deg, var(--color-carbon-dark) 0%, #2a2e39 100%);
+    color: var(--color-pure-white);
+    padding: 2rem 2.5rem;
+    border-radius: var(--radius-card);
+    flex-wrap: wrap;
+  }
+  .tools-cta-box__eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-electric-blue-light);
+    display: block;
+    margin-bottom: 0.375rem;
+  }
+  .tools-cta-box__title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-pure-white);
+  }
+  .tools-cta-box__desc {
+    font-size: var(--text-sm);
+    color: var(--color-pale-silver);
+    max-width: 50ch;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .tools-cta-box__actions {
+    display: flex;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-electric-blue);
+    color: var(--color-pure-white);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color var(--transition-fast);
+  }
+  .btn-primary:hover {
+    background: var(--color-electric-blue-dark);
+  }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--color-pure-white);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: background-color var(--transition-fast);
+  }
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ─── Section Blocks ───────────────────────────────────────────────────────── */
+  .section-block {
+    margin-bottom: 4rem;
+  }
+  .section-header {
+    margin-bottom: 1.75rem;
+  }
+  .section-title {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.375rem;
+  }
+  .section-subtitle {
+    font-size: var(--text-base);
+    color: var(--color-pewter);
+    max-width: 65ch;
+  }
+
+  /* ─── Years Grid ───────────────────────────────────────────────────────────── */
+  .years-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .year-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  }
+  .year-card:hover {
+    border-color: var(--color-electric-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .year-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .year-card__year {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+  .year-card__body {
+    margin-bottom: 1rem;
+  }
+  .year-card__model {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    margin-bottom: 0.25rem;
+  }
+  .year-card__tow {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-electric-blue);
+  }
+  .year-card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-cloud-gray);
+    font-size: var(--text-xs);
+  }
+  .year-card__count {
+    color: var(--color-silver-fog);
+  }
+  .year-card__arrow {
+    color: var(--color-electric-blue);
+    font-weight: 600;
+  }
+
+  .catalog-scope-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: var(--color-light-ash);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-card);
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    line-height: 1.5;
+  }
+  .catalog-scope-note svg {
+    color: var(--color-silver-fog);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ─── Generations ──────────────────────────────────────────────────────────── */
+  .generations-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .gen-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+  }
+  .gen-card__header {
+    margin-bottom: 1rem;
+  }
+  .gen-card__pill {
+    display: inline-block;
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--color-electric-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+  .gen-card__title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.25rem;
+  }
+  .gen-card__engine {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    font-family: var(--font-mono);
+  }
+  .gen-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-graphite);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+  .gen-card__specs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    border-top: 1px solid var(--color-cloud-gray);
+    padding-top: 0.75rem;
+  }
+  .gen-card__specs li {
+    padding: 0.375rem 0;
+    border-bottom: 1px dashed var(--color-cloud-gray);
+  }
+  .gen-card__specs li:last-child {
+    border-bottom: none;
+  }
+
+  /* ─── Specs Table ──────────────────────────────────────────────────────────── */
+  .table-container {
+    overflow-x: auto;
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    background: var(--color-pure-white);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  }
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-xs);
+    text-align: left;
+    white-space: nowrap;
+  }
+  .specs-table th {
+    background: var(--color-light-ash);
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+  .specs-table td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+    color: var(--color-graphite);
+  }
+  .specs-table tr:last-child td {
+    border-bottom: none;
+  }
+  .specs-table tr:hover td {
+    background: var(--color-light-ash);
+  }
+  .table-year-link {
+    color: var(--color-electric-blue);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .table-year-link:hover {
+    text-decoration: underline;
+  }
+  .table-sub {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--color-silver-fog);
+  }
+  .table-engine {
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+  .table-badge {
+    display: inline-block;
+    padding: 0.2rem 0.45rem;
+    background: var(--color-light-ash);
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+  .badge-tow-pkg {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+  .badge-tow-pkg--yes {
+    background: var(--color-verified-bg);
+    color: var(--color-verified);
+    border: 1px solid var(--color-verified-border);
+  }
+  .badge-tow-pkg--no {
+    background: var(--color-light-ash);
+    color: var(--color-pewter);
+  }
+  .text-blue {
+    color: var(--color-electric-blue);
+  }
+
+  /* ─── Tow Package Section ─────────────────────────────────────────────────── */
+  .tow-pkg-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .tow-pkg-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.75rem;
+  }
+  .tow-pkg-card__title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.75rem;
+  }
+  .tow-pkg-card__text {
+    font-size: var(--text-sm);
+    color: var(--color-graphite);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .tow-pkg-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.25rem 0;
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    color: var(--color-pewter);
+  }
+  .tow-pkg-list li {
+    padding: 0.375rem 0;
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+  .tow-pkg-list li:last-child {
+    border-bottom: none;
+  }
+  .tow-pkg-link-box {
+    margin-top: 1rem;
+    font-size: var(--text-xs);
+  }
+  .text-link {
+    color: var(--color-electric-blue);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .text-link:hover {
+    text-decoration: underline;
+  }
+
+  .payload-example-box {
+    background: var(--color-light-ash);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.25rem;
+  }
+  .payload-example-box__title {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+  .payload-math-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.875rem 0;
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+  }
+  .payload-math-list li {
+    padding: 0.25rem 0;
+  }
+  .payload-math-verdict {
+    font-size: var(--text-xs);
+    color: #b91c1c;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--color-pale-silver);
+  }
+
+  /* ─── Guides Crosslink Box ─────────────────────────────────────────────────── */
+  .guides-crosslink-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-card);
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+  .guides-crosslink-box__title {
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.375rem;
+  }
+  .guides-crosslink-box__desc {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    margin-bottom: 1.25rem;
+    max-width: 65ch;
+  }
+  .guides-crosslink-box__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+  .guide-pill {
+    display: inline-flex;
+    align-items: center;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    padding: 0.5rem 0.875rem;
+    border-radius: 9999px;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+  .guide-pill:hover {
+    border-color: var(--color-electric-blue);
+    color: var(--color-electric-blue);
+  }
+  .guide-pill--primary {
+    background: var(--color-electric-blue);
+    color: var(--color-pure-white);
+    border-color: var(--color-electric-blue);
+  }
+  .guide-pill--primary:hover {
+    background: var(--color-electric-blue-dark);
+    color: var(--color-pure-white);
+  }
+
+  /* ─── FAQs Accordion ───────────────────────────────────────────────────────── */
+  .faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .faq-item {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+  .faq-question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+  .faq-chevron {
+    color: var(--color-silver-fog);
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+  .faq-item[open] .faq-chevron {
+    transform: rotate(180deg);
+  }
+  .faq-answer {
+    padding: 0 1.5rem 1.25rem;
+    font-size: var(--text-sm);
+    color: var(--color-graphite);
+    line-height: 1.6;
+    border-top: 1px solid var(--color-cloud-gray);
+    padding-top: 1rem;
+  }
+  .faq-answer p {
+    margin: 0;
+  }
+</style>

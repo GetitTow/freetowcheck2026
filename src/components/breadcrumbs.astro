@@ -1,0 +1,42 @@
+---
+/**
+ * Breadcrumbs — accessible, schema-ready breadcrumb trail
+ */
+interface Crumb {
+  name: string;
+  href?: string;
+  url?: string;
+}
+
+interface Props {
+  crumbs: Crumb[];
+}
+
+const { crumbs } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumbs-nav">
+  <ol class="breadcrumbs" role="list">
+    <li>
+      <a href="/" aria-label="TowingSpecs home">Home</a>
+    </li>
+    {crumbs.map((crumb, i) => {
+      const link = crumb.href || crumb.url;
+      return (
+        <li aria-current={i === crumbs.length - 1 ? 'page' : undefined}>
+          {link && i < crumbs.length - 1 ? (
+            <a href={link}>{crumb.name}</a>
+          ) : (
+            <span>{crumb.name}</span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs-nav {
+    margin-bottom: 1.25rem;
+  }
+</style>

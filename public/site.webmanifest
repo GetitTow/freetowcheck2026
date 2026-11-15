@@ -1,0 +1,16 @@
+{
+  "name": "TowingSpecs",
+  "short_name": "TowingSpecs",
+  "description": "Verified vehicle towing capacity specifications",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#171A20",
+  "theme_color": "#171A20",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

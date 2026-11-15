@@ -1,0 +1,644 @@
+---
+/**
+ * /guides/[slug]/ — Individual Educational Towing Guide
+ * Comprehensive, verified automotive engineering guide with formulas, diagrams, and practical checklists.
+ */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/site-header.astro';
+import SiteFooter from '../../components/site-footer.astro';
+import Breadcrumbs from '../../components/breadcrumbs.astro';
+import SafetyDisclaimer from '../../components/safety-disclaimer.astro';
+
+interface GuideData {
+  slug: string;
+  title: string;
+  subtitle: string;
+  readTime: string;
+  category: string;
+  lastUpdated: string;
+  summary: string;
+  sections: Array<{
+    id: string;
+    heading: string;
+    content: string[];
+    formula?: { label: string; equation: string; explanation: string };
+    callout?: { type: 'tip' | 'warning' | 'info'; title: string; text: string };
+  }>;
+  relatedSlugs: string[];
+}
+
+const GUIDES_DATABASE: Record<string, GuideData> = {
+  'towing-capacity-explained': {
+    slug: 'towing-capacity-explained',
+    title: 'Towing Capacity Explained',
+    subtitle: 'The engineering definitions, calculation methodologies, and real-world limits of vehicle tow ratings.',
+    readTime: '8 min',
+    category: 'Fundamentals',
+    lastUpdated: 'November 2024',
+    summary: 'Towing capacity is the maximum total weight a vehicle is engineered and certified by its manufacturer to pull. However, published ratings represent specific optimal configurations and are subject to critical constraints like GCWR, tongue weight, and payload.',
+    sections: [
+      {
+        id: 'what-is-towing-capacity',
+        heading: 'What Is Towing Capacity?',
+        content: [
+          'Towing capacity is the maximum allowable weight of a trailer and all its contents combined (Gross Trailer Weight, or GTW) that a vehicle can safely tow under specified conditions. Manufacturers certify this limit through rigorous engineering testing including powertrain cooling, braking performance, structural hitch durability, and hill-climbing endurance under standards such as SAE J2807.',
+          'Crucially, an advertised "headline" towing figure (e.g., "Tows up to 14,000 lbs") almost never applies across all trims of that vehicle. It applies solely to a single, specifically optioned configuration—typically an entry-level trim with an upgraded engine, specific rear axle ratio, extended wheelbase, and factory maximum tow package.',
+        ],
+        callout: {
+          type: 'warning',
+          title: 'The Headline Rating Trap',
+          text: 'Never assume your truck or SUV matches the advertised maximum rating. A high-end luxury trim often has 2,000 to 3,000 lbs less towing capacity than a work truck trim of the exact same vehicle due to the weight of luxury equipment.',
+        },
+      },
+      {
+        id: 'the-controlling-constraints',
+        heading: 'The 4 Core Towing Constraints',
+        content: [
+          'Safe towing is governed not by a single number, but by four interdependent legal and physical weight ratings established by vehicle manufacturers:',
+          '1. Gross Vehicle Weight Rating (GVWR): The maximum allowable total weight of the towing vehicle itself, including passengers, fuel, cargo, accessories, and trailer tongue weight.',
+          '2. Gross Combined Weight Rating (GCWR): The maximum allowable combined mass of the towing vehicle, all passengers, cargo, fuel, and the fully loaded trailer.',
+          '3. Gross Axle Weight Rating (GAWR): The maximum weight that can be supported by either the front or rear axle individually.',
+          '4. Tongue Weight Rating (TWR): The maximum downward vertical force the trailer tongue can place onto the hitch receiver.',
+        ],
+        formula: {
+          label: 'True Available Towing Limit',
+          equation: 'Max Trailer Weight = Minimum of (Rated Tow Capacity, GCWR - Actual Loaded Vehicle Weight)',
+          explanation: 'Your allowable trailer weight decreases pound-for-pound as you add gear, accessories, and passengers to the tow vehicle.',
+        },
+      },
+      {
+        id: 'how-to-find-exact-spec',
+        heading: 'How to Determine Your Exact Vehicle Limit',
+        content: [
+          'Step 1: Check your driver\'s door jamb Tire and Loading Information placard. This contains your vehicle\'s exact maximum payload capacity as manufactured.',
+          'Step 2: Note the axle ratio code and engine type from your window sticker or VIN build sheet. Axle gearing differences can shift towing capacity by over 3,000 lbs.',
+          'Step 3: Verify the hitch receiver rating stamp directly on the hitch frame, distinguishing between weight-carrying and weight-distributing limits.',
+        ],
+      },
+    ],
+    relatedSlugs: ['tongue-weight', 'payload-capacity', 'gcwr'],
+  },
+  'tongue-weight': {
+    slug: 'tongue-weight',
+    title: 'Understanding Tongue Weight',
+    subtitle: 'Why 10% to 15% tongue weight is the most vital balance factor in safe towing and trailer sway prevention.',
+    readTime: '6 min',
+    category: 'Fundamentals',
+    lastUpdated: 'November 2024',
+    summary: 'Tongue weight is the downward force exerted by the trailer coupler on the vehicle\'s hitch ball. Maintaining proper tongue weight percentage is essential for high-speed stability and preventing violent trailer sway.',
+    sections: [
+      {
+        id: 'what-is-tongue-weight',
+        heading: 'What Is Tongue Weight & Why Is It Critical?',
+        content: [
+          'Tongue weight (or hitch weight) is the portion of the trailer\'s total gross weight that rests directly on the hitch ball of the tow vehicle. For conventional bumper-pull trailers, industry consensus and SAE standards require tongue weight to be between 10% and 15% of the total loaded trailer weight.',
+          'If tongue weight is too low (under 10%), the trailer acts like a pendulum behind the vehicle. At highway speeds, aerodynamic turbulence from passing semi-trucks or minor steering inputs can trigger uncontrollable trailer sway (fishtailing), frequently leading to catastrophic rollover accidents.',
+          'If tongue weight is too high (exceeding 15% or the hitch receiver rating), it overloads the vehicle\'s rear suspension, lifts weight off the front steering axle, degrades braking ability, and directly consumes vehicle payload.',
+        ],
+        formula: {
+          label: 'Target Tongue Weight Range',
+          equation: 'Target Tongue Weight = Trailer Gross Loaded Weight × 0.10 to 0.15',
+          explanation: 'For a 7,000 lbs loaded travel trailer, target tongue weight should measure between 700 lbs and 1,050 lbs.',
+        },
+      },
+      {
+        id: 'measuring-tongue-weight',
+        heading: 'How to Measure Tongue Weight',
+        content: [
+          '1. Commercial CAT Scales: Weigh your vehicle without the trailer, then weigh vehicle and trailer together (with trailer wheels on a separate scale pad). The difference between the truck\'s unhitched and hitched weight is your actual tongue weight.',
+          '2. Specialized Tongue Weight Scale: Purpose-built hydraulic or mechanical scales placed directly under the trailer coupler jack.',
+          '3. Bathroom Scale Method: Suitable for lighter trailers under 4,000 lbs using a 3:1 or 4:1 mechanical lever beam system.',
+        ],
+        callout: {
+          type: 'tip',
+          title: 'Weight Distribution Hitches (WDH)',
+          text: 'Most trucks and SUVs require a Weight Distribution Hitch for trailers exceeding 5,000 lbs. A WDH uses spring bars to transfer leverage forward to the tow vehicle\'s front axle and rearward to the trailer axles, leveling the vehicle.',
+        },
+      },
+    ],
+    relatedSlugs: ['towing-capacity-explained', 'payload-capacity', 'hitch-classes'],
+  },
+  'payload-capacity': {
+    slug: 'payload-capacity',
+    title: 'Payload Capacity and Why It Matters',
+    subtitle: 'Why payload capacity is almost always the true constraint that limits truck and SUV towing long before tow capacity.',
+    readTime: '7 min',
+    category: 'Fundamentals',
+    lastUpdated: 'November 2024',
+    summary: 'Payload is the maximum weight a vehicle can carry in passengers, cargo, accessories, and trailer tongue weight. In real-world towing, payload capacity is exceeded far more often than maximum towing capacity.',
+    sections: [
+      {
+        id: 'payload-definition',
+        heading: 'What Is Payload Capacity?',
+        content: [
+          'Payload capacity is the maximum total weight of cargo, occupants, and added equipment a vehicle can carry inside the cab and cargo bed. It is mathematically defined as the vehicle\'s Gross Vehicle Weight Rating (GVWR) minus its actual Curb Weight.',
+          'The single most common mistake made by new tower owners is focusing exclusively on towing capacity while ignoring payload. When you hitch a trailer, its tongue weight does not just pull on the hitch—it presses down into the vehicle, subtracting directly from available payload.',
+        ],
+        formula: {
+          label: 'Available Payload Equation',
+          equation: 'Remaining Payload = Door Sticker Payload - Driver & Passengers - Cargo & Gear - Trailer Tongue Weight',
+          explanation: 'Every pound of passengers, coolers, bed covers, and tongue weight reduces available payload.',
+        },
+      },
+      {
+        id: 'real-world-payload-scenario',
+        heading: 'A Real-World Half-Ton Truck Example',
+        content: [
+          'Consider a popular half-ton crew cab truck with a rated towing capacity of 10,000 lbs and a door sticker payload rating of 1,600 lbs:',
+          '• Family of four passengers: 600 lbs',
+          '• Luggage, camping gear, and generator in bed: 300 lbs',
+          '• Weight distribution hitch hardware: 80 lbs',
+          '• Total interior & bed weight: 980 lbs',
+          '• Remaining payload for tongue weight: 1,600 lbs - 980 lbs = 620 lbs.',
+          'With only 620 lbs of remaining payload, the maximum safe trailer this truck can pull at a 12% tongue weight is: 620 / 0.12 = 5,166 lbs—barely half of its advertised 10,000 lbs towing rating!',
+          'This dynamic is even more critical on popular midsize trucks. For example, as detailed in our <a href="/vehicles/toyota/tacoma/" style="color:var(--color-electric-blue);font-weight:500;">Toyota Tacoma Towing Specifications Hub</a>, a V6 or i-FORCE model rated for up to 6,500 lbs of towing typically has a real-world payload between 1,150 and 1,600 lbs. A 650-lb trailer tongue weight immediately claims 40% to 55% of the truck\'s entire payload capacity before accounting for a single passenger or piece of gear.',
+        ],
+        callout: {
+          type: 'warning',
+          title: 'Check the Yellow Door Sticker',
+          text: 'Payload capacity is specific to the individual VIN. Every factory option (sunroof, skid plates, audio amplifiers, step bars) subtracts from the payload figure printed on the driver\'s door jamb sticker.',
+        },
+      },
+    ],
+    relatedSlugs: ['towing-capacity-explained', 'tongue-weight', 'gcwr'],
+  },
+  'gcwr': {
+    slug: 'gcwr',
+    title: 'GCWR: Gross Combined Weight Rating',
+    subtitle: 'The ultimate ceiling: understanding the total combined weight of vehicle, trailer, passengers, and gear.',
+    readTime: '5 min',
+    category: 'Fundamentals',
+    lastUpdated: 'November 2024',
+    summary: 'Gross Combined Weight Rating (GCWR) is the absolute maximum combined mass of the towing vehicle and the trailer combined. It dictates total powertrain and brake system endurance.',
+    sections: [
+      {
+        id: 'gcwr-explained',
+        heading: 'What Is Gross Combined Weight Rating (GCWR)?',
+        content: [
+          'GCWR is established by automotive engineers to represent the maximum combined weight that the vehicle\'s engine, transmission, cooling system, driveshaft, axles, and foundation brakes can safely move, sustain at highway grade, and stop within safety margins.',
+          'Exceeding GCWR leads to rapid transmission overheating, brake fade on mountain descents, and catastrophic structural failure of drivetrain components.',
+        ],
+        formula: {
+          label: 'GCWR Verification Formula',
+          equation: 'Combined Total = Scale Weight of Tow Vehicle + Scale Weight of Loaded Trailer ≤ GCWR',
+          explanation: 'The complete combination on a certified scale must not exceed the GCWR stated in the owner\'s manual.',
+        },
+      },
+    ],
+    relatedSlugs: ['towing-capacity-explained', 'payload-capacity', 'factory-tow-package'],
+  },
+  'factory-tow-package': {
+    slug: 'factory-tow-package',
+    title: 'Factory Tow Package Requirements',
+    subtitle: 'Why an aftermarket receiver hitch does not increase your vehicle towing capacity to the factory rating.',
+    readTime: '6 min',
+    category: 'Equipment',
+    lastUpdated: 'November 2024',
+    summary: 'A factory tow package is far more than a hitch receiver. It typically incorporates heavy-duty engine and transmission cooling, upgraded wiring, high-output alternators, and integrated brake controls required to achieve published tow ratings.',
+    sections: [
+      {
+        id: 'what-is-included',
+        heading: 'What Does a Factory Tow Package Include?',
+        content: [
+          '1. Powertrain Cooling Upgrades: Auxiliary transmission fluid cooler, larger radiator cores, and high-output electric cooling fans to dissipate the extreme thermal loads generated by continuous heavy pulling.',
+          '2. Gearing & Rear Differential: Shorter axle ratios (such as 3.73 or 4.10) that keep the engine in its optimal torque band and reduce strain on transmission clutches.',
+          '3. Electrical & Braking: 7-pin round blade wiring connector, high-output alternator, and factory-integrated trailer brake controller calibrated with the vehicle\'s ABS and stability control system.',
+          '4. Structural Enhancements: Frame reinforcement brackets and Class IV or V receiver hitches welded directly to the vehicle chassis.',
+          'A classic midsize truck example is detailed in our <a href="/vehicles/toyota/tacoma/" style="color:var(--color-electric-blue);font-weight:500;">Toyota Tacoma Towing Analysis</a>: 3.5L V6 models without the factory Tow Package are restricted to a 3,500 lbs standard limit. Adding the factory Tow Package—which includes an auxiliary engine oil cooler, power steering cooler, 130A alternator, and frame-mounted Class IV receiver hitch—is mandatory to unlock its full 6,400 to 6,800 lbs towing capability.',
+        ],
+        callout: {
+          type: 'warning',
+          title: 'Aftermarket Hitches Do Not Increase Tow Ratings',
+          text: 'Installing an aftermarket Class IV hitch on a vehicle without factory towing cooling packages does NOT raise its towing capacity. The vehicle remains legally and mechanically restricted to its base unequipped rating.',
+        },
+      },
+    ],
+    relatedSlugs: ['hitch-classes', 'towing-capacity-explained', 'gcwr'],
+  },
+  'hitch-classes': {
+    slug: 'hitch-classes',
+    title: 'Hitch Classes Explained (I through V)',
+    subtitle: 'Receiver dimensions, weight capacities, and appropriate trailer types for hitch classes I, II, III, IV, and V.',
+    readTime: '5 min',
+    category: 'Equipment',
+    lastUpdated: 'November 2024',
+    summary: 'Receiver hitches are categorized from Class I through Class V based on their structural opening size and gross trailer weight capacity. Selecting the correct hitch class ensures physical compatibility and safety.',
+    sections: [
+      {
+        id: 'hitch-class-overview',
+        heading: 'Receiver Hitch Classification Breakdown',
+        content: [
+          '• Class I: 1-1/4" receiver, rated up to 2,000 lbs GTW / 200 lbs tongue weight. Common on compact cars and small crossovers for bike racks and light utility trailers.',
+          '• Class II: 1-1/4" receiver, rated up to 3,500 lbs GTW / 350 lbs tongue weight. Standard for midsize crossovers, small SUVs, and minivans towing small boats or pop-up campers.',
+          '• Class III: 2" receiver, rated up to 6,000 to 10,000 lbs GTW (with WDH) / 800 lbs tongue weight. The most versatile hitch standard for full-size SUVs, midsize trucks, and light half-ton trucks.',
+          '• Class IV: 2" receiver, rated up to 10,000 to 14,000 lbs GTW / 1,400 lbs tongue weight. Standard on modern half-ton and 3/4-ton pickup trucks pulling heavy travel trailers and toy haulers.',
+          '• Class V: 2-1/2" or 3" receiver, rated up to 16,000 to 25,000 lbs GTW / 2,500 lbs tongue weight. Found on heavy-duty 3/4-ton and 1-ton commercial trucks for large equipment and commercial trailers.',
+        ],
+      },
+    ],
+    relatedSlugs: ['factory-tow-package', 'tongue-weight', 'towing-capacity-explained'],
+  },
+};
+
+const { slug } = Astro.params;
+const guide = slug ? GUIDES_DATABASE[slug] : null;
+
+if (!guide) {
+  return new Response(null, { status: 404 });
+}
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: guide.title,
+  description: guide.summary,
+  author: {
+    '@type': 'Organization',
+    name: 'TowingSpecs Engineering Team',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'TowingSpecs',
+    url: siteUrl,
+  },
+  url: `${siteUrl}/guides/${guide.slug}/`,
+};
+---
+
+<Layout
+  title={`${guide.title} — TowingSpecs Technical Guide`}
+  description={guide.summary}
+  canonicalUrl={`/guides/${guide.slug}/`}
+  jsonLd={jsonLd}
+  breadcrumbs={[
+    { name: 'Guides', url: '/guides/' },
+    { name: guide.title, url: `/guides/${guide.slug}/` },
+  ]}
+>
+  <SiteHeader currentPath="/guides/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs
+        crumbs={[
+          { name: 'Guides', url: '/guides/' },
+          { name: guide.title },
+        ]}
+      />
+
+      <article class="guide-article">
+        <!-- Article Header -->
+        <header class="guide-header">
+          <div class="guide-header__meta">
+            <span class="guide-tag">{guide.category}</span>
+            <span class="guide-read-time">{guide.readTime} read</span>
+            <span class="guide-updated">Updated {guide.lastUpdated}</span>
+          </div>
+          <h1 class="guide-header__title">{guide.title}</h1>
+          <p class="guide-header__subtitle">{guide.subtitle}</p>
+        </header>
+
+        <!-- Executive Summary -->
+        <div class="guide-summary-box">
+          <h2 class="guide-summary-box__title">Key Principles & Summary</h2>
+          <p class="guide-summary-box__text">{guide.summary}</p>
+        </div>
+
+        <!-- Main Content Sections -->
+        <div class="guide-body">
+          {guide.sections.map((section) => (
+            <section id={section.id} class="guide-section" aria-labelledby={`sec-${section.id}`}>
+              <h2 id={`sec-${section.id}`} class="guide-section__heading">{section.heading}</h2>
+
+              {section.content.map((p) => (
+                <p class="guide-section__paragraph" set:html={p} />
+              ))}
+
+              {section.formula && (
+                <div class="formula-card">
+                  <div class="formula-card__badge">{section.formula.label}</div>
+                  <div class="formula-card__equation">{section.formula.equation}</div>
+                  <p class="formula-card__desc">{section.formula.explanation}</p>
+                </div>
+              )}
+
+              {section.callout && (
+                <div class={`callout callout--${section.callout.type}`} role="note">
+                  <h3 class="callout__title">{section.callout.title}</h3>
+                  <p class="callout__text">{section.callout.text}</p>
+                </div>
+              )}
+            </section>
+          ))}
+        </div>
+
+        <!-- Interactive CTA -->
+        <div class="guide-cta-card">
+          <h2 class="guide-cta-card__title">Check Your Specific Setup</h2>
+          <p class="guide-cta-card__desc">
+            Use our interactive Trailer Matcher to calculate towing margin, tongue weight, and payload limits for your exact vehicle and trailer.
+          </p>
+          <div class="guide-cta-card__actions">
+            <a href="/trailer-matcher/" class="btn btn--primary">
+              Launch Trailer Matcher &rarr;
+            </a>
+            <a href="/compare/" class="btn btn--secondary">
+              Compare Vehicles Side-by-Side
+            </a>
+          </div>
+        </div>
+
+        <!-- Related Guides Navigation -->
+        {guide.relatedSlugs && guide.relatedSlugs.length > 0 && (
+          <aside class="related-guides-section" aria-label="Related towing guides">
+            <h2 class="related-guides-title">Related Technical Guides</h2>
+            <div class="related-guides-grid">
+              {guide.relatedSlugs.map((relSlug) => {
+                const rel = GUIDES_DATABASE[relSlug];
+                if (!rel) return null;
+                return (
+                  <a href={`/guides/${rel.slug}/`} class="related-guide-card">
+                    <span class="related-guide-card__read">{rel.readTime}</span>
+                    <h3 class="related-guide-card__title">{rel.title}</h3>
+                    <p class="related-guide-card__desc">{rel.subtitle}</p>
+                    <span class="related-guide-card__link">Read guide &rarr;</span>
+                  </a>
+                );
+              })}
+            </div>
+          </aside>
+        )}
+
+        <div style="margin-top: 3rem;">
+          <SafetyDisclaimer />
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .guide-article {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+
+  .guide-header {
+    margin-bottom: 2rem;
+  }
+
+  .guide-header__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    margin-bottom: 0.75rem;
+  }
+
+  .guide-tag {
+    background: rgba(62, 106, 225, 0.08);
+    color: var(--color-electric-blue);
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-badge);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .guide-header__title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--color-carbon-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+
+  .guide-header__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-pewter);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .guide-summary-box {
+    background: var(--color-snow-white);
+    border-left: 3px solid var(--color-electric-blue);
+    padding: 1.25rem 1.5rem;
+    border-radius: 0 var(--radius-card) var(--radius-card) 0;
+    margin-bottom: 2.5rem;
+  }
+
+  .guide-summary-box__title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-summary-box__text {
+    font-size: var(--text-md);
+    color: var(--color-carbon-dark);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .guide-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .guide-section__heading {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+
+  .guide-section__paragraph {
+    font-size: var(--text-md);
+    color: var(--color-carbon-dark);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .formula-card {
+    background: #111418;
+    color: #ffffff;
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .formula-card__badge {
+    font-size: var(--text-xs);
+    color: #60a5fa;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .formula-card__equation {
+    font-size: var(--text-lg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .formula-card__desc {
+    font-size: var(--text-sm);
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .callout {
+    border-radius: var(--radius-card);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    border: 1px solid;
+  }
+
+  .callout--warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+  }
+
+  .callout--tip {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+
+  .callout__title {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+  }
+
+  .callout--warning .callout__title {
+    color: #92400e;
+  }
+
+  .callout--tip .callout__title {
+    color: #166534;
+  }
+
+  .callout__text {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .callout--warning .callout__text {
+    color: #78350f;
+  }
+
+  .callout--tip .callout__text {
+    color: #14532d;
+  }
+
+  .guide-cta-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 2rem;
+    margin-top: 3.5rem;
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+  }
+
+  .guide-cta-card__title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-cta-card__desc {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    max-width: 50ch;
+    margin: 0 auto 1.5rem;
+  }
+
+  .guide-cta-card__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .related-guides-section {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-cloud-gray);
+  }
+
+  .related-guides-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+
+  .related-guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .related-guide-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .related-guide-card:hover {
+    border-color: var(--color-electric-blue);
+    box-shadow: 0 0 0 1px var(--color-electric-blue);
+  }
+
+  .related-guide-card__read {
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    margin-bottom: 0.375rem;
+  }
+
+  .related-guide-card__title {
+    font-size: var(--text-md);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.375rem;
+  }
+
+  .related-guide-card__desc {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    line-height: 1.5;
+    flex: 1;
+    margin-bottom: 0.75rem;
+  }
+
+  .related-guide-card__link {
+    font-size: var(--text-xs);
+    color: var(--color-electric-blue);
+    font-weight: 500;
+  }
+</style>

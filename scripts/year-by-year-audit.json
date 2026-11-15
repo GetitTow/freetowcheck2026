@@ -1,0 +1,172 @@
+[
+  {
+    "year": 2010,
+    "makes": 5,
+    "models": 7,
+    "configs": 13,
+    "specs": 13,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 13,
+    "status": "Data available"
+  },
+  {
+    "year": 2011,
+    "makes": 4,
+    "models": 8,
+    "configs": 14,
+    "specs": 14,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 14,
+    "status": "Data available"
+  },
+  {
+    "year": 2012,
+    "makes": 5,
+    "models": 8,
+    "configs": 14,
+    "specs": 14,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 14,
+    "status": "Data available"
+  },
+  {
+    "year": 2013,
+    "makes": 4,
+    "models": 12,
+    "configs": 17,
+    "specs": 17,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 17,
+    "status": "Data available"
+  },
+  {
+    "year": 2014,
+    "makes": 4,
+    "models": 7,
+    "configs": 15,
+    "specs": 15,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 15,
+    "status": "Data available"
+  },
+  {
+    "year": 2015,
+    "makes": 5,
+    "models": 8,
+    "configs": 13,
+    "specs": 13,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 13,
+    "status": "Data available"
+  },
+  {
+    "year": 2016,
+    "makes": 6,
+    "models": 9,
+    "configs": 16,
+    "specs": 16,
+    "manufacturerConfirmed": 2,
+    "requiresRepairOrReview": 14,
+    "status": "Data available"
+  },
+  {
+    "year": 2017,
+    "makes": 5,
+    "models": 7,
+    "configs": 11,
+    "specs": 11,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 11,
+    "status": "Data available"
+  },
+  {
+    "year": 2018,
+    "makes": 4,
+    "models": 8,
+    "configs": 14,
+    "specs": 14,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 14,
+    "status": "Data available"
+  },
+  {
+    "year": 2019,
+    "makes": 7,
+    "models": 8,
+    "configs": 16,
+    "specs": 16,
+    "manufacturerConfirmed": 2,
+    "requiresRepairOrReview": 14,
+    "status": "Data available"
+  },
+  {
+    "year": 2020,
+    "makes": 4,
+    "models": 9,
+    "configs": 16,
+    "specs": 16,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 16,
+    "status": "Data available"
+  },
+  {
+    "year": 2021,
+    "makes": 1,
+    "models": 2,
+    "configs": 3,
+    "specs": 3,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 3,
+    "status": "Data available"
+  },
+  {
+    "year": 2022,
+    "makes": 1,
+    "models": 1,
+    "configs": 3,
+    "specs": 3,
+    "manufacturerConfirmed": 3,
+    "requiresRepairOrReview": 0,
+    "status": "Data available"
+  },
+  {
+    "year": 2023,
+    "makes": 7,
+    "models": 12,
+    "configs": 22,
+    "specs": 22,
+    "manufacturerConfirmed": 2,
+    "requiresRepairOrReview": 20,
+    "status": "Data available"
+  },
+  {
+    "year": 2024,
+    "makes": 5,
+    "models": 18,
+    "configs": 25,
+    "specs": 25,
+    "manufacturerConfirmed": 13,
+    "requiresRepairOrReview": 12,
+    "status": "Data available"
+  },
+  {
+    "year": 2025,
+    "makes": 5,
+    "models": 11,
+    "configs": 23,
+    "specs": 23,
+    "manufacturerConfirmed": 5,
+    "requiresRepairOrReview": 18,
+    "status": "Data available"
+  },
+  {
+    "year": 2026,
+    "makes": 0,
+    "models": 0,
+    "configs": 0,
+    "specs": 0,
+    "manufacturerConfirmed": 0,
+    "requiresRepairOrReview": 0,
+    "status": "Research in progress"
+  }
+]

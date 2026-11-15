@@ -1,0 +1,517 @@
+---
+/**
+ * /vehicles/[make]/[model]/[year]/[trim]/ — Trim-specific vehicle specification page
+ * Shows exact configurations, powertrain options, tow package requirements, and ratings for a single trim.
+ */
+import Layout from '../../../../../../layouts/Layout.astro';
+import SiteHeader from '../../../../../../components/site-header.astro';
+import SiteFooter from '../../../../../../components/site-footer.astro';
+import Breadcrumbs from '../../../../../../components/breadcrumbs.astro';
+import SafetyDisclaimer from '../../../../../../components/safety-disclaimer.astro';
+import VerificationStatus from '../../../../../../components/verification-status.astro';
+import SpecificationSource from '../../../../../../components/specification-source.astro';
+import {
+  getMakeBySlug,
+  getModelBySlug,
+  getModelYearByYear,
+  getTrimsByModelYear,
+  getConfigurationsByTrim,
+  getTowingSpecByConfiguration,
+  getSourcesForSpec,
+} from '../../../../../../lib/db.ts';
+
+const { make: makeSlug, model: modelSlug, year: yearParam, trim: trimSlug } = Astro.params;
+const year = yearParam ? parseInt(yearParam, 10) : null;
+
+if (!makeSlug || !modelSlug || !year || !trimSlug) {
+  return Astro.redirect('/vehicles/', 302);
+}
+
+const { data: make } = await getMakeBySlug(makeSlug);
+if (!make) return new Response(null, { status: 404 });
+
+const { data: model } = await getModelBySlug(make.id, modelSlug);
+if (!model) return new Response(null, { status: 404 });
+
+const { data: modelYear } = await getModelYearByYear(model.id, year);
+if (!modelYear) return new Response(null, { status: 404 });
+
+const { data: allTrims } = await getTrimsByModelYear(modelYear.id);
+const currentTrim = (allTrims ?? []).find(
+  (t) => t.slug.toLowerCase() === trimSlug.toLowerCase()
+);
+
+if (!currentTrim) return new Response(null, { status: 404 });
+
+const otherTrims = (allTrims ?? []).filter((t) => t.id !== currentTrim.id);
+
+// Load configurations and specs for this trim
+const { data: rawConfigs } = await getConfigurationsByTrim(currentTrim.id);
+const configs = rawConfigs ?? [];
+
+type ConfigDetails = {
+  config: (typeof configs)[number];
+  spec: Awaited<ReturnType<typeof getTowingSpecByConfiguration>>['data'];
+  sources: Awaited<ReturnType<typeof getSourcesForSpec>>['data'];
+};
+
+const detailedConfigs: ConfigDetails[] = [];
+for (const config of configs) {
+  const { data: spec } = await getTowingSpecByConfiguration(config.id);
+  const { data: sources } = spec ? await getSourcesForSpec(spec.id) : { data: [] };
+  detailedConfigs.push({ config, spec, sources: sources ?? [] });
+}
+
+// Compute maximum rated towing capacity for this trim
+const towRatings = detailedConfigs
+  .map((c) => c.spec?.max_towing_capacity_lbs)
+  .filter((v): v is number => v !== null && v !== undefined);
+const maxTow = towRatings.length > 0 ? Math.max(...towRatings) : null;
+const minTow = towRatings.length > 0 ? Math.min(...towRatings) : null;
+
+function formatLbs(val: number | null | undefined): string {
+  if (val === null || val === undefined) return 'N/A';
+  return val.toLocaleString('en-US');
+}
+
+const pageTitle = `${year} ${make.name} ${model.name} ${currentTrim.name} Towing Capacity`;
+const pageDesc = maxTow
+  ? `${year} ${make.name} ${model.name} ${currentTrim.name} towing capacity: up to ${formatLbs(maxTow)} lbs. Exact powertrain and equipment specifications from verified manufacturer documentation.`
+  : `Towing specifications for the ${year} ${make.name} ${model.name} ${currentTrim.name}. Manufacturer verified figures.`;
+
+const siteUrl = import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com';
+const canonicalPath = `/vehicles/${make.slug}/${model.slug}/${year}/${currentTrim.slug}/`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemPage',
+  name: pageTitle,
+  description: pageDesc,
+  url: `${siteUrl}${canonicalPath}`,
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDesc}
+  canonicalUrl={canonicalPath}
+  jsonLd={jsonLd}
+  breadcrumbs={[
+    { name: 'Vehicles', url: '/vehicles/' },
+    { name: make.name, url: `/vehicles/${make.slug}/` },
+    { name: model.name, url: `/vehicles/${make.slug}/${model.slug}/` },
+    { name: String(year), url: `/vehicles/${make.slug}/${model.slug}/${year}/` },
+    { name: currentTrim.name, url: canonicalPath },
+  ]}
+>
+  <SiteHeader currentPath="/vehicles/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs
+        crumbs={[
+          { name: 'Vehicles', url: '/vehicles/' },
+          { name: make.name, url: `/vehicles/${make.slug}/` },
+          { name: model.name, url: `/vehicles/${make.slug}/${model.slug}/` },
+          { name: String(year), url: `/vehicles/${make.slug}/${model.slug}/${year}/` },
+          { name: currentTrim.name },
+        ]}
+      />
+
+      <!-- Hero Header -->
+      <div class="trim-header">
+        <div class="trim-header__info">
+          <span class="trim-header__eyebrow">{year} {make.name} {model.name}</span>
+          <h1 class="trim-header__title">{currentTrim.name} Trim Specifications</h1>
+          <p class="trim-header__desc">
+            Exact manufacturer towing capacity, payload limits, and equipment requirements for the {currentTrim.name} trim.
+          </p>
+        </div>
+
+        {maxTow !== null && (
+          <div class="trim-capacity-card">
+            <span class="trim-capacity-label">Max Tow Rating</span>
+            <div class="trim-capacity-value-wrap">
+              <span class="trim-capacity-value">{formatLbs(maxTow)}</span>
+              <span class="trim-capacity-unit">lbs</span>
+            </div>
+            {minTow !== null && minTow !== maxTow && (
+              <span class="trim-capacity-range">
+                Varies from {formatLbs(minTow)} to {formatLbs(maxTow)} lbs based on cab &amp; axle options
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <!-- Action bar -->
+      <div class="trim-action-bar">
+        <a
+          href={`/vehicles/${make.slug}/${model.slug}/${year}/`}
+          class="btn btn--secondary btn--sm"
+        >
+          &larr; View All {year} {model.name} Trims
+        </a>
+        <a
+          href={`/trailer-matcher/?make=${make.slug}&model=${model.slug}&year=${year}&trim=${currentTrim.id}`}
+          class="btn btn--primary btn--sm"
+        >
+          Match with Trailer &rarr;
+        </a>
+      </div>
+
+      <!-- Configuration Breakdown Cards -->
+      <section style="margin-top: 2.5rem;" aria-labelledby="configs-heading">
+        <h2 id="configs-heading" style="font-size: var(--text-xl); font-weight: 600; margin-bottom: 1.25rem;">
+          Verified {currentTrim.name} Configurations ({detailedConfigs.length})
+        </h2>
+
+        {detailedConfigs.length > 0 ? (
+          <div class="configs-stack">
+            {detailedConfigs.map(({ config, spec, sources }) => (
+              <article class="config-card">
+                <div class="config-card__header">
+                  <div>
+                    <h3 class="config-card__title">
+                      {config.engine_description || 'Standard Engine'}
+                    </h3>
+                    <div class="config-card__sub">
+                      {[config.drivetrain, config.cab_style, config.bed_length && `${config.bed_length} bed`, config.axle_ratio && `${config.axle_ratio} axle`]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </div>
+                  </div>
+
+                  {spec?.max_towing_capacity_lbs && (
+                    <div class="config-card__headline-tow">
+                      <span class="config-card__tow-num">{formatLbs(spec.max_towing_capacity_lbs)}</span>
+                      <span class="config-card__tow-unit">lbs max tow</span>
+                    </div>
+                  )}
+                </div>
+
+                <!-- Spec Grid -->
+                {spec && (
+                  <div class="spec-table-responsive">
+                    <table class="spec-grid-table">
+                      <thead>
+                        <tr>
+                          <th>Max Towing</th>
+                          <th>Max Tongue Wt</th>
+                          <th>Max Payload</th>
+                          <th>GCWR</th>
+                          <th>Curb Wt / GVWR</th>
+                          <th>Hitch Class</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="font-bold">{formatLbs(spec.max_towing_capacity_lbs)} lbs</td>
+                          <td>{formatLbs(spec.max_tongue_weight_lbs)} lbs</td>
+                          <td class="font-bold">{formatLbs(spec.max_payload_lbs)} lbs</td>
+                          <td>{formatLbs(spec.gcwr_lbs)} lbs</td>
+                          <td>{formatLbs(spec.curb_weight_lbs)} / {formatLbs(spec.gvwr_lbs)} lbs</td>
+                          <td>{spec.hitch_class || 'Class IV'}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Equipment & Requirements */}
+                <div class="config-notes-box">
+                  <div class="config-notes-item">
+                    <strong>Tow Package:</strong>{' '}
+                    {config.has_tow_package ? 'Factory Tow Package Required' : 'Standard Towing Equipment'}
+                  </div>
+                  {spec?.equipment_notes && (
+                    <div class="config-notes-item">
+                      <strong>Equipment Requirements:</strong> {spec.equipment_notes}
+                    </div>
+                  )}
+                  {spec?.fifth_wheel_capacity_lbs && (
+                    <div class="config-notes-item">
+                      <strong>5th-Wheel / Gooseneck:</strong> {formatLbs(spec.fifth_wheel_capacity_lbs)} lbs
+                    </div>
+                  )}
+                </div>
+
+                {/* Data Provenance */}
+                {sources && sources.length > 0 && (
+                  <div class="config-source-row">
+                    <span class="config-source-label">Source Evidence:</span>
+                    {sources.map((src) => (
+                      <SpecificationSource source={src} />
+                    ))}
+                  </div>
+                )}
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="alert alert--warning" role="alert">
+            No published configurations currently verified for this trim.
+          </div>
+        )}
+      </section>
+
+      <!-- Other Trims for this model year -->
+      {otherTrims.length > 0 && (
+        <section style="margin-top: 3.5rem;" aria-labelledby="other-trims-heading">
+          <h2 id="other-trims-heading" style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 1rem;">
+            Compare Other {year} {model.name} Trims
+          </h2>
+          <div class="other-trims-grid">
+            {otherTrims.map((t) => (
+              <a
+                href={`/vehicles/${make.slug}/${model.slug}/${year}/${t.slug}/`}
+                class="other-trim-card"
+              >
+                <h3 class="other-trim-card__name">{t.name}</h3>
+                <span class="other-trim-card__link">View specs &rarr;</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div style="margin-top: 3.5rem;">
+        <SafetyDisclaimer />
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .trim-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+    margin-bottom: 1.5rem;
+  }
+
+  .trim-header__eyebrow {
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+
+  .trim-header__title {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .trim-header__desc {
+    font-size: var(--text-md);
+    color: var(--color-pewter);
+    margin: 0;
+    max-width: 55ch;
+  }
+
+  .trim-capacity-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.25rem 1.5rem;
+    text-align: right;
+  }
+
+  .trim-capacity-label {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+
+  .trim-capacity-value-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 0.375rem;
+  }
+
+  .trim-capacity-value {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .trim-capacity-unit {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    font-weight: 500;
+  }
+
+  .trim-capacity-range {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    margin-top: 0.25rem;
+  }
+
+  .trim-action-bar {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .configs-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .config-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .config-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .config-card__title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    margin: 0;
+  }
+
+  .config-card__sub {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    margin-top: 0.25rem;
+  }
+
+  .config-card__headline-tow {
+    text-align: right;
+  }
+
+  .config-card__tow-num {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .config-card__tow-unit {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+  }
+
+  .spec-table-responsive {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+
+  .spec-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+
+  .spec-grid-table th {
+    background: var(--color-snow-white);
+    padding: 0.625rem 0.875rem;
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+
+  .spec-grid-table td {
+    padding: 0.875rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .font-bold {
+    font-weight: 600;
+  }
+
+  .config-notes-box {
+    background: var(--color-snow-white);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    color: var(--color-carbon-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+  }
+
+  .config-source-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--text-xs);
+    flex-wrap: wrap;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-cloud-gray);
+  }
+
+  .config-source-label {
+    font-weight: 500;
+    color: var(--color-silver-fog);
+  }
+
+  .other-trims-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .other-trim-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .other-trim-card:hover {
+    border-color: var(--color-electric-blue);
+    box-shadow: 0 0 0 1px var(--color-electric-blue);
+  }
+
+  .other-trim-card__name {
+    font-size: var(--text-md);
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  .other-trim-card__link {
+    font-size: var(--text-xs);
+    color: var(--color-electric-blue);
+    font-weight: 500;
+  }
+</style>

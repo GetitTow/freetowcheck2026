@@ -1,0 +1,37 @@
+---
+/**
+ * SafetyDisclaimer — required on all vehicle, trailer, and comparison pages.
+ * Never omit this on pages that display towing specifications.
+ */
+interface Props {
+  /** 'standard' = default vehicle page, 'matcher' = trailer compatibility result */
+  variant?: 'standard' | 'matcher';
+}
+
+const { variant = 'standard' } = Astro.props;
+---
+
+<aside
+  class="disclaimer"
+  role="note"
+  aria-label="Towing safety disclaimer"
+>
+  {variant === 'matcher' ? (
+    <p>
+      <strong>Important safety notice:</strong> Trailer compatibility results are informational estimates derived from
+      manufacturer-published specifications and user-provided inputs. They do not constitute a professional safety
+      assessment. Towing safety depends on factors not captured here, including vehicle condition, driver experience,
+      road conditions, cargo distribution, and brake system ratings. Always consult your vehicle owner's manual,
+      the trailer manufacturer's documentation, and a qualified professional before towing. Exceeding any rated
+      limit is unsafe and may be unlawful.
+    </p>
+  ) : (
+    <p>
+      <strong>Disclaimer:</strong> All towing specifications published on TowingSpecs are sourced from
+      manufacturer documentation and are provided for reference only. Ratings vary by configuration, equipment,
+      and model year. Always verify specifications in your vehicle owner's manual before towing. TowingSpecs is
+      an independent reference platform and is not affiliated with any vehicle manufacturer. Never exceed any
+      manufacturer-rated towing, payload, or tongue-weight limit.
+    </p>
+  )}
+</aside>

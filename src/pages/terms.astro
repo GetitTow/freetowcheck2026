@@ -1,0 +1,77 @@
+---
+/**
+ * /terms/ — Terms of Use & Automotive Safety Disclaimers
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+---
+
+<Layout
+  title="Terms of Use & Safety Disclaimer — TowingSpecs"
+  description="Terms of service, liability limitations, and vehicle weight certification guidelines for TowingSpecs."
+  canonicalUrl="/terms/"
+  breadcrumbs={[{ name: 'Terms of Use', url: '/terms/' }]}
+>
+  <SiteHeader currentPath="/terms/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem; max-width: 780px;">
+      <Breadcrumbs crumbs={[{ name: 'Terms of Use' }]} />
+
+      <h1 style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 600; margin-bottom: 1.5rem;">
+        Terms of Use & Safety Disclaimer
+      </h1>
+
+      <div style="font-size: var(--text-md); line-height: 1.7; color: var(--color-carbon-dark); display: flex; flex-direction: column; gap: 1.5rem;">
+        <p><strong>Effective Date:</strong> January 1, 2025</p>
+
+        <section style="background: #fffbeb; border: 1px solid #fde68a; padding: 1.25rem 1.5rem; border-radius: var(--radius-card);">
+          <h2 style="font-size: var(--text-md); font-weight: 600; color: #92400e; margin-bottom: 0.5rem;">
+            CRITICAL AUTOMOTIVE SAFETY NOTICE
+          </h2>
+          <p style="font-size: var(--text-sm); color: #78350f; margin: 0; line-height: 1.6;">
+            The controlling legal authority for any individual vehicle's weight limits is always the physical manufacturer certification label (Tire and Loading Information and Safety Compliance Certification Placards) affixed to the driver's side door jamb of the specific vehicle. Never exceed the GVWR, GAWR, GCWR, or tongue weight limits stated on your vehicle's physical label.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">1. Reference Use Only</h2>
+          <p>
+            TowingSpecs provides technical specifications and calculations compiled from official manufacturer towing guides and owner's manuals for reference and educational purposes only. Individual vehicle capacities vary based on factory options, aftermarket modifications, passenger loads, cargo distribution, and vehicle condition.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">2. Operator Responsibility</h2>
+          <p>
+            The vehicle operator bears sole legal and practical responsibility for ensuring:
+          </p>
+          <ul style="padding-left: 1.5rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+            <li>The total loaded trailer weight does not exceed the vehicle's rated maximum towing capacity.</li>
+            <li>The trailer tongue weight is properly balanced (typically 10% to 15%) and does not exceed the hitch receiver rating.</li>
+            <li>Vehicle gross vehicle weight (GVWR) including all occupants, cargo, and tongue weight is not exceeded.</li>
+            <li>Appropriate towing equipment (weight-distributing hitches, auxiliary transmission coolers, sway control, and trailer brake controllers) is properly installed and functional.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">3. Limitation of Liability</h2>
+          <p>
+            Under no circumstances shall TowingSpecs, its operators, or contributors be liable for any direct, indirect, incidental, punitive, or consequential damages resulting from the use or inability to use this platform, including but not limited to vehicle mechanical damage, warranty invalidation, or accidents.
+          </p>
+        </section>
+
+        <section>
+          <h2 style="font-size: var(--text-lg); font-weight: 600; margin-bottom: 0.5rem;">4. Intellectual Property</h2>
+          <p>
+            Vehicle brand names, model names, and manufacturer logos are the property of their respective trademark holders. Their use on TowingSpecs is solely for vehicle identification and technical reference under nominative fair use.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>

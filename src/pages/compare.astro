@@ -1,0 +1,601 @@
+---
+/**
+ * /compare/ — Side-by-side Vehicle Towing Comparison
+ * Compare 2 to 3 vehicle configurations on towing capacity, payload, tongue weight, GCWR, and equipment.
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+import SafetyDisclaimer from '../components/safety-disclaimer.astro';
+import VerificationStatus from '../components/verification-status.astro';
+import {
+  getAllDetailedConfigurations,
+  getDetailedConfigurationById,
+  type DetailedConfiguration,
+} from '../lib/db.ts';
+
+const url = Astro.url;
+const v1Id = url.searchParams.get('v1') || 'cfg-f150-xlt-35-4wd-maxtow';
+const v2Id = url.searchParams.get('v2') || 'cfg-silv-rst-62-4wd-maxtrail';
+const v3Id = url.searchParams.get('v3') || '';
+
+const allConfigs = await getAllDetailedConfigurations();
+
+const selectedV1 = v1Id ? (await getDetailedConfigurationById(v1Id)).data : null;
+const selectedV2 = v2Id ? (await getDetailedConfigurationById(v2Id)).data : null;
+const selectedV3 = v3Id ? (await getDetailedConfigurationById(v3Id)).data : null;
+
+const activeVehicles = [selectedV1, selectedV2, selectedV3].filter(
+  (v): v is DetailedConfiguration => v !== null
+);
+
+// Calculate max values across compared vehicles for comparative bar widths
+const maxTowInSet = Math.max(...activeVehicles.map((v) => v.spec?.max_towing_capacity_lbs || 0), 1);
+const maxPayloadInSet = Math.max(...activeVehicles.map((v) => v.spec?.max_payload_lbs || 0), 1);
+const maxGcwrInSet = Math.max(...activeVehicles.map((v) => v.spec?.gcwr_lbs || 0), 1);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Vehicle Towing Specification Comparison Tool',
+  description: 'Compare manufacturer-verified towing capacities, payload ratings, GCWR, and required equipment side-by-side.',
+  url: `${import.meta.env.PUBLIC_SITE_URL || 'https://towingspecs.com'}/compare/`,
+};
+---
+
+<Layout
+  title="Compare Vehicle Towing Capacities — Side-by-Side Spec Comparison"
+  description="Compare towing capacities, payload, tongue weight, GCWR, and tow packages across trucks and SUVs side-by-side. Source-verified automotive specifications."
+  canonicalUrl="/compare/"
+  jsonLd={jsonLd}
+  breadcrumbs={[{ name: 'Compare', url: '/compare/' }]}
+>
+  <SiteHeader currentPath="/compare/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+      <Breadcrumbs crumbs={[{ name: 'Compare' }]} />
+
+      <div class="page-header" style="margin-bottom: 2rem;">
+        <h1 class="page-header__title" style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 500; letter-spacing: -0.02em;">
+          Compare Vehicle Towing Capacities
+        </h1>
+        <p class="page-header__desc" style="color: var(--color-pewter); max-width: 62ch; font-size: var(--text-md); margin-top: 0.5rem;">
+          Evaluate side-by-side towing limits, payload ratings, GCWR, and required towing equipment across exact vehicle configurations.
+        </p>
+      </div>
+
+      <!-- Vehicle Selectors Form -->
+      <section class="compare-selectors-card" aria-label="Select vehicles to compare">
+        <form method="GET" action="/compare/" class="compare-form" id="compare-form">
+          <div class="compare-selectors-grid">
+            <!-- Vehicle 1 -->
+            <div class="form-field">
+              <label for="v1" class="form-label">Vehicle 1</label>
+              <select name="v1" id="v1" class="form-select" onchange="this.form.submit()">
+                {allConfigs.map((item) => (
+                  <option value={item.config.id} selected={item.config.id === v1Id}>
+                    {item.year} {item.make.name} {item.model.name} {item.trim.name} ({item.config.drivetrain})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Vehicle 2 -->
+            <div class="form-field">
+              <label for="v2" class="form-label">Vehicle 2</label>
+              <select name="v2" id="v2" class="form-select" onchange="this.form.submit()">
+                {allConfigs.map((item) => (
+                  <option value={item.config.id} selected={item.config.id === v2Id}>
+                    {item.year} {item.make.name} {item.model.name} {item.trim.name} ({item.config.drivetrain})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Vehicle 3 (Optional) -->
+            <div class="form-field">
+              <label for="v3" class="form-label">Vehicle 3 (Optional)</label>
+              <select name="v3" id="v3" class="form-select" onchange="this.form.submit()">
+                <option value="" selected={!v3Id}>— None selected —</option>
+                {allConfigs.map((item) => (
+                  <option value={item.config.id} selected={item.config.id === v3Id}>
+                    {item.year} {item.make.name} {item.model.name} {item.trim.name} ({item.config.drivetrain})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Side-by-Side Comparison Table -->
+      <div class="compare-table-wrapper" style="margin-top: 2rem;">
+        <table class="compare-table" aria-label="Side-by-side vehicle comparison specifications">
+          <thead>
+            <tr>
+              <th scope="col" class="compare-table__feature-col">Specification</th>
+              {activeVehicles.map((v) => (
+                <th scope="col" class="compare-table__vehicle-col">
+                  <div class="vehicle-card-header">
+                    <span class="vehicle-card-header__eyebrow">{v.year} {v.make.name}</span>
+                    <h2 class="vehicle-card-header__title">{v.model.name} {v.trim.name}</h2>
+                    <span class="vehicle-card-header__drivetrain">{v.config.drivetrain} · {v.config.cab_style || v.model.body_style}</span>
+                    <a
+                      href={`/vehicles/${v.make.slug}/${v.model.slug}/${v.year}/`}
+                      class="vehicle-card-header__link"
+                    >
+                      View full specs &rarr;
+                    </a>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Max Towing Capacity -->
+            <tr class="highlight-row">
+              <th scope="row" class="feature-label">
+                <strong>Max Conventional Towing</strong>
+                <span class="feature-hint">Maximum rated trailer weight</span>
+              </th>
+              {activeVehicles.map((v) => {
+                const tow = v.spec?.max_towing_capacity_lbs;
+                const pct = tow ? Math.round((tow / maxTowInSet) * 100) : 0;
+                return (
+                  <td class="feature-value">
+                    <div class="big-metric">
+                      <span class="big-metric__num">
+                        {tow === 0 ? 'Not recommended' : tow ? `${tow.toLocaleString()} lbs` : '—'}
+                      </span>
+                    </div>
+                    {tow && (
+                      <div class="metric-bar-bg" aria-hidden="true">
+                        <div class="metric-bar-fill" style={`width: ${pct}%`} />
+                      </div>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+
+            <!-- Max Tongue Weight -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Max Tongue Weight
+                <span class="feature-hint">Hitch receiver downward load (10-15%)</span>
+              </th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value font-mono">
+                  {v.spec?.max_tongue_weight_lbs === 0
+                    ? 'N/A'
+                    : v.spec?.max_tongue_weight_lbs
+                    ? `${v.spec.max_tongue_weight_lbs.toLocaleString()} lbs`
+                    : '—'}
+                </td>
+              ))}
+            </tr>
+
+            <!-- Max Payload Capacity -->
+            <tr>
+              <th scope="row" class="feature-label">
+                <strong>Max Payload Capacity</strong>
+                <span class="feature-hint">Passengers + Cargo + Tongue Weight</span>
+              </th>
+              {activeVehicles.map((v) => {
+                const payload = v.spec?.max_payload_lbs;
+                const pct = payload ? Math.round((payload / maxPayloadInSet) * 100) : 0;
+                return (
+                  <td class="feature-value">
+                    <span class="feature-value--primary font-mono">{payload ? `${payload.toLocaleString()} lbs` : '—'}</span>
+                    {payload && (
+                      <div class="metric-bar-bg" aria-hidden="true">
+                        <div class="metric-bar-fill metric-bar-fill--amber" style={`width: ${pct}%`} />
+                      </div>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+
+            <!-- GCWR -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Gross Combined Weight Rating (GCWR)
+                <span class="feature-hint">Total vehicle + trailer + contents maximum</span>
+              </th>
+              {activeVehicles.map((v) => {
+                const gcwr = v.spec?.gcwr_lbs;
+                const pct = gcwr ? Math.round((gcwr / maxGcwrInSet) * 100) : 0;
+                return (
+                  <td class="feature-value">
+                    <span class="font-mono">{gcwr ? `${gcwr.toLocaleString()} lbs` : '—'}</span>
+                    {gcwr && (
+                      <div class="metric-bar-bg" aria-hidden="true">
+                        <div class="metric-bar-fill" style={`width: ${pct}%`} />
+                      </div>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+
+            <!-- Curb Weight & GVWR -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Base Curb Weight / GVWR
+                <span class="feature-hint">Unladen vehicle weight / Gross vehicle weight</span>
+              </th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value font-mono">
+                  {v.spec?.curb_weight_lbs ? `${v.spec.curb_weight_lbs.toLocaleString()} lbs` : '—'}
+                  {' / '}
+                  {v.spec?.gvwr_lbs ? `${v.spec.gvwr_lbs.toLocaleString()} lbs` : '—'}
+                </td>
+              ))}
+            </tr>
+
+            <!-- 5th Wheel / Gooseneck -->
+            <tr>
+              <th scope="row" class="feature-label">
+                5th-Wheel / Gooseneck Rating
+                <span class="feature-hint">Bed-mounted hitch capacity</span>
+              </th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value font-mono">
+                  {v.spec?.fifth_wheel_capacity_lbs
+                    ? `${v.spec.fifth_wheel_capacity_lbs.toLocaleString()} lbs`
+                    : 'Not rated / N/A'}
+                </td>
+              ))}
+            </tr>
+
+            <!-- Engine & Output -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Engine & Powertrain
+                <span class="feature-hint">Displacement, aspiration, output</span>
+              </th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value">
+                  <div style="font-weight: 500; color: var(--color-carbon-dark);">{v.config.engine_description}</div>
+                  <div style="font-size: var(--text-xs); color: var(--color-silver-fog); margin-top: 0.25rem;">
+                    {v.config.transmission}
+                  </div>
+                </td>
+              ))}
+            </tr>
+
+            <!-- Axle Ratio -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Axle Ratio
+                <span class="feature-hint">Rear differential gearing</span>
+              </th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value font-mono">
+                  {v.config.axle_ratio ? `${v.config.axle_ratio} : 1` : 'Standard'}
+                </td>
+              ))}
+            </tr>
+
+            <!-- Hitch Class & Required Equipment -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Tow Package & Hitch Class
+                <span class="feature-hint">Factory equipment required for rating</span>
+              </th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value">
+                  <span class="tag tag--info" style="margin-bottom: 0.375rem; display: inline-block;">
+                    {v.spec?.hitch_class || 'Standard Receiver'}
+                  </span>
+                  <div style="font-size: var(--text-xs); color: var(--color-pewter); line-height: 1.5;">
+                    {v.config.has_tow_package ? 'Factory Tow Package Required' : 'Standard Towing Equipment'}
+                  </div>
+                  {v.spec?.equipment_notes && (
+                    <div style="font-size: var(--text-xs); color: var(--color-pewter); margin-top: 0.375rem; font-style: italic;">
+                      {v.spec.equipment_notes}
+                    </div>
+                  )}
+                </td>
+              ))}
+            </tr>
+
+            <!-- Data Source & Provenance -->
+            <tr>
+              <th scope="row" class="feature-label">
+                Data Provenance & Source
+                <span class="feature-hint">Primary manufacturer evidence</span>
+              </th>
+              {activeVehicles.map((v) => {
+                const src = v.sources[0];
+                return (
+                  <td class="feature-value">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                      <VerificationStatus status={src?.verification_status || 'manufacturer_verified'} compact={true} />
+
+                      {src ? (
+                        <div style="font-size: var(--text-xs); line-height: 1.45;">
+                          <div style="font-weight: 600; color: var(--color-carbon-dark); margin-bottom: 0.25rem;">
+                            {src.document_title}
+                          </div>
+                          <div style="color: var(--color-pewter); margin-bottom: 0.375rem;">
+                            {src.publisher} ({src.publication_year || v.year})
+                            {src.page_number && ` · Page ${src.page_number}`}
+                          </div>
+
+                          <a
+                            href={src.source_url}
+                            target="_blank"
+                            rel="noopener noreferrer nofollow"
+                            style="display: inline-flex; align-items: center; gap: 0.25rem; color: var(--color-electric-blue); font-weight: 500; text-decoration: underline; margin-bottom: 0.375rem;"
+                          >
+                            <span>Open manufacturer source</span>
+                            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                              <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4.5M9.5 2.5V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </a>
+
+                          <div style="color: var(--color-silver-fog); font-size: 0.72rem; line-height: 1.35; padding: 0.35rem 0.5rem; background: #f8fafc; border-radius: 4px; border: 1px solid var(--color-cloud-gray);">
+                            <strong>Confirms:</strong> Max towing, payload & GCWR limits.
+                            {v.config.has_tow_package && ' Requires factory tow package.'}
+                            {src.verification_status === 'source_unavailable' && ' Direct DAM link undergoing repair; available via manufacturer portal.'}
+                            {src.verification_date && ` · Verified ${new Date(src.verification_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}`}
+                          </div>
+                        </div>
+                      ) : (
+                        <span style="color: var(--color-silver-fog); font-size: var(--text-xs);">Documentation pending</span>
+                      )}
+                    </div>
+                  </td>
+                );
+              })}
+            </tr>
+
+            <!-- Matcher Action CTA -->
+            <tr class="action-row">
+              <th scope="row" class="feature-label">Test Compatibility</th>
+              {activeVehicles.map((v) => (
+                <td class="feature-value">
+                  <a
+                    href={`/trailer-matcher/?make=${v.make.slug}&model=${v.model.slug}&year=${v.year}&config=${v.config.id}`}
+                    class="btn btn--secondary btn--sm"
+                    style="width: 100%; justify-content: center;"
+                  >
+                    Match with Trailer &rarr;
+                  </a>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Quick Analysis & Summary -->
+      <section style="margin-top: 3rem;" aria-labelledby="analysis-heading">
+        <h2 id="analysis-heading" style="font-size: var(--text-lg); font-weight: 500; margin-bottom: 1rem;">
+          Towing Comparison Key Takeaways
+        </h2>
+        <div class="analysis-grid">
+          <div class="analysis-card">
+            <h3 class="analysis-card__title">Towing Margin vs. Payload Limit</h3>
+            <p class="analysis-card__body">
+              While a vehicle may boast a high towing capacity (e.g., 14,000 lbs), its tongue weight (1,400 lbs) directly consumes available payload. When carrying passengers and cargo, payload is almost always the controlling constraint before reaching maximum towing capacity.
+            </p>
+          </div>
+          <div class="analysis-card">
+            <h3 class="analysis-card__title">Axle Ratio Matters</h3>
+            <p class="analysis-card__body">
+              Different axle ratios on the exact same truck model can alter tow ratings by thousands of pounds. Always verify the rear axle ratio code on your driver's door jamb sticker before planning your towing setup.
+            </p>
+          </div>
+          <div class="analysis-card">
+            <h3 class="analysis-card__title">Factory Package Requirements</h3>
+            <p class="analysis-card__body">
+              Published ratings frequently assume specific factory options such as upgraded engine and transmission cooling, higher-capacity alternators, and integrated trailer brake controllers.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div style="margin-top: 3rem;">
+        <SafetyDisclaimer />
+      </div>
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .compare-selectors-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+  }
+
+  .compare-selectors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .compare-table-wrapper {
+    overflow-x: auto;
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: var(--text-sm);
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+    vertical-align: top;
+  }
+
+  .compare-table__feature-col {
+    width: 25%;
+    min-width: 200px;
+    background: var(--color-snow-white);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    border-right: 1px solid var(--color-cloud-gray);
+  }
+
+  .compare-table__vehicle-col {
+    min-width: 260px;
+    background: var(--color-pure-white);
+    border-right: 1px solid var(--color-cloud-gray);
+  }
+
+  .compare-table__vehicle-col:last-child {
+    border-right: none;
+  }
+
+  .vehicle-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .vehicle-card-header__eyebrow {
+    font-size: var(--text-xs);
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .vehicle-card-header__title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    margin: 0;
+  }
+
+  .vehicle-card-header__drivetrain {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+  }
+
+  .vehicle-card-header__link {
+    font-size: var(--text-xs);
+    color: var(--color-electric-blue);
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 0.5rem;
+  }
+
+  .vehicle-card-header__link:hover {
+    text-decoration: underline;
+  }
+
+  .feature-label {
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    background: var(--color-snow-white);
+    border-right: 1px solid var(--color-cloud-gray);
+    display: table-cell;
+  }
+
+  .feature-hint {
+    display: block;
+    font-size: var(--text-xs);
+    font-weight: 400;
+    color: var(--color-silver-fog);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+  }
+
+  .feature-value {
+    color: var(--color-carbon-dark);
+    border-right: 1px solid var(--color-cloud-gray);
+  }
+
+  .feature-value:last-child {
+    border-right: none;
+  }
+
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  .highlight-row {
+    background: rgba(62, 106, 225, 0.03);
+  }
+
+  .big-metric__num {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .feature-value--primary {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--color-carbon-dark);
+  }
+
+  .metric-bar-bg {
+    height: 6px;
+    background: var(--color-cloud-gray);
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+  }
+
+  .metric-bar-fill {
+    height: 100%;
+    background: var(--color-electric-blue);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  .metric-bar-fill--amber {
+    background: #d97706;
+  }
+
+  .action-row {
+    background: var(--color-snow-white);
+  }
+
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .analysis-card {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    padding: 1.5rem;
+  }
+
+  .analysis-card__title {
+    font-size: var(--text-md);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .analysis-card__body {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

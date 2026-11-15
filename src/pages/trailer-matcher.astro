@@ -1,0 +1,760 @@
+---
+/**
+ * /trailer-matcher/ — Trailer compatibility checker
+ * Server-rendered form + calculation.
+ */
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site-header.astro';
+import SiteFooter from '../components/site-footer.astro';
+import SafetyDisclaimer from '../components/safety-disclaimer.astro';
+import Breadcrumbs from '../components/breadcrumbs.astro';
+import {
+  getAvailableYears,
+  getMakesForYear,
+  getMakeBySlug,
+  getModelsByMake,
+  getModelBySlug,
+  getModelYears,
+  getModelYearByYear,
+  getTrimsByModelYear,
+  getConfigurationsByTrim,
+  getTowingSpecByConfiguration,
+  calculateTrailerCompatibility,
+} from '../lib/db.ts';
+import type { TowingSpec, CompatibilityResult } from '../lib/types.ts';
+
+// ─── Parse query params ───────────────────────────────────────────────────────
+const url = Astro.url;
+const makeSlug = url.searchParams.get('make') ?? '';
+const modelSlug = url.searchParams.get('model') ?? '';
+const yearParam = url.searchParams.get('year') ?? '';
+const trimId = url.searchParams.get('trim') ?? '';
+const configId = url.searchParams.get('config') ?? '';
+const trailerWeight = parseFloat(url.searchParams.get('trailer_weight') ?? '0') || 0;
+const tongueWeight = url.searchParams.get('tongue_weight') ? parseFloat(url.searchParams.get('tongue_weight')!) : null;
+const passengerWeight = parseFloat(url.searchParams.get('passengers') ?? '0') || 0;
+const cargoWeight = parseFloat(url.searchParams.get('cargo') ?? '0') || 0;
+const hitchHardware = url.searchParams.get('hitch_hardware') ? parseFloat(url.searchParams.get('hitch_hardware')!) : null;
+const customPayload = url.searchParams.get('custom_payload') ? parseFloat(url.searchParams.get('custom_payload')!) : null;
+const isTongueWeightEstimated = url.searchParams.get('is_estimated_tongue') === '1' || url.searchParams.get('is_estimated_tongue') === 'true';
+
+const year = yearParam ? parseInt(yearParam, 10) : null;
+
+// Available published years from DB
+const { data: availableYears } = await getAvailableYears();
+const yearsList = availableYears && availableYears.length > 0 ? availableYears : [2025, 2024, 2013];
+
+// Prepopulate options for SSR when parameters are present (e.g. from compare transfer)
+let initialMakes: { slug: string; name: string }[] = [];
+let initialModels: { slug: string; name: string }[] = [];
+let initialConfigs: { slug: string; name: string }[] = [];
+
+if (year) {
+  const { data: makesData } = await getMakesForYear(year);
+  if (makesData) {
+    initialMakes = makesData.map((m) => ({ slug: m.slug, name: m.name }));
+  }
+}
+
+if (year && makeSlug) {
+  const { data: make } = await getMakeBySlug(makeSlug);
+  if (make) {
+    const { data: modelsData } = await getModelsByMake(make.id);
+    if (modelsData) {
+      for (const m of modelsData) {
+        const { data: myData } = await getModelYears(m.id);
+        if (myData && myData.some((my) => my.year === year)) {
+          initialModels.push({ slug: m.slug, name: m.name });
+        }
+      }
+    }
+  }
+}
+
+if (year && makeSlug && modelSlug) {
+  const { data: make } = await getMakeBySlug(makeSlug);
+  if (make) {
+    const { data: model } = await getModelBySlug(make.id, modelSlug);
+    if (model) {
+      const { data: modelYear } = await getModelYearByYear(model.id, year);
+      if (modelYear) {
+        const { data: trims } = await getTrimsByModelYear(modelYear.id);
+        for (const trim of trims ?? []) {
+          const { data: configList } = await getConfigurationsByTrim(trim.id);
+          for (const cfg of configList ?? []) {
+            const parts = [trim.name];
+            if (cfg.engine_description) parts.push(cfg.engine_description);
+            if (cfg.drivetrain) parts.push(cfg.drivetrain);
+            if (cfg.cab_style) parts.push(cfg.cab_style);
+            if (cfg.has_tow_package) parts.push('w/ Tow Pkg');
+            initialConfigs.push({ slug: cfg.id, name: parts.join(' · ') });
+          }
+        }
+      }
+    }
+  }
+}
+
+// ─── Attempt calculation if all params present ────────────────────────────────
+let spec: TowingSpec | null = null;
+let result: CompatibilityResult | null = null;
+let vehicleLabel = '';
+let formError = '';
+
+const hasAllInputs = makeSlug && modelSlug && year && configId && trailerWeight > 0;
+
+if (hasAllInputs) {
+  const { data: make } = await getMakeBySlug(makeSlug);
+  if (make) {
+    const { data: model } = await getModelBySlug(make.id, modelSlug);
+    if (model) {
+      const { data: modelYear } = await getModelYearByYear(model.id, year!);
+      if (modelYear) {
+        vehicleLabel = `${year} ${make.name} ${model.name}`;
+        const { data: foundSpec } = await getTowingSpecByConfiguration(configId);
+        spec = foundSpec;
+        if (spec) {
+          result = calculateTrailerCompatibility(spec, {
+            vehicleConfigId: configId,
+            trailerLoadedWeightLbs: trailerWeight,
+            trailerTongueWeightLbs: tongueWeight !== null ? tongueWeight : null,
+            passengerWeightLbs: passengerWeight,
+            cargoWeightLbs: cargoWeight,
+            hitchHardwareWeightLbs: hitchHardware,
+            customPayloadLbs: customPayload,
+            isTongueWeightEstimated,
+          });
+        } else {
+          formError = 'Towing specification data is not available for the selected configuration.';
+        }
+      }
+    }
+  }
+  if (!vehicleLabel) {
+    formError = 'The selected vehicle could not be found. Please check your selections.';
+  }
+}
+
+function formatLbs(v: number | null) {
+  if (v === null) return 'N/A';
+  return v.toLocaleString('en-US') + ' lbs';
+}
+
+const resultStatusLabels: Record<string, { label: string; cssClass: string }> = {
+  within_all_limits: { label: 'Within the supplied limits', cssClass: 'alert--safe' },
+  exceeds_towing_capacity: { label: 'Exceeds a specified limit (Towing Capacity)', cssClass: 'alert--error' },
+  exceeds_payload: { label: 'Exceeds a specified limit (Payload Limit)', cssClass: 'alert--error' },
+  exceeds_tongue_weight: { label: 'Exceeds a specified limit (Hitch Tongue Weight)', cssClass: 'alert--error' },
+  exceeds_gcwr: { label: 'Exceeds a specified limit (Gross Combined Weight Rating)', cssClass: 'alert--error' },
+  insufficient_data: { label: 'Cannot determine — missing critical information', cssClass: 'alert--warning' },
+  multiple_violations: { label: 'Exceeds specified limits (Multiple Overloads)', cssClass: 'alert--error' },
+};
+---
+
+<Layout
+  title="Trailer Compatibility Checker — TowingSpecs"
+  description="Check if your trailer is compatible with your vehicle's towing, payload, tongue weight, and GCWR limits. Uses verified manufacturer specifications."
+  canonicalUrl="/trailer-matcher/"
+  breadcrumbs={[{ name: 'Trailer Matcher', url: '/trailer-matcher/' }]}
+>
+  <SiteHeader currentPath="/trailer-matcher/" />
+
+  <main id="main-content">
+    <div class="container" style="padding-top: 2rem; padding-bottom: 4rem; max-width: 900px;">
+      <Breadcrumbs crumbs={[{ name: 'Trailer Matcher' }]} />
+
+      <div class="page-header" style="margin-bottom: 2rem;">
+        <h1 style="font-size: clamp(1.75rem, 3vw, 2.25rem); margin-bottom: 0.625rem;">
+          Trailer Compatibility Checker
+        </h1>
+        <p style="color: var(--color-pewter); max-width: 58ch;">
+          Enter your vehicle and trailer details to evaluate whether your setup is within the
+          manufacturer's published towing, payload, tongue weight, and GCWR limits.
+        </p>
+      </div>
+
+      <!-- ─── Input Form ──────────────────────────────────────────────────────── -->
+      <form
+        class="matcher-form card"
+        method="GET"
+        action="/trailer-matcher/"
+        aria-label="Trailer compatibility inputs"
+        id="matcher-form"
+      >
+        <h2 class="matcher-form__section-title">Vehicle</h2>
+
+        <div class="matcher-grid">
+          <div class="form-field">
+            <label class="form-label" for="m-year">Year</label>
+            <select class="form-select" id="m-year" name="year" required>
+              <option value="" disabled selected={!year}>Select year</option>
+              {yearsList.map((y) => (
+                <option value={y} selected={y === year}>{y}</option>
+              ))}
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-make">Make</label>
+            <select class="form-select" id="m-make" name="make" required disabled={!year && initialMakes.length === 0}>
+              <option value="" disabled selected={!makeSlug}>Select make</option>
+              {initialMakes.map((m) => (
+                <option value={m.slug} selected={m.slug === makeSlug}>{m.name}</option>
+              ))}
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-model">Model</label>
+            <select class="form-select" id="m-model" name="model" required disabled={!makeSlug && initialModels.length === 0}>
+              <option value="" disabled selected={!modelSlug}>Select model</option>
+              {initialModels.map((m) => (
+                <option value={m.slug} selected={m.slug === modelSlug}>{m.name}</option>
+              ))}
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-config">Configuration</label>
+            <select class="form-select" id="m-config" name="config" required disabled={!modelSlug && initialConfigs.length === 0}>
+              <option value="" disabled selected={!configId}>Select configuration</option>
+              {initialConfigs.map((c) => (
+                <option value={c.slug} selected={c.slug === configId}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <hr class="divider" />
+        <h2 class="matcher-form__section-title">Trailer</h2>
+
+        <div class="matcher-grid matcher-grid--3">
+          <div class="form-field">
+            <label class="form-label" for="m-trailer-weight">
+              Trailer Loaded Weight (lbs)
+            </label>
+            <input
+              class="form-input"
+              type="number"
+              id="m-trailer-weight"
+              name="trailer_weight"
+              min="0"
+              max="99999"
+              step="1"
+              required
+              value={trailerWeight || ''}
+              placeholder="e.g. 8500"
+              aria-describedby="m-trailer-weight-hint"
+            />
+            <span id="m-trailer-weight-hint" style="font-size:var(--text-xs);color:var(--color-pewter);">
+              Fully loaded trailer weight including all gear
+            </span>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-tongue-weight">
+              Tongue Weight (lbs, optional)
+            </label>
+            <input
+              class="form-input"
+              type="number"
+              id="m-tongue-weight"
+              name="tongue_weight"
+              min="0"
+              max="9999"
+              step="1"
+              value={tongueWeight ?? ''}
+              placeholder="e.g. 850"
+            />
+            <span id="m-tongue-weight-hint" style="font-size:var(--text-xs);color:var(--color-pewter);margin-top:0.25rem;display:block;">
+              Conventional bumper-pull trailers typically transfer 10%–15% of total trailer weight to the tongue (boat and utility trailers differ).
+            </span>
+            <label style="display:flex;align-items:center;gap:0.4rem;font-size:var(--text-xs);color:var(--color-graphite);margin-top:0.4rem;cursor:pointer;">
+              <input
+                type="checkbox"
+                name="is_estimated_tongue"
+                value="1"
+                checked={isTongueWeightEstimated}
+              />
+              Mark as estimated (percentage-based) rather than scale-measured
+            </label>
+          </div>
+          <div class="form-field" style="align-self:start;"><!-- spacer --></div>
+        </div>
+
+        <hr class="divider" />
+        <h2 class="matcher-form__section-title">Vehicle Load & Door-Jamb Payload</h2>
+
+        <div class="matcher-grid matcher-grid--3">
+          <div class="form-field">
+            <label class="form-label" for="m-passengers">Passengers + Driver Weight (lbs)</label>
+            <input
+              class="form-input"
+              type="number"
+              id="m-passengers"
+              name="passengers"
+              min="0"
+              max="9999"
+              step="1"
+              value={passengerWeight || ''}
+              placeholder="e.g. 360"
+            />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-cargo">Cargo Weight (lbs)</label>
+            <input
+              class="form-input"
+              type="number"
+              id="m-cargo"
+              name="cargo"
+              min="0"
+              max="9999"
+              step="1"
+              value={cargoWeight || ''}
+              placeholder="e.g. 200"
+            />
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-hitch-hardware">Hitch Hardware (lbs, optional)</label>
+            <input
+              class="form-input"
+              type="number"
+              id="m-hitch-hardware"
+              name="hitch_hardware"
+              min="0"
+              max="999"
+              step="1"
+              value={hitchHardware || ''}
+              placeholder="e.g. 75"
+              aria-describedby="m-hitch-hardware-hint"
+            />
+            <span id="m-hitch-hardware-hint" style="font-size:var(--text-xs);color:var(--color-pewter);margin-top:0.25rem;display:block;">
+              Weight distribution head, shank, and spring bars (typically 60–100 lbs). Consumes payload.
+            </span>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="m-custom-payload">
+              Door-Jamb Payload (lbs, optional)
+            </label>
+            <input
+              class="form-input"
+              type="number"
+              id="m-custom-payload"
+              name="custom_payload"
+              min="0"
+              max="9999"
+              step="1"
+              value={customPayload || ''}
+              placeholder="e.g. 1750"
+              aria-describedby="m-custom-payload-hint"
+            />
+            <span id="m-custom-payload-hint" style="font-size:var(--text-xs);color:var(--color-pewter);margin-top:0.25rem;display:block;">
+              From the yellow Tire & Loading sticker on your driver B-pillar door jamb. If blank, brochure baseline is used.
+            </span>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+          <button type="submit" class="btn btn--primary btn--lg">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Check Compatibility
+          </button>
+          <a href="/trailer-matcher/" class="btn btn--ghost">Clear</a>
+        </div>
+      </form>
+
+      <!-- ─── Result ──────────────────────────────────────────────────────────── -->
+      {formError && (
+        <div class="alert alert--error" role="alert" style="margin-top:1.5rem;">
+          <svg class="alert__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p>{formError}</p>
+        </div>
+      )}
+
+      {result && (
+        <div class="result-panel" role="region" aria-label="Compatibility result" aria-live="polite">
+          <h2 class="result-panel__title">Result: {vehicleLabel}</h2>
+
+          <div class:list={['alert', resultStatusLabels[result.status]?.cssClass ?? 'alert--info']} role="status">
+            <svg class="alert__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              {result.status === 'within_all_limits' ? (
+                <path d="M4 10l4 4 8-8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              ) : (
+                <>
+                  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M10 6v5M10 13v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </>
+              )}
+            </svg>
+            <div>
+              <strong style="font-size: var(--text-base);">{result.outcomeHeadline ?? resultStatusLabels[result.status]?.label}</strong>
+              <p style="margin-top:0.375rem;font-size:var(--text-sm);max-width:none;">{result.explanation}</p>
+              {result.controllingConstraint && (
+                <p style="margin-top:0.375rem;font-size:var(--text-xs);font-weight:600;">
+                  Controlling limit: <span style="text-decoration: underline;">{result.controllingConstraint}</span>
+                </p>
+              )}
+            </div>
+          </div>
+
+          <!-- Margins & Calculation Breakdown -->
+          {spec && (
+            <div class="margins-grid" aria-label="Constraint margins">
+              <div class="margin-item">
+                <span class="margin-item__label">Max Towing (Manufacturer Spec)</span>
+                <span class="margin-item__limit">{formatLbs(spec.max_towing_capacity_lbs)}</span>
+                {result.margins.towingCapacityMarginLbs !== null && (
+                  <span class:list={['margin-item__margin', result.margins.towingCapacityMarginLbs >= 0 ? 'margin-item__margin--ok' : 'margin-item__margin--over']}>
+                    {result.margins.towingCapacityMarginLbs >= 0
+                      ? `${result.margins.towingCapacityMarginLbs.toLocaleString()} lbs remaining`
+                      : `${Math.abs(result.margins.towingCapacityMarginLbs).toLocaleString()} lbs over limit`}
+                  </span>
+                )}
+              </div>
+
+              <div class="margin-item">
+                <span class="margin-item__label">
+                  Hitch Tongue Limit {spec.max_tongue_weight_lbs !== null ? (result.breakdown?.tongueWeight?.source === 'user_estimated' ? '(Estimated Input)' : (result.breakdown?.tongueWeight?.source === 'user_measured' ? '(User Measured)' : '(Not Provided)')) : '(Unverified)'}
+                </span>
+                <span class="margin-item__limit">{spec.max_tongue_weight_lbs !== null ? formatLbs(spec.max_tongue_weight_lbs) : 'Not published'}</span>
+                {spec.max_tongue_weight_lbs !== null ? (
+                  result.margins.tongueWeightMarginLbs !== null ? (
+                    <span class:list={['margin-item__margin', result.margins.tongueWeightMarginLbs >= 0 ? 'margin-item__margin--ok' : 'margin-item__margin--over']}>
+                      {result.margins.tongueWeightMarginLbs >= 0
+                        ? `${result.margins.tongueWeightMarginLbs.toLocaleString()} lbs remaining`
+                        : `${Math.abs(result.margins.tongueWeightMarginLbs).toLocaleString()} lbs over limit`}
+                    </span>
+                  ) : (
+                    <span class="margin-item__margin" style="color:var(--color-amber-warning);">
+                      Missing tongue weight
+                    </span>
+                  )
+                ) : (
+                  <span class="margin-item__margin" style="color:var(--color-amber-warning);">
+                    Receiver limit unverified
+                  </span>
+                )}
+              </div>
+
+              {(spec.max_payload_lbs !== null || result.effectivePayloadLbs !== null) && (
+                <div class="margin-item">
+                  <span class="margin-item__label">
+                    Payload {result.usedCustomPayload ? '(Door-Jamb Sticker)' : '(Brochure Baseline)'}
+                  </span>
+                  <span class="margin-item__limit">{formatLbs(result.effectivePayloadLbs ?? spec.max_payload_lbs)}</span>
+                  {result.margins.payloadMarginLbs !== null ? (
+                    <span class:list={['margin-item__margin', result.margins.payloadMarginLbs >= 0 ? 'margin-item__margin--ok' : 'margin-item__margin--over']}>
+                      {result.margins.payloadMarginLbs >= 0
+                        ? `${result.margins.payloadMarginLbs.toLocaleString()} lbs remaining`
+                        : `${Math.abs(result.margins.payloadMarginLbs).toLocaleString()} lbs over limit`}
+                    </span>
+                  ) : (
+                    <span class="margin-item__margin" style="color:var(--color-amber-warning);">
+                      Unverified (requires tongue weight)
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div class="margin-item">
+                <span class="margin-item__label">GCWR (Manufacturer Rig Limit)</span>
+                <span class="margin-item__limit">{spec.gcwr_lbs !== null ? formatLbs(spec.gcwr_lbs) : 'Not published'}</span>
+                {result.margins.gcwrMarginLbs !== null ? (
+                  <span class:list={['margin-item__margin', result.margins.gcwrMarginLbs >= 0 ? 'margin-item__margin--ok' : 'margin-item__margin--over']}>
+                    {result.margins.gcwrMarginLbs >= 0
+                      ? `${result.margins.gcwrMarginLbs.toLocaleString()} lbs remaining`
+                      : `${Math.abs(result.margins.gcwrMarginLbs).toLocaleString()} lbs over limit`}
+                  </span>
+                ) : (
+                  <span class="margin-item__margin" style="color:var(--color-amber-warning);">
+                    GCWR unverified
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {result.missingInputsHelp && result.missingInputsHelp.length > 0 && (
+            <div class="missing-inputs-guide" style="margin: 1.25rem 1.5rem; padding: 1.125rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius-card);">
+              <h3 style="font-size: var(--text-sm); font-weight: 600; color: #92400e; margin: 0 0 0.5rem 0;">
+                How to Find or Measure Missing Information
+              </h3>
+              <p style="font-size: var(--text-xs); color: #78350f; margin-bottom: 0.75rem;">
+                TowingSpecs does not guess unknown vehicle numbers. To complete your towing check, use these straightforward steps:
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                {result.missingInputsHelp.map((item) => (
+                  <div style="background: #ffffff; padding: 0.75rem 1rem; border: 1px solid #fef3c7; border-radius: 6px;">
+                    <div style="font-size: var(--text-xs); font-weight: 700; color: #78350f; margin-bottom: 0.25rem;">
+                      {item.inputName}
+                    </div>
+                    <div style="font-size: var(--text-xs); color: var(--color-graphite); margin-bottom: 0.25rem;">
+                      <strong>Why it matters:</strong> {item.whyNeeded}
+                    </div>
+                    <div style="font-size: var(--text-xs); color: var(--color-graphite);">
+                      <strong>How to find/measure:</strong> {item.howToFindOrMeasure}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div class="next-checks-card" style="margin: 1.25rem 1.5rem; padding: 1.125rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-card);">
+            <h3 style="font-size:var(--text-sm);font-weight:600;color:var(--color-carbon-dark);margin:0 0 0.5rem 0;">
+              Mandatory Physical Verification Protocol
+            </h3>
+            <p style="font-size:var(--text-xs);color:var(--color-pewter);margin-bottom:0.75rem;line-height:1.5;">
+              Never assume a trailer combination is universally safe solely because its weight is below the maximum tow rating. Before departing, complete these physical checks:
+            </p>
+            <ul style="font-size:var(--text-xs);color:var(--color-graphite);line-height:1.6;margin:0;padding-left:1.25rem;">
+              <li><strong>Driver B-Pillar Sticker:</strong> Verify your exact payload capacity on the yellow "Tire and Loading Information" sticker. Factory accessories (sunroof, skid plates, bedliners) reduce payload below base ratings.</li>
+              <li><strong>Hitch Receiver Stamp:</strong> Inspect the stamped metal tag on your rear hitch receiver. Note weight-carrying vs weight-distributing limits.</li>
+              <li><strong>Auxiliary Trailer Brakes:</strong> Most vehicle manufacturers mandate trailer brakes above 1,000–1,500 lbs. Legal thresholds also vary across US states (1,500 lbs to 3,000 lbs). Ensure your in-cab controller is active.</li>
+              <li><strong>Certified Scale Weight:</strong> Visit a certified CAT scale to confirm actual steer axle, drive axle, and trailer axle weights.</li>
+            </ul>
+          </div>
+
+          {result.warnings.length > 0 && (
+            <div class="result-warnings">
+              <h3 class="result-warnings__title">Warnings</h3>
+              <ul role="list">
+                {result.warnings.map((w) => (
+                  <li>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M7 1.5l5.5 10h-11L7 1.5z" stroke="#7a5c0a" stroke-width="1.25" fill="none"/>
+                      <path d="M7 5.5v3" stroke="#7a5c0a" stroke-width="1.25" stroke-linecap="round"/>
+                    </svg>
+                    {w}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {result.isEstimate && (
+            <p class="result-estimate-note">
+              This result is a partial assessment. Some constraints could not be evaluated due to
+              missing specification data. Treat this as informational only.
+            </p>
+          )}
+
+          <SafetyDisclaimer variant="matcher" />
+        </div>
+      )}
+    </div>
+  </main>
+
+  <SiteFooter />
+</Layout>
+
+<style>
+  .matcher-form { margin-bottom: 2rem; }
+
+  .matcher-form__section-title {
+    font-size: var(--text-md);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    margin-bottom: 1rem;
+  }
+
+  .matcher-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .matcher-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .result-panel {
+    margin-top: 2rem;
+    border: 1px solid var(--color-cloud-gray);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .result-panel__title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--color-cloud-gray);
+  }
+
+  .result-panel .alert {
+    margin: 1.25rem 1.5rem;
+    border-radius: var(--radius-card);
+  }
+
+  .margins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 0 1.5rem 1.25rem;
+  }
+
+  .margin-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem;
+    background: var(--color-light-ash);
+    border-radius: var(--radius-card);
+  }
+
+  .margin-item__label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    color: var(--color-silver-fog);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .margin-item__limit {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--color-carbon-dark);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .margin-item__margin {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .margin-item__margin--ok { color: var(--color-verified); }
+  .margin-item__margin--over { color: var(--color-conflict); }
+
+  .result-warnings {
+    margin: 0 1.5rem 1.25rem;
+    padding: 1rem;
+    background: var(--color-pending-bg);
+    border: 1px solid var(--color-pending-border);
+    border-radius: var(--radius-card);
+  }
+
+  .result-warnings__title {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-pending);
+    margin-bottom: 0.625rem;
+  }
+
+  .result-warnings ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .result-warnings li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: var(--text-xs);
+    color: var(--color-pending);
+    line-height: 1.5;
+  }
+
+  .result-warnings li svg { flex-shrink: 0; margin-top: 0.1rem; }
+
+  .result-estimate-note {
+    font-size: var(--text-xs);
+    color: var(--color-pewter);
+    margin: 0 1.5rem 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-light-ash);
+    border-radius: var(--radius-card);
+    line-height: 1.6;
+    max-width: none;
+  }
+
+  .result-panel .disclaimer {
+    margin: 0;
+    border-radius: 0;
+    border-top: 1px solid var(--color-cloud-gray);
+  }
+
+  @media (max-width: 768px) {
+    .matcher-grid, .matcher-grid--3 {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .matcher-grid, .matcher-grid--3 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Cascading selects for trailer matcher (same pattern as VehicleSearch)
+  (function () {
+    const yearSel = document.getElementById('m-year') as HTMLSelectElement | null;
+    const makeSel = document.getElementById('m-make') as HTMLSelectElement | null;
+    const modelSel = document.getElementById('m-model') as HTMLSelectElement | null;
+    const configSel = document.getElementById('m-config') as HTMLSelectElement | null;
+
+    if (!yearSel || !makeSel || !modelSel || !configSel) return;
+
+    async function fetchJSON(url: string) {
+      try {
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        return res.ok ? await res.json() : [];
+      } catch { return []; }
+    }
+
+    function populate(
+      sel: HTMLSelectElement,
+      items: { slug: string; name: string }[],
+      placeholder: string
+    ) {
+      sel.innerHTML = `<option value="" disabled selected>${items.length ? placeholder : 'None available'}</option>`;
+      items.forEach(({ slug, name }) => {
+        const o = document.createElement('option');
+        o.value = slug;
+        o.textContent = name;
+        sel.appendChild(o);
+      });
+      sel.disabled = items.length === 0;
+    }
+
+    yearSel.addEventListener('change', async () => {
+      const year = yearSel.value;
+      [makeSel, modelSel, configSel].forEach(s => s.disabled = true);
+      populate(makeSel, [], 'Loading makes...');
+      populate(modelSel, [], 'Select model');
+      populate(configSel, [], 'Select configuration');
+      if (!year) return;
+      const makes = await fetchJSON(`/api/makes?year=${encodeURIComponent(year)}`);
+      populate(makeSel, makes, 'Select make');
+    });
+
+    makeSel.addEventListener('change', async () => {
+      const year = yearSel.value;
+      const make = makeSel.value;
+      modelSel.disabled = true;
+      configSel.disabled = true;
+      populate(modelSel, [], 'Loading models...');
+      populate(configSel, [], 'Select configuration');
+      if (!year || !make) return;
+      const models = await fetchJSON(`/api/models?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
+      populate(modelSel, models, 'Select model');
+    });
+
+    modelSel.addEventListener('change', async () => {
+      const year = yearSel.value;
+      const make = makeSel.value;
+      const model = modelSel.value;
+      configSel.disabled = true;
+      populate(configSel, [], 'Loading configurations...');
+      if (!year || !make || !model) return;
+      const configs = await fetchJSON(`/api/configs?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}`);
+      populate(configSel, configs, 'Select configuration');
+    });
+  })();
+</script>

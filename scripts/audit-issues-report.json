@@ -1,0 +1,1318 @@
+[
+  {
+    "config_id": "cfg-explorer-active-23-rwd",
+    "vehicle": "2025 Ford Explorer Active",
+    "year": 2025,
+    "type": "PAYLOAD_CURB_GVWR_DRIFT",
+    "current_value": "Curb (4345) + Payload (1530) = 5875 vs GVWR (6160) [diff: 285 lbs]",
+    "evidence_found": "GVWR = Base Curb Weight + Maximum Payload Rating",
+    "recommended_correction": "Reconcile payload or curb weight to match OEM gross vehicle weight rating"
+  },
+  {
+    "config_id": "cfg-rav4-adventure-25-awd",
+    "vehicle": "2025 Toyota RAV4 Adventure",
+    "year": 2025,
+    "source_id": "src-toyota-2025-rav4",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2025 Toyota RAV4 Owner's Manual), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-highlander-2022-ltd-v6-awd",
+    "vehicle": "2022 Toyota Highlander Limited V6 AWD",
+    "year": 2022,
+    "type": "PAYLOAD_CURB_GVWR_DRIFT",
+    "current_value": "Curb (4450) + Payload (1685) = 6135 vs GVWR (5935) [diff: 200 lbs]",
+    "evidence_found": "GVWR = Base Curb Weight + Maximum Payload Rating",
+    "recommended_correction": "Reconcile payload or curb weight to match OEM gross vehicle weight rating"
+  },
+  {
+    "config_id": "cfg-f150-2013-fx4-35-4wd",
+    "vehicle": "2013 Ford F-150 FX4 SuperCrew",
+    "year": 2013,
+    "source_id": "src-ford-2013-towing-guide",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: FETCH_ERROR",
+    "evidence_found": "Archival fleet guide cited (2013 Ford RV & Trailer Towing Guide), but direct DAM PDF returned HTTP FETCH_ERROR",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-silv-2013-ltz-53-4wd",
+    "vehicle": "2013 Chevrolet Silverado 1500 LTZ Crew Cab",
+    "year": 2013,
+    "source_id": "src-chevy-2013-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2013 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-2013-laramie-57-4wd",
+    "vehicle": "2013 Ram 1500 Laramie Crew Cab",
+    "year": 2013,
+    "source_id": "src-ram-2013-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2013 Ram Trucks Towing & Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-honda-pilot-2024-exl-2wd",
+    "vehicle": "2024 Honda Pilot EX-L 3.5L 2WD",
+    "year": 2024,
+    "type": "PAYLOAD_CURB_GVWR_DRIFT",
+    "current_value": "Curb (4313) + Payload (1450) = 5763 vs GVWR (5952) [diff: 189 lbs]",
+    "evidence_found": "GVWR = Base Curb Weight + Maximum Payload Rating",
+    "recommended_correction": "Reconcile payload or curb weight to match OEM gross vehicle weight rating"
+  },
+  {
+    "config_id": "cfg-jeep-grand-cherokee-2024-laredo",
+    "vehicle": "2024 Jeep Grand Cherokee Laredo 3.6L 4x4",
+    "year": 2024,
+    "type": "PAYLOAD_CURB_GVWR_DRIFT",
+    "current_value": "Curb (4364) + Payload (1280) = 5644 vs GVWR (6050) [diff: 406 lbs]",
+    "evidence_found": "GVWR = Base Curb Weight + Maximum Payload Rating",
+    "recommended_correction": "Reconcile payload or curb weight to match OEM gross vehicle weight rating"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2014-53-4wd-nht",
+    "vehicle": "2014 Chevrolet Silverado 1500 LT",
+    "year": 2014,
+    "source_id": "src-chevy-2014-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2014-53-4wd-std",
+    "vehicle": "2014 Chevrolet Silverado 1500 LT",
+    "year": 2014,
+    "source_id": "src-chevy-2014-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2014-43-2wd-std",
+    "vehicle": "2014 Chevrolet Silverado 1500 WT",
+    "year": 2014,
+    "source_id": "src-chevy-2014-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2014-57-4wd-392",
+    "vehicle": "2014 Ram 1500 Big Horn",
+    "year": 2014,
+    "source_id": "src-ram-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2014-30-4wd-355",
+    "vehicle": "2014 Ram 1500 Big Horn",
+    "year": 2014,
+    "source_id": "src-ram-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2014-57-4wd-321",
+    "vehicle": "2014 Ram 1500 Big Horn",
+    "year": 2014,
+    "source_id": "src-ram-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2014-40-4wd-towpkg",
+    "vehicle": "2014 Toyota Tacoma Double Cab V6",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2014-27-2wd-std",
+    "vehicle": "2014 Toyota Tacoma Access Cab 2.7L",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2014-57-4wd-towpkg",
+    "vehicle": "2014 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2014-57-2wd-towpkg",
+    "vehicle": "2014 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2014-40-4wd-hitch",
+    "vehicle": "2014 Toyota 4Runner SR5 4WD",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2014-35-awd-towprep",
+    "vehicle": "2014 Toyota Highlander XLE V6 AWD",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2014-27-fwd-std",
+    "vehicle": "2014 Toyota Highlander LE 2.7L FWD",
+    "year": 2014,
+    "source_id": "src-toyota-2014-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2014 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2015-62-4wd-nht",
+    "vehicle": "2015 Chevrolet Silverado 1500 LTZ",
+    "year": 2015,
+    "source_id": "src-chevy-2015-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2015-53-4wd-std",
+    "vehicle": "2015 Chevrolet Silverado 1500 LT",
+    "year": 2015,
+    "source_id": "src-chevy-2015-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-1500-2015-53-4wd-nht",
+    "vehicle": "2015 GMC Sierra 1500 SLT",
+    "year": 2015,
+    "source_id": "src-gmc-2015-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 GMC Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-tahoe-2015-53-4wd-nht",
+    "vehicle": "2015 Chevrolet Tahoe LT 4WD",
+    "year": 2015,
+    "source_id": "src-chevy-2015-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-tahoe-2015-53-4wd-std",
+    "vehicle": "2015 Chevrolet Tahoe LT 4WD",
+    "year": 2015,
+    "source_id": "src-chevy-2015-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2015-57-4wd-392",
+    "vehicle": "2015 Ram 1500 Laramie",
+    "year": 2015,
+    "source_id": "src-ram-2015-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2015-30-4wd-355",
+    "vehicle": "2015 Ram 1500 Laramie",
+    "year": 2015,
+    "source_id": "src-ram-2015-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2015-40-4wd-towpkg",
+    "vehicle": "2015 Toyota Tacoma Double Cab V6",
+    "year": 2015,
+    "source_id": "src-toyota-2015-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2015-27-2wd-std",
+    "vehicle": "2015 Toyota Tacoma Access Cab 2.7L",
+    "year": 2015,
+    "source_id": "src-toyota-2015-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2015-57-4wd-towpkg",
+    "vehicle": "2015 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2015,
+    "source_id": "src-toyota-2015-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2015 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2016-53-4wd-nht",
+    "vehicle": "2016 Chevrolet Silverado 1500 LT",
+    "year": 2016,
+    "source_id": "src-chevy-2016-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2016-53-4wd-std",
+    "vehicle": "2016 Chevrolet Silverado 1500 LT",
+    "year": 2016,
+    "source_id": "src-chevy-2016-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2016-57-4wd-392",
+    "vehicle": "2016 Ram 1500 Big Horn",
+    "year": 2016,
+    "source_id": "src-ram-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2016-36-4wd-std",
+    "vehicle": "2016 Ram 1500 Big Horn",
+    "year": 2016,
+    "source_id": "src-ram-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2016-35-4wd-towpkg",
+    "vehicle": "2016 Toyota Tacoma TRD Off-Road V6 4x4",
+    "year": 2016,
+    "source_id": "src-toyota-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2016-27-2wd-std",
+    "vehicle": "2016 Toyota Tacoma SR Access Cab 2.7L",
+    "year": 2016,
+    "source_id": "src-toyota-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2016-57-4wd-towpkg",
+    "vehicle": "2016 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2016,
+    "source_id": "src-toyota-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2016-57-4wd-doublecab",
+    "vehicle": "2016 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2016,
+    "source_id": "src-toyota-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2016-40-4wd-hitch",
+    "vehicle": "2016 Toyota 4Runner SR5 4WD",
+    "year": 2016,
+    "source_id": "src-toyota-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2016-35-awd-towprep",
+    "vehicle": "2016 Toyota Highlander XLE V6 AWD",
+    "year": 2016,
+    "source_id": "src-toyota-2016-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-nissan-frontier-2016-40-4wd-towpkg",
+    "vehicle": "2016 Nissan Frontier PRO-4X Crew Cab 4x4",
+    "year": 2016,
+    "source_id": "src-nissan-2016-frontier",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Nissan Frontier Towing Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-nissan-frontier-2016-40-2wd-towpkg",
+    "vehicle": "2016 Nissan Frontier SV King Cab 4x2",
+    "year": 2016,
+    "source_id": "src-nissan-2016-frontier",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2016 Nissan Frontier Towing Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2017-62-4wd-nht",
+    "vehicle": "2017 Chevrolet Silverado 1500 LTZ",
+    "year": 2017,
+    "source_id": "src-chevy-2017-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2017-53-4wd-std",
+    "vehicle": "2017 Chevrolet Silverado 1500 LT",
+    "year": 2017,
+    "source_id": "src-chevy-2017-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-1500-2017-62-4wd-nht",
+    "vehicle": "2017 GMC Sierra 1500 Denali",
+    "year": 2017,
+    "source_id": "src-gmc-2017-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 GMC Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2017-57-4wd-392",
+    "vehicle": "2017 Ram 1500 Laramie",
+    "year": 2017,
+    "source_id": "src-ram-2017-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2017-57-4wd-321",
+    "vehicle": "2017 Ram 1500 Laramie",
+    "year": 2017,
+    "source_id": "src-ram-2017-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2017-35-4wd-towpkg",
+    "vehicle": "2017 Toyota Tacoma TRD Off-Road V6 4x4",
+    "year": 2017,
+    "source_id": "src-toyota-2017-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2017-27-2wd-std",
+    "vehicle": "2017 Toyota Tacoma SR Access Cab 2.7L",
+    "year": 2017,
+    "source_id": "src-toyota-2017-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2017-57-4wd-towpkg",
+    "vehicle": "2017 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2017,
+    "source_id": "src-toyota-2017-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2017 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2018-62-4wd-nht",
+    "vehicle": "2018 Chevrolet Silverado 1500 LTZ",
+    "year": 2018,
+    "source_id": "src-chevy-2018-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2018-53-4wd-std",
+    "vehicle": "2018 Chevrolet Silverado 1500 LT",
+    "year": 2018,
+    "source_id": "src-chevy-2018-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-tahoe-2018-53-4wd-nht",
+    "vehicle": "2018 Chevrolet Tahoe LT 4WD",
+    "year": 2018,
+    "source_id": "src-chevy-2018-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-tahoe-2018-53-4wd-std",
+    "vehicle": "2018 Chevrolet Tahoe LT 4WD",
+    "year": 2018,
+    "source_id": "src-chevy-2018-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2018-57-4wd-392",
+    "vehicle": "2018 Ram 1500 Big Horn",
+    "year": 2018,
+    "source_id": "src-ram-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2018-30-4wd-392",
+    "vehicle": "2018 Ram 1500 Big Horn",
+    "year": 2018,
+    "source_id": "src-ram-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Ram 1500 Towing and Capacity Chart), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2018-35-4wd-towpkg",
+    "vehicle": "2018 Toyota Tacoma TRD Off-Road V6 4x4",
+    "year": 2018,
+    "source_id": "src-toyota-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2018-27-2wd-std",
+    "vehicle": "2018 Toyota Tacoma SR Access Cab 2.7L",
+    "year": 2018,
+    "source_id": "src-toyota-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2018-57-4wd-towpkg",
+    "vehicle": "2018 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2018,
+    "source_id": "src-toyota-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2018-40-4wd-hitch",
+    "vehicle": "2018 Toyota 4Runner TRD Off-Road 4WD",
+    "year": 2018,
+    "source_id": "src-toyota-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2018-35-awd-towprep",
+    "vehicle": "2018 Toyota Highlander XLE V6 AWD",
+    "year": 2018,
+    "source_id": "src-toyota-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2018-35-hybrid-awd",
+    "vehicle": "2018 Toyota Highlander Hybrid XLE AWD",
+    "year": 2018,
+    "source_id": "src-toyota-2018-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2018 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2019-62-4wd-nht",
+    "vehicle": "2019 Chevrolet Silverado 1500 LTZ",
+    "year": 2019,
+    "source_id": "src-chevy-2019-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2019-53-4wd-std",
+    "vehicle": "2019 Chevrolet Silverado 1500 LT",
+    "year": 2019,
+    "source_id": "src-chevy-2019-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-1500-2019-62-4wd-nht",
+    "vehicle": "2019 GMC Sierra 1500 Denali",
+    "year": 2019,
+    "source_id": "src-gmc-2019-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 GMC Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-1500-2019-53-4wd-std",
+    "vehicle": "2019 GMC Sierra 1500 SLT",
+    "year": 2019,
+    "source_id": "src-gmc-2019-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 GMC Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2019-57-4wd-etorque-392",
+    "vehicle": "2019 Ram 1500 Laramie",
+    "year": 2019,
+    "source_id": "src-ram-2019-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Ram 1500 Trailer Towing & Capacity Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2019-57-4wd-std-321",
+    "vehicle": "2019 Ram 1500 Laramie",
+    "year": 2019,
+    "source_id": "src-ram-2019-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Ram 1500 Trailer Towing & Capacity Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2019-35-4wd-towpkg",
+    "vehicle": "2019 Toyota Tacoma TRD Off-Road V6 4x4",
+    "year": 2019,
+    "source_id": "src-toyota-2019-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2019-27-2wd-std",
+    "vehicle": "2019 Toyota Tacoma SR Access Cab 2.7L",
+    "year": 2019,
+    "source_id": "src-toyota-2019-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2019-57-4wd-towpkg",
+    "vehicle": "2019 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2019,
+    "source_id": "src-toyota-2019-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2019-57-2wd-doublecab",
+    "vehicle": "2019 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2019,
+    "source_id": "src-toyota-2019-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-nissan-frontier-2019-40-4wd-towpkg",
+    "vehicle": "2019 Nissan Frontier PRO-4X Crew Cab 4x4",
+    "year": 2019,
+    "source_id": "src-nissan-2019-frontier",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Nissan Frontier Towing Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-nissan-frontier-2019-40-2wd-towpkg",
+    "vehicle": "2019 Nissan Frontier SV King Cab 4x2",
+    "year": 2019,
+    "source_id": "src-nissan-2019-frontier",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2019 Nissan Frontier Towing Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2020-62-4wd-nht",
+    "vehicle": "2020 Chevrolet Silverado 1500 High Country",
+    "year": 2020,
+    "source_id": "src-chevy-2020-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-silverado-1500-2020-53-4wd-std",
+    "vehicle": "2020 Chevrolet Silverado 1500 LT",
+    "year": 2020,
+    "source_id": "src-chevy-2020-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-tahoe-2020-53-4wd-nht",
+    "vehicle": "2020 Chevrolet Tahoe Premier 4WD",
+    "year": 2020,
+    "source_id": "src-chevy-2020-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevrolet-tahoe-2020-62-4wd-std",
+    "vehicle": "2020 Chevrolet Tahoe Premier 4WD",
+    "year": 2020,
+    "source_id": "src-chevy-2020-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2020-57-4wd-etorque-392",
+    "vehicle": "2020 Ram 1500 Laramie",
+    "year": 2020,
+    "source_id": "src-ram-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Ram 1500 Towing and Payload Ratings), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2020-30-4wd-ecodiesel-392",
+    "vehicle": "2020 Ram 1500 Laramie",
+    "year": 2020,
+    "source_id": "src-ram-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Ram 1500 Towing and Payload Ratings), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2020-35-4wd-towpkg",
+    "vehicle": "2020 Toyota Tacoma TRD Off-Road V6 4x4",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2020-27-2wd-std",
+    "vehicle": "2020 Toyota Tacoma SR Access Cab 2.7L",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2020-57-4wd-towpkg",
+    "vehicle": "2020 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2020-57-4wd-doublecab",
+    "vehicle": "2020 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2020-40-4wd-hitch",
+    "vehicle": "2020 Toyota 4Runner SR5 4WD",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2020-35-awd-towpkg",
+    "vehicle": "2020 Toyota Highlander Limited V6 AWD",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2020-25-hybrid-awd",
+    "vehicle": "2020 Toyota Highlander Hybrid XLE AWD",
+    "year": 2020,
+    "source_id": "src-toyota-2020-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2020 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2010-62-4wd-nht",
+    "vehicle": "2010 Chevrolet Silverado 1500 LTZ",
+    "year": 2010,
+    "source_id": "src-chevy-2010-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2010-53-4wd-std",
+    "vehicle": "2010 Chevrolet Silverado 1500 LT",
+    "year": 2010,
+    "source_id": "src-chevy-2010-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-tahoe-2010-53-4wd-nht",
+    "vehicle": "2010 Chevrolet Tahoe LT 4WD",
+    "year": 2010,
+    "source_id": "src-chevy-2010-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-tahoe-2010-53-4wd-std",
+    "vehicle": "2010 Chevrolet Tahoe LT 4WD",
+    "year": 2010,
+    "source_id": "src-chevy-2010-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-2010-62-awd-nht",
+    "vehicle": "2010 GMC Sierra 1500 Denali",
+    "year": 2010,
+    "source_id": "src-chevy-2010-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2010-40-4wd-towpkg",
+    "vehicle": "2010 Toyota Tacoma Double Cab V6",
+    "year": 2010,
+    "source_id": "src-toyota-2010-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2010-27-2wd-std",
+    "vehicle": "2010 Toyota Tacoma Access Cab 2.7L",
+    "year": 2010,
+    "source_id": "src-toyota-2010-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2010-57-4wd-towpkg",
+    "vehicle": "2010 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2010,
+    "source_id": "src-toyota-2010-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2010-57-2wd-towpkg",
+    "vehicle": "2010 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2010,
+    "source_id": "src-toyota-2010-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2010 Toyota Towing & Capacity Specifications), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2011-62-4wd-nht",
+    "vehicle": "2011 Chevrolet Silverado 1500 LTZ",
+    "year": 2011,
+    "source_id": "src-chevy-2011-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2011-53-4wd-std",
+    "vehicle": "2011 Chevrolet Silverado 1500 LT",
+    "year": 2011,
+    "source_id": "src-chevy-2011-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-tahoe-2011-53-4wd-nht",
+    "vehicle": "2011 Chevrolet Tahoe LT 4WD",
+    "year": 2011,
+    "source_id": "src-chevy-2011-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-tahoe-2011-53-4wd-std",
+    "vehicle": "2011 Chevrolet Tahoe LT 4WD",
+    "year": 2011,
+    "source_id": "src-chevy-2011-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2011-40-4wd-towpkg",
+    "vehicle": "2011 Toyota Tacoma Double Cab V6",
+    "year": 2011,
+    "source_id": "src-toyota-2011-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2011-27-2wd-std",
+    "vehicle": "2011 Toyota Tacoma Access Cab 2.7L",
+    "year": 2011,
+    "source_id": "src-toyota-2011-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2011-57-4wd-towpkg",
+    "vehicle": "2011 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2011,
+    "source_id": "src-toyota-2011-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2011-57-2wd-towpkg",
+    "vehicle": "2011 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2011,
+    "source_id": "src-toyota-2011-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2011-40-4wd-hitch",
+    "vehicle": "2011 Toyota 4Runner SR5 4WD",
+    "year": 2011,
+    "source_id": "src-toyota-2011-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2011 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2012-62-4wd-nht",
+    "vehicle": "2012 Chevrolet Silverado 1500 LTZ",
+    "year": 2012,
+    "source_id": "src-chevy-2012-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2012-53-4wd-std",
+    "vehicle": "2012 Chevrolet Silverado 1500 LT",
+    "year": 2012,
+    "source_id": "src-chevy-2012-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-2012-62-awd-nht",
+    "vehicle": "2012 GMC Sierra 1500 Denali",
+    "year": 2012,
+    "source_id": "src-gmc-2012-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 GMC Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2012-40-4wd-towpkg",
+    "vehicle": "2012 Toyota Tacoma Double Cab V6",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2012-27-2wd-std",
+    "vehicle": "2012 Toyota Tacoma Access Cab 2.7L",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2012-57-4wd-towpkg",
+    "vehicle": "2012 Toyota Tundra SR5 CrewMax 5.7L V8",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2012-57-2wd-towpkg",
+    "vehicle": "2012 Toyota Tundra SR5 Double Cab 5.7L V8",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2012-40-4wd-hitch",
+    "vehicle": "2012 Toyota 4Runner SR5 4WD",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2012-35-awd-towprep",
+    "vehicle": "2012 Toyota Highlander Limited V6 AWD",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-highlander-2012-hybrid-awd",
+    "vehicle": "2012 Toyota Highlander Hybrid Limited AWD",
+    "year": 2012,
+    "source_id": "src-toyota-2012-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2012 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2023-62-4wd-nht",
+    "vehicle": "2023 Chevrolet Silverado 1500 LTZ",
+    "year": 2023,
+    "source_id": "src-chevy-2023-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-silverado-2023-53-4wd-std",
+    "vehicle": "2023 Chevrolet Silverado 1500 LT",
+    "year": 2023,
+    "source_id": "src-chevy-2023-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-tahoe-2023-53-4wd-nht",
+    "vehicle": "2023 Chevrolet Tahoe LT 4WD",
+    "year": 2023,
+    "source_id": "src-chevy-2023-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-chevy-tahoe-2023-53-4wd-std",
+    "vehicle": "2023 Chevrolet Tahoe LT 4WD",
+    "year": 2023,
+    "source_id": "src-chevy-2023-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Chevrolet Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-gmc-sierra-2023-62-4wd-nht",
+    "vehicle": "2023 GMC Sierra 1500 Denali Ultimate",
+    "year": 2023,
+    "source_id": "src-gmc-2023-trailering",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 GMC Trailering Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2023-57-4wd-392",
+    "vehicle": "2023 Ram 1500 Laramie",
+    "year": 2023,
+    "source_id": "src-ram-2023-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Ram 1500 Towing Specifications & Matrix), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-ram-1500-2023-57-4wd-321",
+    "vehicle": "2023 Ram 1500 Laramie",
+    "year": 2023,
+    "source_id": "src-ram-2023-towing",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Ram 1500 Towing Specifications & Matrix), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2023-34-4wd-towpkg",
+    "vehicle": "2023 Toyota Tundra SR5 CrewMax 3.4L",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tundra-2023-hybrid-4wd",
+    "vehicle": "2023 Toyota Tundra Limited Hybrid CrewMax",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-sequoia-2023-hybrid-2wd",
+    "vehicle": "2023 Toyota Sequoia SR5 2WD",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-sequoia-2023-hybrid-4wd",
+    "vehicle": "2023 Toyota Sequoia Platinum 4WD",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2023-35-4wd-towpkg",
+    "vehicle": "2023 Toyota Tacoma TRD Off-Road",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-tacoma-2023-27-2wd-std",
+    "vehicle": "2023 Toyota Tacoma SR I4",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-toyota-4runner-2023-40-4wd-hitch",
+    "vehicle": "2023 Toyota 4Runner SR5 4WD",
+    "year": 2023,
+    "source_id": "src-toyota-2023-specs",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Toyota Towing & Capacity Specifications (SAE J2807 Certified)), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-nissan-frontier-2023-pro4x-4wd",
+    "vehicle": "2023 Nissan Frontier PRO-4X",
+    "year": 2023,
+    "source_id": "src-nissan-2023-frontier",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Nissan Frontier Towing Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  },
+  {
+    "config_id": "cfg-nissan-frontier-2023-sv-2wd",
+    "vehicle": "2023 Nissan Frontier SV",
+    "year": 2023,
+    "source_id": "src-nissan-2023-frontier",
+    "type": "ARCHIVAL_LINK_MOVED",
+    "current_value": "Status: partially_verified, HTTP: 404",
+    "evidence_found": "Archival fleet guide cited (2023 Nissan Frontier Towing Guide), but direct DAM PDF returned HTTP 404",
+    "recommended_correction": "Preserve archival citation; document portal fallback in source notes"
+  }
+]

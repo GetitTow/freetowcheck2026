@@ -1,0 +1,533 @@
+---
+/**
+ * VehicleSearch — server-rendered cascading lookup form
+ * Cascades: Year (2010–2026) → Make → Model → (redirects to /vehicles/make/model/year/)
+ *
+ * Uses a GET form so selections are bookmarkable and shareable.
+ * Progressive enhancement: works without JS. JS enhances with
+ * dependent field disabling, AJAX cascading, and real-time coverage notifications.
+ */
+import type { Make } from '../lib/types.ts';
+import { CATALOG_YEARS_SCOPE } from '../lib/catalog-years.ts';
+import { getMakes } from '../lib/db.ts';
+
+interface Props {
+  makes?: Make[];
+  preselectedYear?: number;
+  preselectedMakeSlug?: string;
+  compact?: boolean;
+}
+
+const {
+  makes: propMakes,
+  preselectedYear,
+  preselectedMakeSlug,
+  compact = false,
+} = Astro.props;
+
+// Load all verified catalog makes if not passed
+const makesResult = propMakes && propMakes.length > 0 ? { data: propMakes } : await getMakes();
+const allMakes = makesResult.data ?? [];
+
+const publishedYears = CATALOG_YEARS_SCOPE.filter((y) => y.hasPublishedRecords);
+const plannedYears = CATALOG_YEARS_SCOPE.filter((y) => !y.hasPublishedRecords);
+---
+
+<div class:list={['vehicle-search', { 'vehicle-search--compact': compact }]}>
+  {!compact && (
+    <div class="vehicle-search__header">
+      <p class="vehicle-search__hint">
+        Select exact vehicle specifications. Sourced directly from manufacturer owner manuals and towing guides.
+      </p>
+      <span class="vehicle-search__badge">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <circle cx="6" cy="6" r="5" stroke="#3E6AE1" stroke-width="1.25"/>
+          <path d="M6 3.5v3l2 1" stroke="#3E6AE1" stroke-width="1.25" stroke-linecap="round"/>
+        </svg>
+        Scope: 2010–2026 (17 Years)
+      </span>
+    </div>
+  )}
+
+  <form
+    class="vehicle-search__form"
+    method="GET"
+    action="/vehicles/search/"
+    id="vehicle-search-form"
+    aria-label="Vehicle towing specification lookup"
+  >
+    <div class="lookup-grid">
+      <!-- Year Selector: 2010 through 2026 -->
+      <div class="form-field">
+        <label class="form-label" for="search-year">Model Year</label>
+        <select
+          class="form-select"
+          id="search-year"
+          name="year"
+          required
+          aria-required="true"
+          aria-describedby="search-year-hint search-status-live"
+        >
+          <option value="" disabled selected={!preselectedYear}>Select year (2010–2026)</option>
+          <optgroup label="Published Model Years (Data Available)">
+            {publishedYears.map((y) => (
+              <option
+                value={y.year}
+                selected={y.year === preselectedYear}
+                data-status="verified"
+                data-count={y.modelsCount}
+              >
+                {y.year} — {y.statusLabel} ({y.modelsCount === 1 ? '1 model' : `${y.modelsCount} models`})
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Catalog Scope (Research In Progress)">
+            {plannedYears.map((y) => (
+              <option
+                value={y.year}
+                selected={y.year === preselectedYear}
+                data-status="planned"
+                data-count="0"
+              >
+                {y.year} — {y.statusLabel}
+              </option>
+            ))}
+          </optgroup>
+        </select>
+        <span id="search-year-hint" class="sr-only">Choose model year between 2010 and 2026</span>
+      </div>
+
+      <!-- Make Selector -->
+      <div class="form-field">
+        <label class="form-label" for="search-make">Make</label>
+        <select
+          class="form-select"
+          id="search-make"
+          name="make"
+          required
+          aria-required="true"
+          disabled={!preselectedYear && allMakes.length === 0}
+        >
+          <option value="" disabled selected={!preselectedMakeSlug}>Select make</option>
+          {allMakes.map((make) => (
+            <option value={make.slug} selected={make.slug === preselectedMakeSlug}>
+              {make.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <!-- Model Selector -->
+      <div class="form-field">
+        <label class="form-label" for="search-model">Model</label>
+        <select
+          class="form-select"
+          id="search-model"
+          name="model"
+          required
+          aria-required="true"
+          disabled
+        >
+          <option value="" disabled selected>Select model</option>
+        </select>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-field vehicle-search__submit">
+        <span class="form-label" aria-hidden="true">&nbsp;</span>
+        <button
+          type="submit"
+          class="btn btn--primary vehicle-search__btn"
+          id="search-submit-btn"
+          disabled
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M7 12A5 5 0 1 0 7 2a5 5 0 0 0 0 10zM14 14l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Find Specs
+        </button>
+      </div>
+    </div>
+
+    <!-- Real-time dynamic coverage notification banner -->
+    <div
+      id="search-notice"
+      class="search-notice"
+      role="region"
+      aria-label="Coverage Status Notice"
+      hidden
+    >
+      <div class="search-notice__content">
+        <div class="search-notice__header">
+          <svg class="search-notice__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <circle cx="9" cy="9" r="8" stroke="#7a5c0a" stroke-width="1.5"/>
+            <path d="M9 5v4.5M9 12.5h.01" stroke="#7a5c0a" stroke-width="1.75" stroke-linecap="round"/>
+          </svg>
+          <strong id="notice-title">Coverage Status Notice</strong>
+        </div>
+        <p id="notice-body" class="search-notice__text"></p>
+        <div class="search-notice__shortcuts">
+          <span class="search-notice__shortcuts-label">Published model years with data available:</span>
+          <div class="search-notice__pills">
+            {publishedYears.map((py) => (
+              <button type="button" class="quick-year-btn" data-year={py.year}>
+                {py.year} ({py.modelsCount === 1 ? '1 model' : `${py.modelsCount} models`})
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="search-status-live" class="sr-only" aria-live="polite"></div>
+  </form>
+
+  <div class="vehicle-search__footer">
+    <a href="/coverage/" class="coverage-link">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M2 3.5h10M2 7h10M2 10.5h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      View 2010–2026 Vehicle Coverage Dashboard & Roadmap →
+    </a>
+  </div>
+</div>
+
+<style>
+  .vehicle-search {
+    width: 100%;
+  }
+
+  .vehicle-search__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .vehicle-search__hint {
+    font-size: var(--text-sm);
+    color: var(--color-pewter);
+    margin: 0;
+    max-width: none;
+    line-height: 1.4;
+  }
+
+  .vehicle-search__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-electric-blue);
+    background: #f0f4ff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+  }
+
+  .lookup-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 1fr auto;
+    gap: 0.875rem;
+    align-items: end;
+  }
+
+  .vehicle-search__submit {
+    min-width: 140px;
+  }
+
+  .vehicle-search__btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .vehicle-search--compact .vehicle-search__header {
+    display: none;
+  }
+
+  /* ─── Real-Time Coverage Notice ─────────────────────────────────────────── */
+  .search-notice {
+    margin-top: 1rem;
+    padding: 1rem 1.125rem;
+    background-color: var(--color-pending-bg);
+    border: 1px solid var(--color-pending-border);
+    border-radius: var(--radius-card);
+    animation: fadeIn 200ms ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .search-notice__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-pending);
+    font-size: var(--text-sm);
+    margin-bottom: 0.35rem;
+  }
+
+  .search-notice__icon {
+    flex-shrink: 0;
+  }
+
+  .search-notice__text {
+    font-size: var(--text-xs);
+    color: var(--color-graphite);
+    line-height: 1.5;
+    margin: 0 0 0.75rem 0;
+    max-width: none;
+  }
+
+  .search-notice__shortcuts {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--color-pending-border);
+  }
+
+  .search-notice__shortcuts-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-pending);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .search-notice__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .quick-year-btn {
+    background: var(--color-pure-white);
+    border: 1px solid var(--color-pending-border);
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-graphite);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .quick-year-btn:hover {
+    background-color: #fbf5df;
+    border-color: var(--color-pending);
+    color: var(--color-carbon-dark);
+  }
+
+  .vehicle-search__footer {
+    margin-top: 0.875rem;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .coverage-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: var(--text-xs);
+    color: var(--color-electric-blue);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .coverage-link:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 860px) {
+    .lookup-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .vehicle-search__submit {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .lookup-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Progressive enhancement for cascading selects.
+   * Handles 2010–2026 model years, dynamic AJAX make/model population,
+   * live coverage notices, keyboard navigation, and screen reader announcements.
+   */
+  (function () {
+    const yearSel = document.getElementById('search-year') as HTMLSelectElement | null;
+    const makeSel = document.getElementById('search-make') as HTMLSelectElement | null;
+    const modelSel = document.getElementById('search-model') as HTMLSelectElement | null;
+    const submitBtn = document.getElementById('search-submit-btn') as HTMLButtonElement | null;
+    const noticeEl = document.getElementById('search-notice') as HTMLElement | null;
+    const noticeTitle = document.getElementById('notice-title') as HTMLElement | null;
+    const noticeBody = document.getElementById('notice-body') as HTMLElement | null;
+    const liveAnnouncer = document.getElementById('search-status-live') as HTMLElement | null;
+
+    if (!yearSel || !makeSel || !modelSel || !submitBtn) return;
+
+    function announce(msg: string) {
+      if (liveAnnouncer) {
+        liveAnnouncer.textContent = msg;
+      }
+    }
+
+    async function fetchJSON(url: string): Promise<{ slug: string; name: string }[]> {
+      try {
+        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (!res.ok) return [];
+        return await res.json();
+      } catch (err) {
+        console.error('Lookup fetch error:', err);
+        return [];
+      }
+    }
+
+    function populateSelect(
+      sel: HTMLSelectElement,
+      items: { slug: string; name: string }[],
+      placeholder: string,
+      emptyMessage = 'No options available'
+    ) {
+      sel.innerHTML = '';
+      const empty = document.createElement('option');
+      empty.value = '';
+      empty.disabled = true;
+      empty.selected = true;
+      empty.textContent = items.length ? placeholder : emptyMessage;
+      sel.appendChild(empty);
+
+      items.forEach(({ slug, name }) => {
+        const opt = document.createElement('option');
+        opt.value = slug;
+        opt.textContent = name;
+        sel.appendChild(opt);
+      });
+
+      sel.disabled = items.length === 0;
+    }
+
+    function showNotice(title: string, body: string) {
+      if (noticeEl && noticeTitle && noticeBody) {
+        noticeTitle.textContent = title;
+        noticeBody.textContent = body;
+        noticeEl.hidden = false;
+      }
+      announce(`${title}: ${body}`);
+    }
+
+    function hideNotice() {
+      if (noticeEl) {
+        noticeEl.hidden = true;
+      }
+    }
+
+    // Handle Year Selection
+    yearSel.addEventListener('change', async () => {
+      const year = yearSel.value;
+      const selectedOption = yearSel.selectedOptions[0];
+      const isPlanned = selectedOption?.dataset.status === 'planned';
+
+      // Always reset downstream selects
+      makeSel.disabled = true;
+      modelSel.disabled = true;
+      submitBtn.disabled = true;
+      populateSelect(makeSel, [], 'Loading makes...');
+      populateSelect(modelSel, [], 'Select model');
+
+      if (!year) {
+        hideNotice();
+        return;
+      }
+
+      if (isPlanned) {
+        showNotice(
+          `Model Year ${year} — Research in Progress`,
+          `Official manufacturer towing guides and owner manuals for ${year} are currently undergoing technical review. No verified records have been published for this model year yet. Please select an available model year below or choose another year.`
+        );
+        populateSelect(makeSel, [], `No records published for ${year}`, `No records published for ${year}`);
+        populateSelect(modelSel, [], 'Select model', 'No models available');
+        return;
+      }
+
+      // Year is verified
+      hideNotice();
+      populateSelect(makeSel, [], 'Loading makes...');
+      announce(`Loading makes for model year ${year}...`);
+
+      const makes = await fetchJSON(`/api/makes?year=${encodeURIComponent(year)}`);
+      if (makes.length > 0) {
+        populateSelect(makeSel, makes, 'Select make');
+        announce(`${makes.length} makes available for model year ${year}.`);
+      } else {
+        showNotice(
+          `Model Year ${year} — Zero Published Records Found`,
+          `No manufacturer records are published for ${year}. Please select a verified year from the dropdown.`
+        );
+        populateSelect(makeSel, [], `No makes found for ${year}`, `No makes found for ${year}`);
+      }
+    });
+
+    // Handle Make Selection
+    makeSel.addEventListener('change', async () => {
+      const year = yearSel.value;
+      const make = makeSel.value;
+
+      modelSel.disabled = true;
+      submitBtn.disabled = true;
+      populateSelect(modelSel, [], 'Loading models...');
+
+      if (!year || !make) return;
+
+      announce(`Loading models for ${make} ${year}...`);
+      const models = await fetchJSON(
+        `/api/models?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`
+      );
+
+      if (models.length > 0) {
+        populateSelect(modelSel, models, 'Select model');
+        announce(`${models.length} models available.`);
+      } else {
+        populateSelect(modelSel, [], 'No models found for this year', 'No models found');
+        announce(`No models found for ${make} ${year}.`);
+      }
+    });
+
+    // Handle Model Selection
+    modelSel.addEventListener('change', () => {
+      const model = modelSel.value;
+      submitBtn.disabled = !model;
+      if (model) {
+        announce('Model selected. Click Find Specs to view towing specifications.');
+      }
+    });
+
+    // Handle Quick-Year shortcuts inside the notice
+    document.querySelectorAll('.quick-year-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const targetYear = (e.currentTarget as HTMLElement).getAttribute('data-year');
+        if (targetYear && yearSel) {
+          yearSel.value = targetYear;
+          yearSel.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    // If preselected values were set on initial render, activate submit
+    if (yearSel.value && makeSel.value && modelSel.value) {
+      submitBtn.disabled = false;
+    }
+  })();
+</script>
